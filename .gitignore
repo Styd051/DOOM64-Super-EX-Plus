@@ -1,0 +1,67 @@
+# Prerequisites
+*.d
+
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+
+# Linker output
+*.ilk
+*.map
+*.exp
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Kernel Module Compile Results
+*.mod*
+*.cmd
+.tmp_versions/
+modules.order
+Module.symvers
+Mkfile.old
+dkms.conf
+*.db
+*.db-shm
+*.lock
+*.vsidx
+*.db-wal
+*.opendb
+*.ipch
+*.log
+*.res
+*.tlog
+*.recipe
+*.iobj
+*.ipdb
+
+# macOS files
+*.DS_Store
+
+# Doom 64 EX Plus specific
+/Windows/.vs
+/Windows/Debug
+/Windows/Release
+/Windows/x64
+Windows/Doom64EX-Plus Launcher.vcxproj.user
+Windows/Doom64EXPlus.vcxproj.user
+.DS_Store
+src/engine/.DS_Store
+*.user
