@@ -77,6 +77,7 @@ char* sprnames[NUMSPRITES + 1] = {  //0x5FA30
 	"AV64",
 	"VFIR",
 	"MPOS",
+	"POS4",
 	NULL
 };
 
@@ -180,6 +181,7 @@ void A_FireCrackle();
 void A_SpiderMastermindMetal();
 void A_SpidDeathEvent();
 void A_MeleeZombieAttack();
+void A_SSGPosAttack();
 
 
 #pragma warning(push)
@@ -1568,6 +1570,41 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_MPOS_RAISE3*/{ SPR_MPOS, 9, 5, {NULL}, S_MPOS_RAISE4 },
 	/*S_MPOS_RAISE4*/{ SPR_MPOS, 8, 5, {NULL}, S_MPOS_RAISE5 },
 	/*S_MPOS_RAISE5*/{ SPR_MPOS, 7, 5, {NULL}, S_MPOS_RUN1 },
+
+	/*S_POSS3_STND*/{ SPR_POS4, 0, 10, {A_Look}, S_POSS3_STND2 },
+	/*S_POSS3_STND2*/{ SPR_POS4, 1, 10, {A_Look}, S_POSS3_STND },
+	/*S_POSS3_RUN1*/{ SPR_POS4, 0, 3, {A_Chase}, S_POSS3_RUN2 },
+	/*S_POSS3_RUN2*/{ SPR_POS4, 0, 3, {A_Chase}, S_POSS3_RUN3 },
+	/*S_POSS3_RUN3*/{ SPR_POS4, 1, 3, {A_Chase}, S_POSS3_RUN4 },
+	/*S_POSS3_RUN4*/{ SPR_POS4, 1, 3, {A_Chase}, S_POSS3_RUN5 },
+	/*S_POSS3_RUN5*/{ SPR_POS4, 2, 3, {A_Chase}, S_POSS3_RUN6 },
+	/*S_POSS3_RUN6*/{ SPR_POS4, 2, 3, {A_Chase}, S_POSS3_RUN7 },
+	/*S_POSS3_RUN7*/{ SPR_POS4, 3, 3, {A_Chase}, S_POSS3_RUN8 },
+	/*S_POSS3_RUN8*/{ SPR_POS4, 3, 3, {A_Chase}, S_POSS3_RUN1 },
+	/*S_POSS3_ATK1*/{ SPR_POS4, 4, 10, {A_FaceTarget}, S_POSS3_ATK2 },
+	/*S_POSS3_ATK2*/{ SPR_POS4, 5, 10, {A_SSGPosAttack}, S_POSS3_ATK3 },
+	/*S_POSS3_ATK3*/{ SPR_POS4, 4, 10, {NULL}, S_POSS3_RUN1 },
+	/*S_POSS3_PAIN*/{ SPR_POS4, 6, 3, {NULL}, S_POSS3_PAIN2 },
+	/*S_POSS3_PAIN2*/{ SPR_POS4, 6, 3, {A_Pain}, S_POSS3_RUN1 },
+	/*S_POSS3_DIE1*/{ SPR_POS4, 7, 5, {NULL}, S_POSS3_DIE2 },
+	/*S_POSS3_DIE2*/{ SPR_POS4, 8, 5, {A_Scream}, S_POSS3_DIE3 },
+	/*S_POSS3_DIE3*/{ SPR_POS4, 9, 5, {A_Fall}, S_POSS3_DIE4 },
+	/*S_POSS3_DIE4*/{ SPR_POS4, 10, 5, {A_OnDeathTrigger}, S_POSS3_DIE5 },
+	/*S_POSS3_DIE5*/{ SPR_POS4, 11, -1, {NULL}, S_NULL },
+	/*S_POSS3_XDIE1*/{ SPR_POS4, 12, 5, {NULL}, S_POSS3_XDIE2 },
+	/*S_POSS3_XDIE2*/{ SPR_POS4, 13, 5, {A_XScream}, S_POSS3_XDIE3 },
+	/*S_POSS3_XDIE3*/{ SPR_POS4, 14, 5, {A_Fall}, S_POSS3_XDIE4 },
+	/*S_POSS3_XDIE4*/{ SPR_POS4, 15, 5, {NULL}, S_POSS3_XDIE5 },
+	/*S_POSS3_XDIE5*/{ SPR_POS4, 16, 5, {NULL}, S_POSS3_XDIE6 },
+	/*S_POSS3_XDIE6*/{ SPR_POS4, 17, 5, {NULL}, S_POSS3_XDIE7 },
+	/*S_POSS3_XDIE7*/{ SPR_POS4, 18, 5, {NULL}, S_POSS3_XDIE8 },
+	/*S_POSS3_XDIE8*/{ SPR_POS4, 19, 5, {A_OnDeathTrigger}, S_POSS3_XDIE9 },
+	/*S_POSS3_XDIE9*/{ SPR_POS4, 20, -1, {NULL}, S_NULL },
+	/*S_POSS3_RAISE1*/{ SPR_POS4, 11, 5, {NULL}, S_POSS3_RAISE2 },
+	/*S_POSS3_RAISE2*/{ SPR_POS4, 10, 5, {NULL}, S_POSS3_RAISE3 },
+	/*S_POSS3_RAISE3*/{ SPR_POS4, 9, 5, {NULL}, S_POSS3_RAISE4 },
+	/*S_POSS3_RAISE4*/{ SPR_POS4, 8, 5, {NULL}, S_POSS3_RAISE5 },
+	/*S_POSS3_RAISE5*/{ SPR_POS4, 7, 5, {NULL}, S_POSS3_RUN1 },
 };
 
 #pragma warning(pop)
@@ -6894,5 +6931,34 @@ S_NULL	   //raisestate
 	0,        //palette
 	255,        //alpha
 	S_MPOS_RAISE1	   //raisestate
+},
+
+{
+	/*MT_SSGZOMBIE*/
+	9004,        //doomednum
+	S_POSS3_STND,        //spawnstate
+	120,        //spawnhealth
+	S_POSS3_RUN1,        //seestate
+	sfx_possit2,        //seesound
+	8,        //reactiontime
+	sfx_None/*sfx_000*/,        //attacksound
+	S_POSS3_PAIN,        //painstate
+	170,        //painchance
+	sfx_dbpain1,        //painsound
+	S_NULL,        //meleestate
+	S_POSS3_ATK1,        //missilestate
+	S_POSS3_DIE1,        //deathstate
+	S_POSS3_XDIE1,        //xdeathstate
+	sfx_posdie2,        //deathsound
+	8,        //speed
+	32 * FRACUNIT,        //radius
+	87 * FRACUNIT,        //height
+	100,        //mass
+	0,        //damage
+	sfx_posact,        //activesound
+	MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
+	0,        //palette
+	255,        //alpha
+	S_POSS3_RAISE1	   //raisestate
 },
 };

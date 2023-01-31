@@ -2495,3 +2495,31 @@ void A_MeleeZombieAttack(mobj_t* actor) {
 		P_DamageMobj(actor->target, actor, actor, damage);
 	}
 }
+
+//
+// A_SSGPosAttack
+//
+
+void A_SSGPosAttack(mobj_t* actor) {
+	int     i;
+	int     angle;
+	int     bangle;
+	int     damage;
+	int     slope;
+
+	if (!actor->target) {
+		return;
+	}
+
+	S_StartSound(actor, sfx_sht2fire);
+	A_FaceTarget(actor);
+	bangle = actor->angle;
+	slope = P_AimLineAttack(actor, bangle, 0, MISSILERANGE);
+
+	for (i = 0; i < 20; i++) {
+		angle = bangle + ((P_Random() - P_Random()) << 20);
+		angle += (P_Random() - P_Random()) << 19;
+		damage = 5 * (P_Random() % 3 + 1);
+		P_LineAttack(actor, angle, MISSILERANGE, slope, damage);
+	}
+}
