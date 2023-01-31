@@ -876,6 +876,9 @@ static void P_Obituary(mobj_t* source, mobj_t* target) {
 		case MT_SPIDER:
 			sprintf(omsg, "you stood in awe\nof the Spider Demon.");
 			break;
+		case MT_VILE:
+			sprintf(omsg, "you were incinerated\nby an Arch-Vile.");
+			break;
 		case MT_ANNIHILATOR:
 			sprintf(omsg, "you were splattered\nby a Annihilator.");
 			break;
@@ -884,6 +887,12 @@ static void P_Obituary(mobj_t* source, mobj_t* target) {
 			break;
 		case MT_DUKEOFHELL:
 			sprintf(omsg, "you were killed\nby a Duke Of Hell.");
+			break;
+		case MT_BRUISERDEMON:
+			sprintf(omsg, "you were killed\nby a Bruiser Demon.");
+			break;
+		case MT_MELEEZOMBIE:
+			sprintf(omsg, "you were killed\nby a Melee Zombie.");
 			break;
 		default:
 			sprintf(omsg, "you died.");
