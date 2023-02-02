@@ -79,6 +79,7 @@ char* sprnames[NUMSPRITES + 1] = {  //0x5FA30
 	"MPOS",
 	"POS4",
 	"SKON",
+	"BRMT",
 	NULL
 };
 
@@ -1185,6 +1186,10 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_SKON10*/{ SPR_SKON, 9, 4, {NULL}, S_SKON1 },
 
 	/*S_SKON11*/{ SPR_SKON, 10, -1, {NULL}, S_NULL },
+
+	/*S_BRMT1*/{ SPR_BRMT, 0, 4, {NULL}, S_BRMT2 },
+	/*S_BRMT2*/{ SPR_BRMT, 1, 4, {NULL}, S_BRMT3 },
+	/*S_BRMT3*/{ SPR_BRMT, 2, 4, {NULL}, S_BRMT1 },
 
 	/*S_CPOS_STND*/			{ SPR_CPOS, 0, 10, {A_Look}, S_CPOS_STND2 },
 	/*S_CPOS_STND2*/		{ SPR_CPOS, 1, 10, {A_Look}, S_CPOS_STND },
@@ -6590,6 +6595,35 @@ S_NULL	   //raisestate
 	sfx_None/*sfx_000*/,        //deathsound
 	0,        //speed
 	12 * FRACUNIT,        //radius
+	16 * FRACUNIT,        //height
+	100,        //mass
+	0,        //damage
+	sfx_None/*sfx_000*/,        //activesound
+	MF_SOLID,        //flags
+	0,        //palette
+	255,        //alpha
+	S_NULL	   //raisestate
+},
+
+{
+	/*MT_MISC44*/
+	8042,        //doomednum
+	S_BRMT1,        //spawnstate
+	1000,        //spawnhealth
+	S_NULL,        //seestate
+	sfx_None/*sfx_000*/,        //seesound
+	8,        //reactiontime
+	sfx_None/*sfx_000*/,        //attacksound
+	S_NULL,        //painstate
+	0,        //painchance
+	sfx_None/*sfx_000*/,        //painsound
+	S_NULL,        //meleestate
+	S_NULL,        //missilestate
+	S_NULL,        //deathstate
+	S_NULL,        //xdeathstate
+	sfx_None/*sfx_000*/,        //deathsound
+	0,        //speed
+	20 * FRACUNIT,        //radius
 	16 * FRACUNIT,        //height
 	100,        //mass
 	0,        //damage
