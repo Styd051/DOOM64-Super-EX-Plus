@@ -214,6 +214,7 @@ typedef enum {
 	SPR_SKON,
 	SPR_BRMT,
 	SPR_QDMG,
+	SPR_FRCK,
 	NUMSPRITES
 } spritenum_t;
 
@@ -1148,6 +1149,10 @@ typedef enum {
 	S_BRMT1,
 	S_BRMT2,
 	S_BRMT3,
+	S_FRCK1,
+	S_FRCK2,
+	S_FRCK3,
+	S_FRCK4,
 	S_QDMG1,
 	S_QDMG2,
 	S_QDMG3,
@@ -1757,6 +1762,9 @@ typedef enum {
 	MT_MISC42,
 	MT_MISC43,
 	MT_MISC44,
+	MT_MISC45,
+	MT_MISC46,
+	MT_MISC47,
 	MT_CHAINGUY,
 	MT_UNDEAD,
 	MT_PROJ_UNDEAD,
