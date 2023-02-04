@@ -104,6 +104,7 @@
 #define GOTMAP          "Computer Area Map"
 #define GOTVISOR        "Light Amplification Goggles"
 #define GOTMSPHERE      "Mega Sphere!"
+#define GOTQUADDAMAGE   "Quad Damage!"
 
 #define GOTCLIP         "Picked up a clip."
 #define GOTCLIPBOX      "Picked up a box of bullets."

@@ -146,6 +146,8 @@ typedef enum {
 	sfx_vilact,
 	sfx_flamst,
 	sfx_flame,
+	sfx_quaddamageact,
+	sfx_quaddamageatt,
 	mus_amb01,
 	mus_amb02,
 	mus_amb03,

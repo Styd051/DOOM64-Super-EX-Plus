@@ -1083,6 +1083,14 @@ void ST_UpdateFlash(void) {
 		st_flash_b = 0;
 		st_flash_a = (p->bonuscount + 8) << 1;
 	}
+	// quad damage flash (purple)
+	else if (p->powers[pw_quaddamage] > 61 || (p->powers[pw_quaddamage] & 8)) {
+		flashcolor = D_RGBA(128, 128, 128, 0xff);
+		st_flash_r = 128;
+		st_flash_g = 0;
+		st_flash_b = 255;
+		st_flash_a = 64;
+	}
 }
 
 //

@@ -80,6 +80,7 @@ char* sprnames[NUMSPRITES + 1] = {  //0x5FA30
 	"POS4",
 	"SKON",
 	"BRMT",
+	"QDMG",
 	NULL
 };
 
@@ -1190,6 +1191,13 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_BRMT1*/{ SPR_BRMT, 0, 4, {NULL}, S_BRMT2 },
 	/*S_BRMT2*/{ SPR_BRMT, 1, 4, {NULL}, S_BRMT3 },
 	/*S_BRMT3*/{ SPR_BRMT, 2, 4, {NULL}, S_BRMT1 },
+
+	/*S_QDMG1*/{ SPR_QDMG, 32768, 4, {NULL}, S_QDMG2 },
+	/*S_QDMG2*/{ SPR_QDMG, 32769, 4, {NULL}, S_QDMG3 },
+	/*S_QDMG3*/{ SPR_QDMG, 32770, 4, {NULL}, S_QDMG4 },
+	/*S_QDMG4*/{ SPR_QDMG, 32771, 4, {NULL}, S_QDMG5 },
+	/*S_QDMG5*/{ SPR_QDMG, 32770, 4, {NULL}, S_QDMG6 },
+	/*S_QDMG6*/{ SPR_QDMG, 32769, 4, {NULL}, S_QDMG1 },
 
 	/*S_CPOS_STND*/			{ SPR_CPOS, 0, 10, {A_Look}, S_CPOS_STND2 },
 	/*S_CPOS_STND2*/		{ SPR_CPOS, 1, 10, {A_Look}, S_CPOS_STND },
@@ -7066,5 +7074,121 @@ S_NULL	   //raisestate
 	0,        //palette
 	255,        //alpha
 	S_POSS3_RAISE1	   //raisestate
+},
+
+{
+	/*MT_ITEM_QUADDAMAGE*/
+	9006,        //doomednum
+	S_QDMG1,        //spawnstate
+	1000,        //spawnhealth
+	S_NULL,        //seestate
+	sfx_None/*sfx_000*/,        //seesound
+	8,        //reactiontime
+	sfx_None/*sfx_000*/,        //attacksound
+	S_NULL,        //painstate
+	0,        //painchance
+	sfx_None/*sfx_000*/,        //painsound
+	S_NULL,        //meleestate
+	S_NULL,        //missilestate
+	S_NULL,        //deathstate
+	S_NULL,        //xdeathstate
+	sfx_None/*sfx_000*/,        //deathsound
+	0,        //speed
+	20 * FRACUNIT,        //radius
+	16 * FRACUNIT,        //height
+	100,        //mass
+	0,        //damage
+	sfx_None/*sfx_000*/,        //activesound
+	MF_SPECIAL | MF_COUNTITEM,        //flags
+	0,        //palette
+	255,        //alpha
+	S_NULL	   //raisestate
+},
+
+{
+	/*MT_PROJ_ROCKETQUADDAMAGE*/
+	-1,        //doomednum
+	S_ROCKET,        //spawnstate
+	1000,        //spawnhealth
+	S_NULL,        //seestate
+	sfx_missile,        //seesound
+	8,        //reactiontime
+	sfx_None/*sfx_000*/,        //attacksound
+	S_NULL,        //painstate
+	0,        //painchance
+	sfx_None/*sfx_000*/,        //painsound
+	S_NULL,        //meleestate
+	S_NULL,        //missilestate
+	S_ROCKET_DIE1,        //deathstate
+	S_NULL,        //xdeathstate
+	sfx_explode,        //deathsound
+	30 * FRACUNIT,        //speed
+	11 * FRACUNIT,        //radius
+	8 * FRACUNIT,        //height
+	100,        //mass
+	40,        //damage
+	sfx_None/*sfx_000*/,        //activesound
+	MF_NOBLOCKMAP | MF_DROPOFF | MF_MISSILE,        //flags
+	0,        //palette
+	255,        //alpha
+	S_NULL	   //raisestate
+},
+
+{
+	/*MT_PROJ_PLASMAQUADDAMAGE*/
+	-1,        //doomednum
+	S_PLASMA1,        //spawnstate
+	1000,        //spawnhealth
+	S_NULL,        //seestate
+	sfx_plasma,        //seesound
+	8,        //reactiontime
+	sfx_None/*sfx_000*/,        //attacksound
+	S_NULL,        //painstate
+	0,        //painchance
+	sfx_None/*sfx_000*/,        //painsound
+	S_NULL,        //meleestate
+	S_NULL,        //missilestate
+	S_PLASMA_DIE1,        //deathstate
+	S_NULL,        //xdeathstate
+	sfx_implod,        //deathsound
+	40 * FRACUNIT,        //speed
+	13 * FRACUNIT,        //radius
+	8 * FRACUNIT,        //height
+	100,        //mass
+	10,        //damage
+	sfx_None/*sfx_000*/,        //activesound
+	MF_NOBLOCKMAP | MF_DROPOFF | MF_MISSILE,        //flags
+	0,        //palette
+	255,        //alpha
+	S_NULL	   //raisestate
+},
+
+{
+	/*MT_PROJ_BFGQUADDAMAGE*/
+	-1,        //doomednum
+	S_BFGBALL1,        //spawnstate
+	1000,        //spawnhealth
+	S_NULL,        //seestate
+	sfx_None/*sfx_000*/,        //seesound
+	8,        //reactiontime
+	sfx_None/*sfx_000*/,        //attacksound
+	S_NULL,        //painstate
+	0,        //painchance
+	sfx_None/*sfx_000*/,        //painsound
+	S_NULL,        //meleestate
+	S_NULL,        //missilestate
+	S_BFGBALL_DIE1,        //deathstate
+	S_NULL,        //xdeathstate
+	sfx_bfgexp,        //deathsound
+	40 * FRACUNIT,        //speed
+	13 * FRACUNIT,        //radius
+	8 * FRACUNIT,        //height
+	100,        //mass
+	200,        //damage
+	sfx_None/*sfx_000*/,        //activesound
+	MF_NOBLOCKMAP | MF_DROPOFF | MF_MISSILE,        //flags
+	0,        //palette
+	255,        //alpha
+	S_NULL	   //raisestate
 },
 };

@@ -448,6 +448,11 @@ void A_Punch(player_t* player, pspdef_t* psp) {
 		damage *= 10;
 	}
 
+	if (player->powers[pw_quaddamage]) {
+		damage *= 20;
+		S_StartSound(player->mo, sfx_quaddamageatt);
+	}
+
 	angle = player->mo->angle;
 	angle += (angle_t)(P_Random() - P_Random()) << 18;
 
@@ -475,6 +480,10 @@ void A_Saw (player_t *player, pspdef_t *psp) // 8001BC1C
 	int     slope = 0;
 
 	damage = ((P_Random()&7)+1)*3;
+	if (player->powers[pw_quaddamage]) {
+		damage *= 10;
+		S_StartSound(player->mo, sfx_quaddamageatt);
+	}
 	angle = player->mo->angle;
 	rnd1 = P_Random();
 	rnd2 = P_Random();
@@ -525,7 +534,19 @@ void A_ChainSawReady(player_t* player, pspdef_t* psp) {
 
 void A_FireMissile(player_t* player, pspdef_t* psp) {
 	player->ammo[weaponinfo[player->readyweapon].ammo]--;
-	P_SpawnPlayerMissile(player->mo, MT_PROJ_ROCKET);
+
+	if (player->powers[pw_quaddamage]) {
+
+			P_SpawnPlayerMissile(player->mo, MT_PROJ_ROCKETQUADDAMAGE);
+			S_StartSound(player->mo, sfx_quaddamageatt);
+
+	}
+	else 
+	{
+
+		P_SpawnPlayerMissile(player->mo, MT_PROJ_ROCKET);
+
+	}
 
 	player->recoilpitch = RECOILPITCH;
 
@@ -539,7 +560,20 @@ void A_FireMissile(player_t* player, pspdef_t* psp) {
 //
 void A_FireBFG(player_t* player, pspdef_t* psp) {
 	player->ammo[weaponinfo[player->readyweapon].ammo] -= BFGCELLS;
-	P_SpawnPlayerMissile(player->mo, MT_PROJ_BFG);
+
+	if (player->powers[pw_quaddamage]) {
+
+		P_SpawnPlayerMissile(player->mo, MT_PROJ_BFGQUADDAMAGE);
+		S_StartSound(player->mo, sfx_quaddamageatt);
+
+	}
+	else
+	{
+
+		P_SpawnPlayerMissile(player->mo, MT_PROJ_BFG);
+
+	}
+
 }
 
 //
@@ -563,7 +597,19 @@ void A_FirePlasma(player_t* player, pspdef_t* psp) {
 	player->ammo[weaponinfo[player->readyweapon].ammo]--;
 
 	P_SetPsprite(player, ps_flash, S_NULL);
-	P_SpawnPlayerMissile(player->mo, MT_PROJ_PLASMA);
+
+	if (player->powers[pw_quaddamage]) {
+
+		P_SpawnPlayerMissile(player->mo, MT_PROJ_PLASMAQUADDAMAGE);
+		S_StartSound(player->mo, sfx_quaddamageatt);
+
+	}
+	else
+	{
+
+		P_SpawnPlayerMissile(player->mo, MT_PROJ_PLASMA);
+
+	}
 }
 
 //
@@ -597,11 +643,15 @@ void P_BulletSlope(mobj_t* mo) {
 // P_GunShot
 //
 void P_GunShot(mobj_t* mo, boolean accurate) {
+	player_t* p = &players[consoleplayer];
 	angle_t     angle;
 	int         damage;
 	int         rnd1, rnd2;
 
 	damage = ((P_Random() & 3) * 4) + 4;
+	if (p->powers[pw_quaddamage]) {
+		damage *= 4;
+	}
 	angle = mo->angle;
 
 	if (!accurate) {
@@ -619,6 +669,9 @@ void P_GunShot(mobj_t* mo, boolean accurate) {
 void A_FirePistol(player_t* player, pspdef_t* psp)
 {
 	S_StartSound(player->mo, sfx_pistol);
+	if (player->powers[pw_quaddamage]) {
+		S_StartSound(player->mo, sfx_quaddamageatt);
+	}
 
 	player->ammo[weaponinfo[player->readyweapon].ammo]--;
 
@@ -635,6 +688,9 @@ void A_FireShotgun(player_t* player, pspdef_t* psp) {
 	int i;
 
 	S_StartSound(player->mo, sfx_shotgun);
+	if (player->powers[pw_quaddamage]) {
+		S_StartSound(player->mo, sfx_quaddamageatt);
+	}
 	P_SetMobjState(player->mo, S_PLAY_ATK2);
 
 	player->ammo[weaponinfo[player->readyweapon].ammo]--;
@@ -658,6 +714,9 @@ void A_FireShotgun2(player_t* player, pspdef_t* psp) {
 	int         damage;
 
 	S_StartSound(player->mo, sfx_sht2fire);
+	if (player->powers[pw_quaddamage]) {
+		S_StartSound(player->mo, sfx_quaddamageatt);
+	}
 	P_SetMobjState(player->mo, S_PLAY_ATK2);
 	player->ammo[weaponinfo[player->readyweapon].ammo] -= 2;
 
@@ -672,6 +731,9 @@ void A_FireShotgun2(player_t* player, pspdef_t* psp) {
 
 	for (i = 0; i < 20; i++) {
 		damage = 5 * (P_Random() % 3 + 1);
+		if (player->powers[pw_quaddamage]) {
+			damage *= 3;
+		}
 		angle = player->mo->angle;
 		angle += (P_Random() - P_Random()) << 19;
 		P_LineAttack(player->mo, angle, MISSILERANGE, bulletslope +
@@ -692,6 +754,9 @@ void A_FireCGun(player_t* player, pspdef_t* psp) {
 	}
 
 	S_StartSound(player->mo, sfx_pistol);
+	if (player->powers[pw_quaddamage]) {
+		S_StartSound(player->mo, sfx_quaddamageatt);
+	}
 
 	P_SetMobjState(player->mo, S_PLAY_ATK2);
 	player->ammo[weaponinfo[player->readyweapon].ammo]--;
@@ -1024,6 +1089,10 @@ void A_FireLaser(player_t* player, pspdef_t* psp) {
 
 		hitdice = (P_Random() & 7);
 		damage = (((hitdice << 2) + hitdice) << 1) + 10;
+		if (player->powers[pw_quaddamage]) {
+			damage *= 2;
+			S_StartSound(player->mo, sfx_quaddamageatt);
+		}
 
 		P_LineAttack(mobj, angleoffs, LASERRANGE, slope, damage);
 

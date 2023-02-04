@@ -744,6 +744,10 @@ void P_PlayerThink(player_t* player) {
         player->powers[pw_ironfeet]--;
     }
 
+    if (player->powers[pw_quaddamage]) {
+        player->powers[pw_quaddamage]--;
+    }
+
     if (player->damagecount) {
         player->damagecount--;
     }

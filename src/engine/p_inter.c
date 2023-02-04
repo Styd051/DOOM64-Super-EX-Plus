@@ -355,6 +355,11 @@ boolean P_GivePower(player_t* player, int power) {
 		return true;
 	}
 
+	if (power == pw_quaddamage) {
+		player->powers[power] = QUADDAMAGETICS;
+		return true;
+	}
+
 	if (player->powers[power]) {
 		return false;    // already got it
 	}
@@ -565,6 +570,15 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 		player->message = GOTVISOR;
 		player->messagepic = 39;
 		sound = sfx_powerup;
+		break;
+
+	case SPR_QDMG:
+		if (!P_GivePower(player, pw_quaddamage)) {
+			return;
+		}
+		player->message = GOTQUADDAMAGE;
+		player->messagepic = 35;
+		sound = sfx_quaddamageact;
 		break;
 
 		// ammo

@@ -219,6 +219,7 @@ typedef enum {
 	pw_ironfeet,
 	pw_allmap,
 	pw_infrared,
+	pw_quaddamage,
 	NUMPOWERS
 } powertype_t;
 
@@ -233,7 +234,8 @@ typedef enum {
 	INVISTICS = (60 * TICRATE),
 	INFRATICS = (120 * TICRATE),
 	IRONTICS = (60 * TICRATE),
-	STRTICS = (3 * TICRATE)
+	STRTICS = (3 * TICRATE),
+	QUADDAMAGETICS = (30 * TICRATE)
 } powerduration_t;
 
 // 20120209 villsa - game flags
