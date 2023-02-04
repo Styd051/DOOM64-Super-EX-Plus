@@ -14,7 +14,9 @@ currently 11 new monsters have been added
 
 -TESTA0
 
--Annihilator -Hellhound
+-Annihilator 
+
+-Hellhound
 
 -Duke Of Hell
 
@@ -27,3 +29,24 @@ currently 11 new monsters have been added
 currently 40 new decorations have been added
 
 -the decorations of the version DOOM 64 Alpha (40 new decorations)
+
+# The Credits
+-Gibbon for the port EX+
+
+-CRANEO for the sprite Chaingunner  in style DOOM64 
+
+-DrPyspy for the sprite Revenant in style DOOM64 and soon the sprite Arch-vile too !  
+
+-IDDQD_1337 for the sprite Super Shotgun Zombie in style DOOM64
+
+-Immorpher for the sprite Spider mastermind and arch-vile in style mother demon for DOO%M64
+
+-Onox792 for the sprite Annihilator in style DOOM64
+
+-GEC for the sprite Duke Of Hell and Hellhound in style DOOM64
+
+-DrDoctor for some sprite new monsters and new decorations
+
+-Midway Games for the sprites of the new decorations of the version alpha of DOOM64
+
+-Ani for the sprite Quad Damage in style DOOM64
