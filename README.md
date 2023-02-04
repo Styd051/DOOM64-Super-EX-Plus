@@ -39,7 +39,7 @@ currently 40 new decorations have been added
 
 -IDDQD_1337 for the sprite Super Shotgun Zombie in style DOOM64
 
--Immorpher for the sprite Spider mastermind and arch-vile in style mother demon for DOO%M64
+-Immorpher for the sprite Spider mastermind and arch-vile in style mother demon for DOOM64
 
 -Onox792 for the sprite Annihilator in style DOOM64
 
