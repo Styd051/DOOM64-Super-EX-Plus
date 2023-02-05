@@ -651,6 +651,12 @@ void P_PlayerThink(player_t* player) {
                 newweapon = wp_supershotgun;
             }
 
+            if (newweapon == wp_chaingun
+                && player->weaponowned[wp_nailgun]
+                && player->readyweapon != wp_nailgun) {
+                newweapon = wp_nailgun;
+            }
+
             if (player->weaponowned[newweapon] && newweapon != player->readyweapon) {
                 player->pendingweapon = newweapon;
             }

@@ -82,6 +82,9 @@ char* sprnames[NUMSPRITES + 1] = {  //0x5FA30
 	"BRMT",
 	"QDMG",
 	"FRCK",
+	"NLGN",
+	"NLBX",
+	"NLGP",
 	NULL
 };
 
@@ -186,6 +189,7 @@ void A_SpiderMastermindMetal();
 void A_SpidDeathEvent();
 void A_MeleeZombieAttack();
 void A_SSGPosAttack();
+void A_FireNailgun();
 
 
 #pragma warning(push)
@@ -1106,6 +1110,26 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_LASERG1*/           { SPR_LASR, 0, 8, {A_FireLaser}, S_LASERG2 },
 	/*S_LASERG2*/           { SPR_LASR, 0, 3, {A_ReFire}, S_LASERG },
 	/*S_LASERGLIGHT*/       { SPR_LASR, 32769, 3, {NULL}, S_NULL },
+
+	/*S_NAILG*/{ SPR_NLGN, 0, 1, {A_WeaponReady}, S_NAILG },
+	/*S_NAILGDOWN*/{ SPR_NLGN, 0, 1, {A_Lower}, S_NAILGDOWN },
+	/*S_NAILGUP*/{ SPR_NLGN, 0, 1, {A_Raise}, S_NAILGUP },
+	/*S_NAILG1*/{ SPR_NLGN, 1, 1, {A_FireNailgun}, S_NAILG2 },
+	/*S_NAILG2*/{ SPR_NLGN, 2, 1, {NULL}, S_NAILG3 },
+	/*S_NAILG3*/{ SPR_NLGN, 3, 1, {NULL}, S_NAILG4 },
+	/*S_NAILG4*/{ SPR_NLGN, 4, 1, {NULL}, S_NAILG5 },
+	/*S_NAILG5*/{ SPR_NLGN, 5, 1, {NULL}, S_NAILG6 },
+	/*S_NAILG6*/{ SPR_NLGN, 6, 1, {A_FireNailgun}, S_NAILG7 },
+	/*S_NAILG7*/{ SPR_NLGN, 7, 1, {NULL}, S_NAILG8 },
+	/*S_NAILG8*/{ SPR_NLGN, 8, 1, {NULL}, S_NAILG9 },
+	/*S_NAILG9*/{ SPR_NLGN, 9, 1, {NULL}, S_NAILG10 },
+	/*S_NAILG10*/{ SPR_NLGN, 10, 1, {NULL}, S_NAILG11 },
+	/*S_NAILG11*/{ SPR_NLGN, 0, 5, {A_ReFire}, S_NAILG },
+
+	/*S_NAILSAMMO*/{ SPR_NLBX, 0, -1, {NULL}, S_NULL },
+
+	/*S_NLGP*/{ SPR_NLGP, 0, -1, {NULL}, S_NULL },
+
 
 	{ SPR_S015,0,-1,NULL,S_NULL },// S_LAMP3
 	{ SPR_S016,0,-1,NULL,S_NULL },// S_LAMP4
@@ -7280,6 +7304,122 @@ S_NULL	   //raisestate
 	8 * FRACUNIT,        //height
 	100,        //mass
 	200,        //damage
+	sfx_None/*sfx_000*/,        //activesound
+	MF_NOBLOCKMAP | MF_DROPOFF | MF_MISSILE,        //flags
+	0,        //palette
+	255,        //alpha
+	S_NULL	   //raisestate
+},
+
+{
+	/*MT_PROJ_NAILQUADDAMAGE*/
+	-1,        //doomednum
+	S_DART,        //spawnstate
+	1000,        //spawnhealth
+	S_NULL,        //seestate
+	sfx_None/*sfx_000*/,        //seesound
+	8,        //reactiontime
+	sfx_None/*sfx_000*/,        //attacksound
+	S_NULL,        //painstate
+	0,        //painchance
+	sfx_None/*sfx_000*/,        //painsound
+	S_NULL,        //meleestate
+	S_NULL,        //missilestate
+	S_PUFF1,        //deathstate
+	S_NULL,        //xdeathstate
+	sfx_nailtink,        //deathsound
+	44 * FRACUNIT,        //speed
+	13 * FRACUNIT,        //radius
+	8 * FRACUNIT,        //height
+	100,        //mass
+	40,        //damage
+	sfx_None/*sfx_000*/,        //activesound
+	MF_NOBLOCKMAP | MF_DROPOFF | MF_MISSILE,        //flags
+	0,        //palette
+	255,        //alpha
+	S_NULL	   //raisestate
+},
+
+{
+	/*MT_WEAP_NAILGUN*/
+	9007,        //doomednum
+	S_NLGP,        //spawnstate
+	1000,        //spawnhealth
+	S_NULL,        //seestate
+	sfx_None/*sfx_000*/,        //seesound
+	8,        //reactiontime
+	sfx_None/*sfx_000*/,        //attacksound
+	S_NULL,        //painstate
+	0,        //painchance
+	sfx_None/*sfx_000*/,        //painsound
+	S_NULL,        //meleestate
+	S_NULL,        //missilestate
+	S_NULL,        //deathstate
+	S_NULL,        //xdeathstate
+	sfx_None/*sfx_000*/,        //deathsound
+	0,        //speed
+	20 * FRACUNIT,        //radius
+	16 * FRACUNIT,        //height
+	100,        //mass
+	0,        //damage
+	sfx_None/*sfx_000*/,        //activesound
+	MF_SPECIAL,        //flags
+	0,        //palette
+	255,        //alpha
+	S_NULL	   //raisestate
+},
+
+{
+	/*MT_AMMO_NAILS*/
+	9008,        //doomednum
+	S_NAILSAMMO,        //spawnstate
+	1000,        //spawnhealth
+	S_NULL,        //seestate
+	sfx_None/*sfx_000*/,        //seesound
+	8,        //reactiontime
+	sfx_None/*sfx_000*/,        //attacksound
+	S_NULL,        //painstate
+	0,        //painchance
+	sfx_None/*sfx_000*/,        //painsound
+	S_NULL,        //meleestate
+	S_NULL,        //missilestate
+	S_NULL,        //deathstate
+	S_NULL,        //xdeathstate
+	sfx_None/*sfx_000*/,        //deathsound
+	0,        //speed
+	20 * FRACUNIT,        //radius
+	16 * FRACUNIT,        //height
+	100,        //mass
+	0,        //damage
+	sfx_None/*sfx_000*/,        //activesound
+	MF_SPECIAL,        //flags
+	0,        //palette
+	255,        //alpha
+	S_NULL	   //raisestate
+},
+
+{
+	/*MT_PROJ_NAIL*/
+	-1,        //doomednum
+	S_DART,        //spawnstate
+	1000,        //spawnhealth
+	S_NULL,        //seestate
+	sfx_None/*sfx_000*/,        //seesound
+	8,        //reactiontime
+	sfx_None/*sfx_000*/,        //attacksound
+	S_NULL,        //painstate
+	0,        //painchance
+	sfx_None/*sfx_000*/,        //painsound
+	S_NULL,        //meleestate
+	S_NULL,        //missilestate
+	S_PUFF1,        //deathstate
+	S_NULL,        //xdeathstate
+	sfx_nailtink,        //deathsound
+	44 * FRACUNIT,        //speed
+	13 * FRACUNIT,        //radius
+	8 * FRACUNIT,        //height
+	100,        //mass
+	20,        //damage
 	sfx_None/*sfx_000*/,        //activesound
 	MF_NOBLOCKMAP | MF_DROPOFF | MF_MISSILE,        //flags
 	0,        //palette

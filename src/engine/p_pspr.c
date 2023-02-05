@@ -67,7 +67,8 @@ weaponinfo_t    weaponinfo[NUMWEAPONS] = {
 	{ am_misl,      S_ROCKETLUP, S_ROCKETLDOWN, S_ROCKETL, S_ROCKETL1, S_ROCKETLLIGHT1 },    // rocket launcher
 	{ am_cell,      S_PLASMAGUP1, S_PLASMAGDOWN, S_PLASMAG, S_PLASMAG1, S_NULL },    // plasma gun
 	{ am_cell,      S_BFGUP, S_BFGDOWN, S_BFG, S_BFG1, S_BFGLIGHT1 },    // bfg
-	{ am_cell,      S_LASERGUP, S_LASERGDOWN, S_LASERG, S_LASERG1, S_LASERGLIGHT }    // laser rifle
+	{ am_cell,      S_LASERGUP, S_LASERGDOWN, S_LASERG, S_LASERG1, S_LASERGLIGHT },    // laser rifle
+	{ am_nails,      S_NAILGUP, S_NAILGDOWN, S_NAILG, S_NAILG1, S_NULL }    // nailgun
 };
 
 static int laserCells = 1;
@@ -245,6 +246,10 @@ boolean P_CheckAmmo(player_t* player) {
 		else if (player->weaponowned[wp_laser]
 			&& player->ammo[am_cell] > laserCells) {
 			player->pendingweapon = wp_laser;
+		}
+		else if (player->weaponowned[wp_nailgun]
+			&& player->ammo[am_nails]) {
+			player->pendingweapon = wp_nailgun;
 		}
 		else {
 			// If everything fails.
@@ -1199,4 +1204,48 @@ void P_MovePsprites(player_t* player) {
 
 	player->psprites[ps_flash].sx = player->psprites[ps_weapon].sx;
 	player->psprites[ps_flash].sy = player->psprites[ps_weapon].sy;
+}
+
+//
+// A_FireNailgun
+//
+
+void A_FireNailgun(player_t* player, pspdef_t* psp) {
+	int ammo = player->ammo[weaponinfo[player->readyweapon].ammo];
+	int rand;
+
+	if (!ammo) {
+		return;
+	}
+
+	S_StartSound(player->mo, sfx_nailgun);
+	if (player->powers[pw_quaddamage]) {
+
+		P_SpawnPlayerMissile(player->mo, MT_PROJ_NAILQUADDAMAGE);
+		S_StartSound(player->mo, sfx_quaddamageatt);
+
+	}
+	else
+	{
+
+		P_SpawnPlayerMissile(player->mo, MT_PROJ_NAIL);
+
+	}
+
+	P_SetMobjState(player->mo, S_PLAY_ATK2);
+	player->ammo[weaponinfo[player->readyweapon].ammo]--;
+
+	// randomize sx
+	rand = (((P_Random() & 1) << 1) - 1);
+	psp->sx = (rand * FRACUNIT);
+
+	// randomize sy
+	rand = ((((ammo - 1) & 1) << 1) - 1);
+	psp->sy = WEAPONTOP - (rand * (2 * FRACUNIT));
+	if (v_accessibility.value < 1)
+	{
+		player->recoilpitch = RECOILPITCH;
+	}
+
+	P_BulletSlope(player->mo);
 }

@@ -64,8 +64,8 @@ CVAR_EXTERNAL(m_brutal);
 
 // a weapon is found with two clip loads,
 // a big item has five clip loads
-int     maxammo[NUMAMMO] = { 200, 50, 300, 50 };
-int     clipammo[NUMAMMO] = { 10, 4, 20, 1 };
+int     maxammo[NUMAMMO] = { 200, 50, 300, 50, 100 };
+int     clipammo[NUMAMMO] = { 10, 4, 20, 1, 10 };
 
 int infraredFactor = 0;
 
@@ -168,6 +168,14 @@ boolean P_GiveAmmo(player_t* player, ammotype_t ammo, int num) {
 			}
 		}
 	default:
+		break;
+
+	case am_nails:
+		if (player->readyweapon == wp_fist) {
+			if (player->weaponowned[wp_nailgun]) {
+				player->pendingweapon = wp_nailgun;
+			}
+		}
 		break;
 	}
 
@@ -669,6 +677,14 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 		player->messagepic = 15;
 		break;
 
+	case SPR_NLBX:
+		if (!P_GiveAmmo(player, am_nails, 1)) {
+			return;
+		}
+		player->message = GOTNAILSAMMO;
+		player->messagepic = 45;
+		break;
+
 		// weapons
 	case SPR_BFUG:
 		if (!P_GiveWeapon(player, special, wp_bfg, false)) {
@@ -738,6 +754,15 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 			return;
 		}
 		player->message = GOTLASER;
+		sound = sfx_sgcock;
+		break;
+
+	case SPR_NLGP:
+		if (!P_GiveWeapon(player, special, wp_nailgun, false)) {
+			return;
+		}
+		player->message = GOTNAILGUN;
+		player->messagepic = 44;
 		sound = sfx_sgcock;
 		break;
 
