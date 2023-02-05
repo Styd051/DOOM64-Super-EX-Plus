@@ -366,6 +366,7 @@ static CMD(Cheat) {
 				CON_Printf(AQUA, "6: Plasma Rifle\n");
 				CON_Printf(AQUA, "7: BFG 9000\n");
 				CON_Printf(AQUA, "8: Demon Artifact\n");
+				CON_Printf(AQUA, "9: Nailgun\n");
 				return;
 			}
 
