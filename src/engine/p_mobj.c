@@ -1217,6 +1217,26 @@ void P_SpawnPlayerMissile(mobj_t* source, mobjtype_t type) {
 		missileheight = (32 * FRACUNIT);
 		offset = 30;
 	}
+	else if (type == MT_PROJ_NAIL) {
+		missileheight = (32 * FRACUNIT);
+		offset = 40;
+	}
+	else if (type == MT_PROJ_ROCKETQUADDAMAGE) {
+		missileheight = (42 * FRACUNIT);
+		offset = 30;
+	}
+	else if (type == MT_PROJ_PLASMAQUADDAMAGE) {
+		missileheight = (32 * FRACUNIT);
+		offset = 40;
+	}
+	else if (type == MT_PROJ_BFGQUADDAMAGE) {
+		missileheight = (32 * FRACUNIT);
+		offset = 30;
+	}
+	else if (type == MT_PROJ_NAILQUADDAMAGE) {
+		missileheight = (32 * FRACUNIT);
+		offset = 40;
+	}
 	else {
 		missileheight = (32 * FRACUNIT);
 		offset = 0;
