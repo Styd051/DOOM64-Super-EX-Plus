@@ -26,7 +26,7 @@ currently 11 new monsters have been added
 
 -Super Shotgun Zombie
 
-currently 48 new decorations have been added
+currently 88 new decorations have been added
 
 -the decorations of the version DOOM 64 Alpha (40 new decorations)
 
