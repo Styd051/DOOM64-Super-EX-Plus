@@ -26,9 +26,21 @@ currently 11 new monsters have been added
 
 -Super Shotgun Zombie
 
-currently 40 new decorations have been added
+currently 48 new decorations have been added
 
 -the decorations of the version DOOM 64 Alpha (40 new decorations)
+
+-all the decorations of DrDoctor was added
+
+-6 gore decorations with marines from the Reloaded mod have been added
+
+currently 1 new weapon have been added
+
+-the Nailgun
+
+currently 1 new power have been added
+
+-the Quad Damage
 
 # The Credits
 -Gibbon for the port EX+
