@@ -62,3 +62,5 @@ currently 1 new power have been added
 -Midway Games for the sprites of the new decorations of the version alpha of DOOM64
 
 -Ani for the sprite Quad Damage in style DOOM64
+
+-DOOMPiter for the sprite Nailgun 
