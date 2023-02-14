@@ -2,7 +2,7 @@
 Super EX+ and a custom fork of  EX+ of Gibbon, designed for mappers to use custom content on their map, with a modified DOOM Builder 64 configuration to show custom content, like custom monsters, custom decorations, etc... in the map editor
 
 # Custom Content Added
-currently 11 new monsters have been added
+currently 13 new monsters have been added
 
 -Archvile
 
@@ -26,6 +26,10 @@ currently 11 new monsters have been added
 
 -Super Shotgun Zombie
 
+-Icon Of Sin (Immorpher)
+
+-Mario
+
 currently 88 new decorations have been added
 
 -the decorations of the version DOOM 64 Alpha (40 new decorations)
@@ -47,7 +51,7 @@ currently 1 new power have been added
 
 -CRANEO for the sprite Chaingunner  in style DOOM64 
 
--DrPyspy for the sprite Revenant in style DOOM64 and soon the sprite Arch-vile too !  
+-DrPyspy for the sprite Revenant and sprite Arch-vile in style DOOM64  
 
 -IDDQD_1337 for the sprite Super Shotgun Zombie in style DOOM64
 
