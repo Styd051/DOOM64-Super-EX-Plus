@@ -68,3 +68,5 @@ currently 1 new power have been added
 -Ani for the sprite Quad Damage in style DOOM64
 
 -DOOMPiter for the sprite Nailgun 
+
+-Molecicco for the sprite Icon Of Sin version Immorpher, and the sprite Keen Mario
