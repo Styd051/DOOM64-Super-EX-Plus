@@ -69,4 +69,6 @@ currently 1 new power have been added
 
 -DOOMPiter for the sprite Nailgun 
 
--Molecicco for the sprite Icon Of Sin version Immorpher, and the sprite Keen Mario
+-Molecicco for the sprite Icon Of Sin version Immorpher
+
+-Bobjet for the sprite Keen Mario
