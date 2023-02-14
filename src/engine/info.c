@@ -74,7 +74,7 @@ char* sprnames[NUMSPRITES + 1] = {  //0x5FA30
 	"DKHF",
 	"BR64",
 	"BQ64",
-	"AV64",
+	"VILE",
 	"VFIR",
 	"MPOS",
 	"POS4",
@@ -110,6 +110,8 @@ char* sprnames[NUMSPRITES + 1] = {  //0x5FA30
 	"MAG4",
 	"MAG5",
 	"MAG6",
+	"BBRN",
+	"KEEN",
 	NULL
 };
 
@@ -215,6 +217,9 @@ void A_SpidDeathEvent();
 void A_MeleeZombieAttack();
 void A_SSGPosAttack();
 void A_FireNailgun();
+void A_BrainPain();
+void A_BrainScream();
+void A_BrainDie();
 
 
 #pragma warning(push)
@@ -1651,46 +1656,44 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 
 
 
-	/*S_VILE_STND*/{ SPR_AV64, 0, 10, {A_Look}, S_VILE_STND2 },
-	/*S_VILE_STND2*/{ SPR_AV64, 1, 10, {A_Look}, S_VILE_STND3 },
-	/*S_VILE_STND3*/{ SPR_AV64, 2, 10, {A_Look}, S_VILE_STND4 },
-	/*S_VILE_STND4*/{ SPR_AV64, 3, 10, {A_Look}, S_VILE_STND },
-	/*S_VILE_RUN1*/{ SPR_AV64, 0, 2, {A_VileChase}, S_VILE_RUN2 },
-	/*S_VILE_RUN2*/{ SPR_AV64, 0, 2, {A_VileChase}, S_VILE_RUN3 },
-	/*S_VILE_RUN3*/{ SPR_AV64, 0, 2, {A_VileChase}, S_VILE_RUN4 },
-	/*S_VILE_RUN4*/{ SPR_AV64, 1, 2, {A_VileChase}, S_VILE_RUN5 },
-	/*S_VILE_RUN5*/{ SPR_AV64, 1, 2, {A_VileChase}, S_VILE_RUN6 },
-	/*S_VILE_RUN6*/{ SPR_AV64, 1, 2, {A_VileChase}, S_VILE_RUN7 },
-	/*S_VILE_RUN7*/{ SPR_AV64, 2, 2, {A_VileChase}, S_VILE_RUN8 },
-	/*S_VILE_RUN8*/{ SPR_AV64, 2, 2, {A_VileChase}, S_VILE_RUN9 },
-	/*S_VILE_RUN9*/{ SPR_AV64, 2, 2, {A_VileChase}, S_VILE_RUN10 },
-	/*S_VILE_RUN10*/{ SPR_AV64, 3, 2, {A_VileChase}, S_VILE_RUN11 },
-	/*S_VILE_RUN11*/{ SPR_AV64, 3, 2, {A_VileChase}, S_VILE_RUN12 },
-	/*S_VILE_RUN12*/{ SPR_AV64, 3, 2, {A_VileChase}, S_VILE_RUN1 },
-	/*S_VILE_ATK1*/{ SPR_AV64, 4, 0, {A_VileStart}, S_VILE_ATK2 },
-	/*S_VILE_ATK2*/{ SPR_AV64, 4, 10, {A_FaceTarget}, S_VILE_ATK3 },
-	/*S_VILE_ATK3*/{ SPR_AV64, 4, 8, {A_VileTarget}, S_VILE_ATK4 },
-	/*S_VILE_ATK4*/{ SPR_AV64, 4, 8, {A_FaceTarget}, S_VILE_ATK5 },
-	/*S_VILE_ATK5*/{ SPR_AV64, 5, 8, {A_FaceTarget}, S_VILE_ATK6 },
-	/*S_VILE_ATK6*/{ SPR_AV64, 5, 8, {A_FaceTarget}, S_VILE_ATK7 },
-	/*S_VILE_ATK7*/{ SPR_AV64, 6, 8, {A_FaceTarget}, S_VILE_ATK8 },
-	/*S_VILE_ATK8*/{ SPR_AV64, 6, 8, {A_FaceTarget}, S_VILE_ATK9 },
-	/*S_VILE_ATK9*/{ SPR_AV64, 6, 8, {A_FaceTarget}, S_VILE_ATK10 },
-	/*S_VILE_ATK10*/{ SPR_AV64, 6, 8, {A_VileAttack}, S_VILE_ATK11 },
-	/*S_VILE_ATK11*/{ SPR_AV64, 5, 10, {NULL}, S_VILE_ATK12 },
-	/*S_VILE_ATK12*/{ SPR_AV64, 4, 10, {NULL}, S_VILE_RUN1 },
-	/*S_VILE_HEAL1*/{ SPR_AV64, 7, 10, {NULL}, S_VILE_HEAL2 },
-	/*S_VILE_HEAL2*/{ SPR_AV64, 8, 10, {NULL}, S_VILE_HEAL3 },
-	/*S_VILE_HEAL3*/{ SPR_AV64, 9, 10, {NULL}, S_VILE_RUN1 },
-	/*S_VILE_PAIN*/{ SPR_AV64, 10, 5, {NULL}, S_VILE_PAIN2 },
-	/*S_VILE_PAIN2*/{ SPR_AV64, 10, 5, {A_Pain}, S_VILE_RUN1 },
-	/*S_VILE_DIE1*/{ SPR_AV64, 11, 7, {A_RectDeathEvent}, S_VILE_DIE2 },
-	/*S_VILE_DIE2*/{ SPR_AV64, 12, 7, {NULL}, S_VILE_DIE3 },
-	/*S_VILE_DIE3*/{ SPR_AV64, 13, 7, {NULL}, S_VILE_DIE4 },
-	/*S_VILE_DIE4*/{ SPR_AV64, 14, 7, {NULL}, S_VILE_DIE5 },
-	/*S_VILE_DIE5*/{ SPR_AV64, 15, 7, {NULL}, S_VILE_DIE6 },
-	/*S_VILE_DIE6*/{ SPR_AV64, 16, 7, {A_OnDeathTrigger}, S_VILE_DIE7 },
-	/*S_VILE_DIE7*/{ SPR_AV64, 17, 2, {NULL}, S_NULL },
+	/*S_VILE_STND*/{ SPR_VILE, 0, 10, {A_Look}, S_VILE_STND2 },
+	/*S_VILE_STND2*/{ SPR_VILE, 1, 10, {A_Look}, S_VILE_STND },
+	/*S_VILE_RUN1*/{ SPR_VILE, 0, 2, {A_VileChase}, S_VILE_RUN2 },
+	/*S_VILE_RUN2*/{ SPR_VILE, 0, 2, {A_VileChase}, S_VILE_RUN3 },
+	/*S_VILE_RUN3*/{ SPR_VILE, 1, 2, {A_VileChase}, S_VILE_RUN4 },
+	/*S_VILE_RUN4*/{ SPR_VILE, 1, 2, {A_VileChase}, S_VILE_RUN5 },
+	/*S_VILE_RUN5*/{ SPR_VILE, 2, 2, {A_VileChase}, S_VILE_RUN6 },
+	/*S_VILE_RUN6*/{ SPR_VILE, 2, 2, {A_VileChase}, S_VILE_RUN7 },
+	/*S_VILE_RUN7*/{ SPR_VILE, 3, 2, {A_VileChase}, S_VILE_RUN8 },
+	/*S_VILE_RUN8*/{ SPR_VILE, 3, 2, {A_VileChase}, S_VILE_RUN9 },
+	/*S_VILE_RUN9*/{ SPR_VILE, 4, 2, {A_VileChase}, S_VILE_RUN10 },
+	/*S_VILE_RUN10*/{ SPR_VILE, 4, 2, {A_VileChase}, S_VILE_RUN11 },
+	/*S_VILE_RUN11*/{ SPR_VILE, 5, 2, {A_VileChase}, S_VILE_RUN12 },
+	/*S_VILE_RUN12*/{ SPR_VILE, 5, 2, {A_VileChase}, S_VILE_RUN1 },
+	/*S_VILE_ATK1*/{ SPR_VILE, 32774, 0, {A_VileStart}, S_VILE_ATK2 },
+	/*S_VILE_ATK2*/{ SPR_VILE, 32774, 10, {A_FaceTarget}, S_VILE_ATK3 },
+	/*S_VILE_ATK3*/{ SPR_VILE, 32775, 8, {A_VileTarget}, S_VILE_ATK4 },
+	/*S_VILE_ATK4*/{ SPR_VILE, 32776, 8, {A_FaceTarget}, S_VILE_ATK5 },
+	/*S_VILE_ATK5*/{ SPR_VILE, 32777, 8, {A_FaceTarget}, S_VILE_ATK6 },
+	/*S_VILE_ATK6*/{ SPR_VILE, 32778, 8, {A_FaceTarget}, S_VILE_ATK7 },
+	/*S_VILE_ATK7*/{ SPR_VILE, 32779, 8, {A_FaceTarget}, S_VILE_ATK8 },
+	/*S_VILE_ATK8*/{ SPR_VILE, 32780, 8, {A_FaceTarget}, S_VILE_ATK9 },
+	/*S_VILE_ATK9*/{ SPR_VILE, 32781, 8, {A_FaceTarget}, S_VILE_ATK10 },
+	/*S_VILE_ATK10*/{ SPR_VILE, 32782, 8, {A_VileAttack}, S_VILE_ATK11 },
+	/*S_VILE_ATK11*/{ SPR_VILE, 32783, 8, {NULL}, S_VILE_ATK12 },
+	/*S_VILE_ATK12*/{ SPR_VILE, 32784, 12, {NULL}, S_VILE_RUN1 },
+	/*S_VILE_HEAL1*/{ SPR_VILE, 32793, 10, {NULL}, S_VILE_HEAL2 },
+	/*S_VILE_HEAL2*/{ SPR_VILE, 32794, 10, {NULL}, S_VILE_HEAL3 },
+	/*S_VILE_HEAL3*/{ SPR_VILE, 32795, 10, {NULL}, S_VILE_RUN1 },
+	/*S_VILE_PAIN*/{ SPR_VILE, 17, 5, {NULL}, S_VILE_PAIN2 },
+	/*S_VILE_PAIN2*/{ SPR_VILE, 17, 5, {A_Pain}, S_VILE_RUN1 },
+	/*S_VILE_DIE1*/{ SPR_VILE, 18, 7, {NULL}, S_VILE_DIE2 },
+	/*S_VILE_DIE2*/{ SPR_VILE, 19, 7, {A_Scream}, S_VILE_DIE3 },
+	/*S_VILE_DIE3*/{ SPR_VILE, 20, 7, {A_Fall}, S_VILE_DIE4 },
+	/*S_VILE_DIE4*/{ SPR_VILE, 21, 7, {NULL}, S_VILE_DIE5 },
+	/*S_VILE_DIE5*/{ SPR_VILE, 22, 7, {NULL}, S_VILE_DIE6 },
+	/*S_VILE_DIE6*/{ SPR_VILE, 23, 7, {A_OnDeathTrigger}, S_VILE_DIE7 },
+	/*S_VILE_DIE7*/{ SPR_VILE, 24, -1, {NULL}, S_NULL },
 
 	/*S_FIRE1*/{ SPR_VFIR, 32768, 2, {A_StartFire}, S_FIRE2 },
 	/*S_FIRE2*/{ SPR_VFIR, 32769, 2, {A_Fire}, S_FIRE3 },
@@ -1721,7 +1724,12 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_FIRE27*/{ SPR_VFIR, 32774, 2, {A_Fire}, S_FIRE28 },
 	/*S_FIRE28*/{ SPR_VFIR, 32775, 2, {A_Fire}, S_FIRE29 },
 	/*S_FIRE29*/{ SPR_VFIR, 32774, 2, {A_Fire}, S_FIRE30 },
-	/*S_FIRE30*/{ SPR_VFIR, 32775, 2, {A_Fire}, S_NULL },
+	/*S_FIRE30*/{ SPR_VFIR, 32775, 2, {A_Fire}, S_FIRE31 },
+	/*S_FIRE31*/{ SPR_VFIR, 32776, 2, {A_Fire}, S_FIRE32 },
+	/*S_FIRE32*/{ SPR_VFIR, 32775, 2, {A_Fire}, S_FIRE33 },
+	/*S_FIRE33*/{ SPR_VFIR, 32776, 2, {A_Fire}, S_FIRE34 },
+	/*S_FIRE34*/{ SPR_VFIR, 32775, 2, {A_Fire}, S_FIRE35 },
+	/*S_FIRE35*/{ SPR_VFIR, 32776, 2, {A_Fire}, S_NULL },
 
 	/*S_MPOS_STND*/{ SPR_MPOS, 0, 10, {A_Look}, S_MPOS_STND2 },
 	/*S_MPOS_STND2*/{ SPR_MPOS, 1, 10, {A_Look}, S_MPOS_STND },
@@ -1782,6 +1790,30 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_POSS3_RAISE3*/{ SPR_POS4, 9, 5, {NULL}, S_POSS3_RAISE4 },
 	/*S_POSS3_RAISE4*/{ SPR_POS4, 8, 5, {NULL}, S_POSS3_RAISE5 },
 	/*S_POSS3_RAISE5*/{ SPR_POS4, 7, 5, {NULL}, S_POSS3_RUN1 },
+
+	/*S_BRAIN_STND*/{ SPR_BBRN, 0, 1, {A_Look}, S_BRAIN_STND },
+	/*S_BRAIN*/{ SPR_BBRN, 0, -1, {NULL}, S_NULL },
+	/*S_BRAIN_PAIN*/{ SPR_BBRN, 1, 36, {A_BrainPain}, S_BRAIN },
+	/*S_BRAIN_DIE1*/{ SPR_BBRN, 0, 100, {A_BrainScream}, S_BRAIN_DIE2 },
+	/*S_BRAIN_DIE2*/{ SPR_BBRN, 0, 10, {NULL}, S_BRAIN_DIE3 },
+	/*S_BRAIN_DIE3*/{ SPR_BBRN, 0, 10, {NULL}, S_BRAIN_DIE4 },
+	/*S_BRAIN_DIE4*/{ SPR_BBRN, 0, -1, {A_BrainDie}, S_NULL },
+
+	/*S_KEENSTND*/{ SPR_KEEN, 0, -1, {NULL}, S_KEENSTND },
+	/*S_COMMKEEN*/{ SPR_KEEN, 0, 6, {NULL}, S_COMMKEEN2 },
+	/*S_COMMKEEN2*/{ SPR_KEEN, 1, 6, {NULL}, S_COMMKEEN3 },
+	/*S_COMMKEEN3*/{ SPR_KEEN, 2, 6, {A_Scream}, S_COMMKEEN4 },
+	/*S_COMMKEEN4*/{ SPR_KEEN, 3, 6, {NULL}, S_COMMKEEN5 },
+	/*S_COMMKEEN5*/{ SPR_KEEN, 4, 6, {A_Fall}, S_COMMKEEN6 },
+	/*S_COMMKEEN6*/{ SPR_KEEN, 5, 6, {NULL}, S_COMMKEEN7 },
+	/*S_COMMKEEN7*/{ SPR_KEEN, 6, 6, {NULL}, S_COMMKEEN8 },
+	/*S_COMMKEEN8*/{ SPR_KEEN, 7, 6, {NULL}, S_COMMKEEN9 },
+	/*S_COMMKEEN9*/{ SPR_KEEN, 8, 6, {NULL}, S_COMMKEEN10 },
+	/*S_COMMKEEN10*/{ SPR_KEEN, 9, 6, {NULL}, S_COMMKEEN11 },
+	/*S_COMMKEEN11*/{ SPR_KEEN, 10, 6, {A_OnDeathTrigger}, S_COMMKEEN12 },
+	/*S_COMMKEEN12*/{ SPR_KEEN, 11, -1, {NULL}, S_NULL },
+	/*S_KEENPAIN*/{ SPR_KEEN, 12, 4, {NULL}, S_KEENPAIN2 },
+	/*S_KEENPAIN2*/{ SPR_KEEN, 12, 8, {A_Pain}, S_KEENSTND },
 };
 
 #pragma warning(pop)
@@ -8425,8 +8457,8 @@ S_NULL	   //raisestate
 	S_NULL,		// xdeathstate
 	sfx_vildth,		// deathsound
 	15,		// speed
-	20 * FRACUNIT,		// radius
-	56 * FRACUNIT,		// height
+	32 * FRACUNIT,		// radius
+	120 * FRACUNIT,		// height
 	500,		// mass
 	0,		// damage
 	sfx_vilact,		// activesound
@@ -8750,6 +8782,64 @@ S_NULL	   //raisestate
 	20,        //damage
 	sfx_None/*sfx_000*/,        //activesound
 	MF_NOBLOCKMAP | MF_DROPOFF | MF_MISSILE,        //flags
+	0,        //palette
+	255,        //alpha
+	S_NULL	   //raisestate
+},
+
+{
+	/*MT_BOSSBRAIN*/
+	88,        //doomednum
+	S_BRAIN_STND,        //spawnstate
+	250,        //spawnhealth
+	S_BRAIN,        //seestate
+	sfx_bossit,        //seesound
+	8,        //reactiontime
+	sfx_None/*sfx_000*/,        //attacksound
+	S_BRAIN_PAIN,        //painstate
+	255,        //painchance
+	sfx_bospn,        //painsound
+	S_NULL,        //meleestate
+	S_NULL,        //missilestate
+	S_BRAIN_DIE1,        //deathstate
+	S_NULL,        //xdeathstate
+	sfx_bosdth,        //deathsound
+	0,        //speed
+	16 * FRACUNIT,        //radius
+	16 * FRACUNIT,        //height
+	10000000,        //mass
+	0,        //damage
+	sfx_None/*sfx_000*/,        //activesound
+	MF_SOLID | MF_SHOOTABLE,        //flags
+	0,        //palette
+	255,        //alpha
+	S_NULL	   //raisestate
+},
+
+{
+	/*MT_MARIO*/
+	72,        //doomednum
+	S_KEENSTND,        //spawnstate
+	100,        //spawnhealth
+	S_NULL,        //seestate
+	sfx_None/*sfx_000*/,        //seesound
+	8,        //reactiontime
+	sfx_None/*sfx_000*/,        //attacksound
+	S_KEENPAIN,        //painstate
+	256,        //painchance
+	sfx_keenpn,        //painsound
+	S_NULL,        //meleestate
+	S_NULL,        //missilestate
+	S_COMMKEEN,        //deathstate
+	S_NULL,        //xdeathstate
+	sfx_keendt,        //deathsound
+	0,        //speed
+	16 * FRACUNIT,        //radius
+	72 * FRACUNIT,        //height
+	10000000,        //mass
+	0,        //damage
+	sfx_None/*sfx_000*/,        //activesound
+	MF_SOLID | MF_SPAWNCEILING | MF_SHOOTABLE | MF_COUNTKILL,        //flags
 	0,        //palette
 	255,        //alpha
 	S_NULL	   //raisestate

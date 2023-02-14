@@ -1552,7 +1552,7 @@ boolean PIT_RadiusAttack(mobj_t* thing) {
         return true;
     }
 
-    //  archvile take no damage from concussion.
+    //  archvile take no damage to avoid the bug where it attacks itself
     if (thing->type == MT_VILE) {
         return true;
     }
