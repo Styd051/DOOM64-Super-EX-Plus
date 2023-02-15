@@ -1552,11 +1552,6 @@ boolean PIT_RadiusAttack(mobj_t* thing) {
         return true;
     }
 
-    //  archvile take no damage to avoid the bug where it attacks itself
-    if (thing->type == MT_VILE) {
-        return true;
-    }
-
     if (thing->type == MT_SKULL || thing->type == MT_PAIN) {
         if (bombsource && bombsource->type == MT_SKULL) {
             return true;
