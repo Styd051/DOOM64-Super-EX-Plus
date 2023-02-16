@@ -112,6 +112,7 @@ char* sprnames[NUMSPRITES + 1] = {  //0x5FA30
 	"MAG6",
 	"BBRN",
 	"KEEN",
+	"BOSF",
 	NULL
 };
 
@@ -220,6 +221,10 @@ void A_FireNailgun();
 void A_BrainPain();
 void A_BrainScream();
 void A_BrainDie();
+void A_BrainAwake();
+void A_BrainSpit();
+void A_SpawnSound();
+void A_SpawnFly();
 
 
 #pragma warning(push)
@@ -1791,13 +1796,35 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_POSS3_RAISE4*/{ SPR_POS4, 8, 5, {NULL}, S_POSS3_RAISE5 },
 	/*S_POSS3_RAISE5*/{ SPR_POS4, 7, 5, {NULL}, S_POSS3_RUN1 },
 
-	/*S_BRAIN_STND*/{ SPR_BBRN, 0, 1, {A_Look}, S_BRAIN_STND },
 	/*S_BRAIN*/{ SPR_BBRN, 0, -1, {NULL}, S_NULL },
 	/*S_BRAIN_PAIN*/{ SPR_BBRN, 1, 36, {A_BrainPain}, S_BRAIN },
 	/*S_BRAIN_DIE1*/{ SPR_BBRN, 0, 100, {A_BrainScream}, S_BRAIN_DIE2 },
 	/*S_BRAIN_DIE2*/{ SPR_BBRN, 0, 10, {NULL}, S_BRAIN_DIE3 },
 	/*S_BRAIN_DIE3*/{ SPR_BBRN, 0, 10, {NULL}, S_BRAIN_DIE4 },
 	/*S_BRAIN_DIE4*/{ SPR_BBRN, 0, -1, {A_BrainDie}, S_NULL },
+
+	/*S_BRAINEYE*/{ SPR_BBRN, 0, 10, {A_Look}, S_BRAINEYE },
+	/*S_BRAINEYESEE*/{ SPR_BBRN, 0, 181, {A_BrainAwake}, S_BRAINEYE1 },
+	/*S_BRAINEYE1*/{ SPR_BBRN, 0, 150, {A_BrainSpit}, S_BRAINEYE1 },
+
+	/*S_SPAWN1*/{ SPR_BOSF, 32768, 3, {A_SpawnSound}, S_SPAWN2 },
+	/*S_SPAWN2*/{ SPR_BOSF, 32769, 3, {A_SpawnFly}, S_SPAWN3 },
+	/*S_SPAWN3*/{ SPR_BOSF, 32770, 3, {A_SpawnFly}, S_SPAWN4 },
+	/*S_SPAWN4*/{ SPR_BOSF, 32771, 3, {A_SpawnFly}, S_SPAWN5 },
+	/*S_SPAWN5*/{ SPR_BOSF, 32772, 3, {A_SpawnFly}, S_SPAWN6 },
+	/*S_SPAWN6*/{ SPR_BOSF, 32773, 3, {A_SpawnFly}, S_SPAWN7 },
+	/*S_SPAWN7*/{ SPR_BOSF, 32774, 3, {A_SpawnFly}, S_SPAWN8 },
+	/*S_SPAWN8*/{ SPR_BOSF, 32775, 3, {A_SpawnFly}, S_SPAWN1 },
+
+	/*S_SPAWNFIRE1*/{ SPR_VFIR, 32768, 4, {A_Fire}, S_SPAWNFIRE2 },
+	/*S_SPAWNFIRE2*/{ SPR_VFIR, 32769, 4, {A_Fire}, S_SPAWNFIRE3 },
+	/*S_SPAWNFIRE3*/{ SPR_VFIR, 32770, 4, {A_Fire}, S_SPAWNFIRE4 },
+	/*S_SPAWNFIRE4*/{ SPR_VFIR, 32771, 4, {A_Fire}, S_SPAWNFIRE5 },
+	/*S_SPAWNFIRE5*/{ SPR_VFIR, 32772, 4, {A_Fire}, S_SPAWNFIRE6 },
+	/*S_SPAWNFIRE6*/{ SPR_VFIR, 32773, 4, {A_Fire}, S_SPAWNFIRE7 },
+	/*S_SPAWNFIRE7*/{ SPR_VFIR, 32774, 4, {A_Fire}, S_SPAWNFIRE8 },
+	/*S_SPAWNFIRE8*/{ SPR_VFIR, 32775, 4, {A_Fire}, S_SPAWNFIRE9 },
+	/*S_SPAWNFIRE9*/{ SPR_VFIR, 32776, 4, {A_Fire}, S_NULL },
 
 	/*S_KEENSTND*/{ SPR_KEEN, 0, -1, {NULL}, S_KEENSTND },
 	/*S_COMMKEEN*/{ SPR_KEEN, 0, 6, {NULL}, S_COMMKEEN2 },
@@ -8790,10 +8817,10 @@ S_NULL	   //raisestate
 {
 	/*MT_BOSSBRAIN*/
 	88,        //doomednum
-	S_BRAIN_STND,        //spawnstate
+	S_BRAIN,        //spawnstate
 	250,        //spawnhealth
-	S_BRAIN,        //seestate
-	sfx_bossit,        //seesound
+	S_NULL,        //seestate
+	sfx_None/*sfx_000*/,        //seesound
 	8,        //reactiontime
 	sfx_None/*sfx_000*/,        //attacksound
 	S_BRAIN_PAIN,        //painstate
@@ -8811,6 +8838,122 @@ S_NULL	   //raisestate
 	0,        //damage
 	sfx_None/*sfx_000*/,        //activesound
 	MF_SOLID | MF_SHOOTABLE,        //flags
+	0,        //palette
+	255,        //alpha
+	S_NULL	   //raisestate
+},
+
+{
+	/*MT_BOSSSPIT*/
+	90,        //doomednum
+	S_BRAINEYE,        //spawnstate
+	1000,        //spawnhealth
+	S_BRAINEYESEE,        //seestate
+	sfx_None/*sfx_000*/,        //seesound
+	8,        //reactiontime
+	sfx_None/*sfx_000*/,        //attacksound
+	S_NULL,        //painstate
+	0,        //painchance
+	sfx_None/*sfx_000*/,        //painsound
+	S_NULL,        //meleestate
+	S_NULL,        //missilestate
+	S_NULL,        //deathstate
+	S_NULL,        //xdeathstate
+	sfx_None/*sfx_000*/,        //deathsound
+	0,        //speed
+	20 * FRACUNIT,        //radius
+	32 * FRACUNIT,        //height
+	100,        //mass
+	0,        //damage
+	sfx_None/*sfx_000*/,        //activesound
+	MF_NOBLOCKMAP | MF_NOSECTOR,        //flags
+	0,        //palette
+	255,        //alpha
+	S_NULL	   //raisestate
+},
+
+{
+	/*MT_BOSSTARGET*/
+	87,        //doomednum
+	S_NULL,        //spawnstate
+	1000,        //spawnhealth
+	S_NULL,        //seestate
+	sfx_None/*sfx_000*/,        //seesound
+	8,        //reactiontime
+	sfx_None/*sfx_000*/,        //attacksound
+	S_NULL,        //painstate
+	0,        //painchance
+	sfx_None/*sfx_000*/,        //painsound
+	S_NULL,        //meleestate
+	S_NULL,        //missilestate
+	S_NULL,        //deathstate
+	S_NULL,        //xdeathstate
+	sfx_None/*sfx_000*/,        //deathsound
+	0,        //speed
+	20 * FRACUNIT,        //radius
+	32 * FRACUNIT,        //height
+	100,        //mass
+	0,        //damage
+	sfx_None/*sfx_000*/,        //activesound
+	MF_NOBLOCKMAP | MF_NOSECTOR,        //flags
+	0,        //palette
+	255,        //alpha
+	S_NULL	   //raisestate
+},
+
+{
+	/*MT_SPAWNSHOT*/
+	-1,        //doomednum
+	S_SPAWN1,        //spawnstate
+	1000,        //spawnhealth
+	S_NULL,        //seestate
+	sfx_None,        //seesound
+	8,        //reactiontime
+	sfx_None/*sfx_000*/,        //attacksound
+	S_NULL,        //painstate
+	0,        //painchance
+	sfx_None/*sfx_000*/,        //painsound
+	S_NULL,        //meleestate
+	S_NULL,        //missilestate
+	S_NULL,        //deathstate
+	S_NULL,        //xdeathstate
+	sfx_None,        //deathsound
+	10,        //speed
+	6 * FRACUNIT,        //radius
+	32 * FRACUNIT,        //height
+	100,        //mass
+	3,        //damage
+	sfx_None/*sfx_000*/,        //activesound
+	MF_NOBLOCKMAP | MF_MISSILE | MF_DROPOFF | MF_NOCLIP,        //flags
+	0,        //palette
+	255,        //alpha
+	S_NULL	   //raisestate
+},
+
+{
+	/*MT_SPAWNFIRE*/
+	-1,        //doomednum
+	S_SPAWNFIRE1,        //spawnstate
+	1000,        //spawnhealth
+	S_NULL,        //seestate
+	sfx_None/*sfx_000*/,        //seesound
+	8,        //reactiontime
+	sfx_None/*sfx_000*/,        //attacksound
+	S_NULL,        //painstate
+	0,        //painchance
+	sfx_None/*sfx_000*/,        //painsound
+	S_NULL,        //meleestate
+	S_NULL,        //missilestate
+	S_NULL,        //deathstate
+	S_NULL,        //xdeathstate
+	sfx_None/*sfx_000*/,        //deathsound
+	0,        //speed
+	20 * FRACUNIT,        //radius
+	16 * FRACUNIT,        //height
+	100,        //mass
+	0,        //damage
+	sfx_None/*sfx_000*/,        //activesound
+	MF_NOBLOCKMAP,        //flags
 	0,        //palette
 	255,        //alpha
 	S_NULL	   //raisestate

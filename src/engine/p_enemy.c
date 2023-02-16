@@ -2525,6 +2525,43 @@ void A_SSGPosAttack(mobj_t* actor) {
 }
 
 //
+// A_BrainAwake
+//
+
+mobj_t* braintargets[32];
+int		numbraintargets;
+int		braintargeton;
+
+void A_BrainAwake(mobj_t* mo)
+{
+	thinker_t* thinker;
+	mobj_t* m;
+
+	// find all the target spots
+	numbraintargets = 0;
+	braintargeton = 0;
+
+	thinker = thinkercap.next;
+	for (thinker = thinkercap.next;
+		thinker != &thinkercap;
+		thinker = thinker->next)
+	{
+		if (thinker->function.acp1 != (actionf_p1)P_MobjThinker)
+			continue;	// not a mobj
+
+		m = (mobj_t*)thinker;
+
+		if (m->type == MT_BOSSTARGET)
+		{
+			braintargets[numbraintargets] = m;
+			numbraintargets++;
+		}
+	}
+
+	S_StartSound(NULL, sfx_bossit);
+}
+
+//
 // A_BrainPain
 //
 
@@ -2568,4 +2605,106 @@ void A_BrainScream(mobj_t* mo)
 void A_BrainDie(mobj_t* mo)
 {
 	G_ExitLevel();
+}
+
+//
+// A_BrainSpit
+//
+
+void A_BrainSpit(mobj_t* mo)
+{
+	mobj_t* targ;
+	mobj_t* newmobj;
+
+	static int	easy = 0;
+
+	easy ^= 1;
+	if (gameskill <= sk_easy && (!easy))
+		return;
+
+	// shoot a cube at current target
+	targ = braintargets[braintargeton];
+	braintargeton = (braintargeton + 1) % numbraintargets;
+
+	// spawn brain missile
+	newmobj = P_SpawnMissile(mo, targ, MT_SPAWNSHOT, 0, 0, 0, true);
+	newmobj->target = targ;
+	newmobj->reactiontime =
+		((targ->y - mo->y) / newmobj->momy) / newmobj->state->info_tics;
+
+	S_StartSound(NULL, NULL);
+}
+
+
+//
+// A_SpawnSound
+//
+
+void A_SpawnFly(mobj_t* mo);
+
+// travelling cube sound
+void A_SpawnSound(mobj_t* mo)
+{
+	S_StartSound(mo, NULL);
+	A_SpawnFly(mo);
+}
+
+//
+// A_SpawnFly
+//
+
+void A_SpawnFly(mobj_t* mo)
+{
+	mobj_t* newmobj;
+	mobj_t* fog;
+	mobj_t* targ;
+	int		r;
+	mobjtype_t	type;
+
+	if (--mo->reactiontime)
+		return;	// still flying
+
+	targ = mo->target;
+
+	// First spawn teleport fog.
+	fog = P_SpawnMobj(targ->x, targ->y, targ->z, MT_SPAWNFIRE);
+	S_StartSound(fog, sfx_telept);
+
+	// Randomly select monster to spawn.
+	r = P_Random();
+
+	// Probability distribution (kind of :),
+	// decreasing likelihood.
+	if (r < 50)
+		type = MT_IMP1;
+	else if (r < 90)
+		type = MT_POSSESSED2;
+	else if (r < 120)
+		type = MT_DEMON2;
+	else if (r < 130)
+		type = MT_PAIN;
+	else if (r < 160)
+		type = MT_CACODEMON;
+	else if (r < 162)
+		type = MT_VILE;
+	else if (r < 172)
+		type = MT_UNDEAD;
+	else if (r < 192)
+		type = MT_BABY;
+	else if (r < 222)
+		type = MT_MANCUBUS;
+	else if (r < 246)
+		type = MT_BRUISER2;
+	else
+		type = MT_BRUISER1;
+
+	newmobj = P_SpawnMobj(targ->x, targ->y, targ->z, type);
+	if (P_LookForPlayers(newmobj, true))
+		P_SetMobjState(newmobj, newmobj->info->seestate);
+
+	// telefrag anything in this spot
+	P_TeleportMove(newmobj, newmobj->x, newmobj->y);
+
+	// remove self (i.e., cube).
+	P_RemoveMobj(mo);
 }
