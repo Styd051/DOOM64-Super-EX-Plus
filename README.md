@@ -2,7 +2,7 @@
 Super EX+ and a custom fork of  EX+ of Gibbon, designed for mappers to use custom content on their map, with a modified DOOM Builder 64 configuration to show custom content, like custom monsters, custom decorations, etc... in the map editor
 
 # Custom Content Added
-currently 13 new monsters have been added
+currently 15 new monsters have been added
 
 -Archvile
 
@@ -29,6 +29,10 @@ currently 13 new monsters have been added
 -Icon Of Sin (Immorpher)
 
 -Mario
+
+-Mother Demon rework and who the power to resurrect demons
+
+-WolfensteinSS
 
 currently 88 new decorations have been added
 
@@ -72,3 +76,5 @@ currently 1 new power have been added
 -Molecicco for the sprite Icon Of Sin version Immorpher
 
 -Bobjet for the sprite Keen Mario
+
+-Velaron for the sprite WolfensteinSS

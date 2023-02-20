@@ -113,6 +113,8 @@ char* sprnames[NUMSPRITES + 1] = {  //0x5FA30
 	"BBRN",
 	"KEEN",
 	"BOSF",
+	"TARG",
+	"SSWV",
 	NULL
 };
 
@@ -225,6 +227,9 @@ void A_BrainAwake();
 void A_BrainSpit();
 void A_SpawnSound();
 void A_SpawnFly();
+void A_RectChase2();
+void A_RectGroundFire2();
+void A_RectMissile2();
 
 
 #pragma warning(push)
@@ -1803,9 +1808,9 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_BRAIN_DIE3*/{ SPR_BBRN, 0, 10, {NULL}, S_BRAIN_DIE4 },
 	/*S_BRAIN_DIE4*/{ SPR_BBRN, 0, -1, {A_BrainDie}, S_NULL },
 
-	/*S_BRAINEYE*/{ SPR_BBRN, 0, 10, {A_Look}, S_BRAINEYE },
-	/*S_BRAINEYESEE*/{ SPR_BBRN, 0, 181, {A_BrainAwake}, S_BRAINEYE1 },
-	/*S_BRAINEYE1*/{ SPR_BBRN, 0, 150, {A_BrainSpit}, S_BRAINEYE1 },
+	/*S_BRAINEYE*/{ SPR_POSS, 0, 10, {A_Look}, S_BRAINEYE },
+	/*S_BRAINEYESEE*/{ SPR_POSS, 0, 181, {A_BrainAwake}, S_BRAINEYE1 },
+	/*S_BRAINEYE1*/{ SPR_POSS, 0, 150, {A_BrainSpit}, S_BRAINEYE1 },
 
 	/*S_SPAWN1*/{ SPR_BOSF, 32768, 3, {A_SpawnSound}, S_SPAWN2 },
 	/*S_SPAWN2*/{ SPR_BOSF, 32769, 3, {A_SpawnFly}, S_SPAWN3 },
@@ -1826,6 +1831,8 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_SPAWNFIRE8*/{ SPR_VFIR, 32775, 4, {A_Fire}, S_SPAWNFIRE9 },
 	/*S_SPAWNFIRE9*/{ SPR_VFIR, 32776, 4, {A_Fire}, S_NULL },
 
+	/*S_TARGET*/{ SPR_TARG, 32768, -1, {NULL}, S_NULL },
+
 	/*S_KEENSTND*/{ SPR_KEEN, 0, -1, {NULL}, S_KEENSTND },
 	/*S_COMMKEEN*/{ SPR_KEEN, 0, 6, {NULL}, S_COMMKEEN2 },
 	/*S_COMMKEEN2*/{ SPR_KEEN, 1, 6, {NULL}, S_COMMKEEN3 },
@@ -1841,6 +1848,67 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_COMMKEEN12*/{ SPR_KEEN, 11, -1, {NULL}, S_NULL },
 	/*S_KEENPAIN*/{ SPR_KEEN, 12, 4, {NULL}, S_KEENPAIN2 },
 	/*S_KEENPAIN2*/{ SPR_KEEN, 12, 8, {A_Pain}, S_KEENSTND },
+
+	/*S_RECT2_STND*/{ SPR_RECT, 0, 8, {A_Look}, S_RECT2_STND2 },
+	/*S_RECT2_STND2*/{ SPR_RECT, 1, 8, {A_Look}, S_RECT2_STND3 },
+	/*S_RECT2_STND3*/{ SPR_RECT, 2, 8, {A_Look}, S_RECT2_STND4 },
+	/*S_RECT2_STND4*/{ SPR_RECT, 3, 8, {A_Look}, S_RECT2_STND },
+	/*S_RECT2_RUN1*/{ SPR_RECT, 0, 3, {A_RectChase2}, S_RECT2_RUN2 },
+	/*S_RECT2_RUN2*/{ SPR_RECT, 0, 3, {A_RectChase2}, S_RECT2_RUN3 },
+	/*S_RECT2_RUN3*/{ SPR_RECT, 0, 3, {A_RectChase2}, S_RECT2_RUN4 },
+	/*S_RECT2_RUN4*/{ SPR_RECT, 1, 3, {A_RectChase2}, S_RECT2_RUN5 },
+	/*S_RECT2_RUN5*/{ SPR_RECT, 1, 3, {A_RectChase2}, S_RECT2_RUN6 },
+	/*S_RECT2_RUN6*/{ SPR_RECT, 1, 3, {A_RectChase2}, S_RECT2_RUN7 },
+	/*S_RECT2_RUN7*/{ SPR_RECT, 2, 3, {A_RectChase2}, S_RECT2_RUN8 },
+	/*S_RECT2_RUN8*/{ SPR_RECT, 2, 3, {A_RectChase2}, S_RECT2_RUN9 },
+	/*S_RECT2_RUN9*/{ SPR_RECT, 2, 3, {A_RectChase2}, S_RECT2_RUN10 },
+	/*S_RECT2_RUN10*/{ SPR_RECT, 3, 3, {A_RectChase2}, S_RECT2_RUN11 },
+	/*S_RECT2_RUN11*/{ SPR_RECT, 3, 3, {A_RectChase2}, S_RECT2_RUN12 },
+	/*S_RECT2_RUN12*/{ SPR_RECT, 3, 3, {A_RectChase2}, S_RECT2_RUN1 },
+	/*S_RECT2_ATK1*/{ SPR_RECT, 32774, 12, {A_RectGroundFire2}, S_RECT2_ATK2 },
+	/*S_RECT2_ATK2*/{ SPR_RECT, 4, 12, {NULL}, S_RECT2_ATK3 },
+	/*S_RECT2_ATK3*/{ SPR_RECT, 32773, 12, {A_RectMissile2}, S_RECT2_ATK4 },
+	/*S_RECT2_ATK4*/{ SPR_RECT, 4, 8, {NULL}, S_RECT2_RUN1 },
+	/*S_RECT2_HEAL1*/{ SPR_RECT, 32774, 10, {NULL}, S_RECT2_HEAL2 },
+	/*S_RECT2_HEAL2*/{ SPR_RECT, 4, 10, {NULL}, S_RECT2_HEAL3 },
+	/*S_RECT2_HEAL3*/{ SPR_RECT, 32773, 10, {NULL}, S_RECT2_RUN1 },
+	/*S_RECT2_PAIN*/{ SPR_RECT, 7, 18, {A_Pain}, S_RECT2_RUN1 },
+	/*S_RECT2_DIE1*/{ SPR_RECT, 8, 60, {A_RectDeathEvent}, S_RECT2_DIE2 },
+	/*S_RECT2_DIE2*/{ SPR_RECT, 9, 8, {NULL}, S_RECT2_DIE3 },
+	/*S_RECT2_DIE3*/{ SPR_RECT, 10, 8, {NULL}, S_RECT2_DIE4 },
+	/*S_RECT2_DIE4*/{ SPR_RECT, 11, 5, {NULL}, S_RECT2_DIE5 },
+	/*S_RECT2_DIE5*/{ SPR_RECT, 12, 4, {NULL}, S_RECT2_DIE6 },
+	/*S_RECT2_DIE6*/{ SPR_RECT, 13, 3, {A_OnDeathTrigger}, S_RECT2_DIE7 },
+	/*S_RECT2_DIE7*/{ SPR_RECT, 14, 2, {NULL}, S_NULL },
+
+	/*S_SSWV_STND*/{ SPR_SSWV, 0, 10, {A_Look}, S_SSWV_STND2 },
+	/*S_SSWV_STND2*/{ SPR_SSWV, 0, 10, {A_Look}, S_SSWV_STND },
+	/*S_SSWV_RUN1*/{ SPR_SSWV, 1, 3, {A_Chase}, S_SSWV_RUN2 },
+	/*S_SSWV_RUN2*/{ SPR_SSWV, 1, 3, {A_Chase}, S_SSWV_RUN3 },
+	/*S_SSWV_RUN3*/{ SPR_SSWV, 2, 3, {A_Chase}, S_SSWV_RUN4 },
+	/*S_SSWV_RUN4*/{ SPR_SSWV, 2, 3, {A_Chase}, S_SSWV_RUN5 },
+	/*S_SSWV_RUN5*/{ SPR_SSWV, 3, 3, {A_Chase}, S_SSWV_RUN6 },
+	/*S_SSWV_RUN6*/{ SPR_SSWV, 3, 3, {A_Chase}, S_SSWV_RUN7 },
+	/*S_SSWV_RUN7*/{ SPR_SSWV, 4, 3, {A_Chase}, S_SSWV_RUN8 },
+	/*S_SSWV_RUN8*/{ SPR_SSWV, 4, 3, {A_Chase}, S_SSWV_RUN1 },
+	/*S_SSWV_ATK1*/{ SPR_SSWV, 5, 10, {A_FaceTarget}, S_SSWV_ATK2 },
+	/*S_SSWV_ATK2*/{ SPR_SSWV, 6, 10, {A_FaceTarget}, S_SSWV_ATK3 },
+	/*S_SSWV_ATK3*/{ SPR_SSWV, 32775, 4, {A_CPosAttack}, S_SSWV_ATK4 },
+	/*S_SSWV_ATK4*/{ SPR_SSWV, 6, 6, {A_FaceTarget}, S_SSWV_ATK5 },
+	/*S_SSWV_ATK5*/{ SPR_SSWV, 32775, 4, {A_CPosAttack}, S_SSWV_ATK6 },
+	/*S_SSWV_ATK6*/{ SPR_SSWV, 6, 1, {A_CPosRefire}, S_SSWV_ATK2 },
+	/*S_SSWV_PAIN*/{ SPR_SSWV, 8, 3, {NULL}, S_SSWV_PAIN2 },
+	/*S_SSWV_PAIN2*/{ SPR_SSWV, 8, 3, {A_Pain}, S_SSWV_RUN1 },
+	/*S_SSWV_DIE1*/{ SPR_SSWV, 9, 5, {NULL}, S_SSWV_DIE2 },
+	/*S_SSWV_DIE2*/{ SPR_SSWV, 10, 5, {A_Scream}, S_SSWV_DIE3 },
+	/*S_SSWV_DIE3*/{ SPR_SSWV, 11, 5, {A_Fall}, S_SSWV_DIE4 },
+	/*S_SSWV_DIE4*/{ SPR_SSWV, 12, 5, {A_OnDeathTrigger}, S_SSWV_DIE5 },
+	/*S_SSWV_DIE5*/{ SPR_SSWV, 13, -1, {NULL}, S_NULL },
+	/*S_SSWV_RAISE1*/{ SPR_SSWV, 13, 5, {NULL}, S_SSWV_RAISE2 },
+	/*S_SSWV_RAISE2*/{ SPR_SSWV, 12, 5, {NULL}, S_SSWV_RAISE3 },
+	/*S_SSWV_RAISE3*/{ SPR_SSWV, 11, 5, {NULL}, S_SSWV_RAISE4 },
+	/*S_SSWV_RAISE4*/{ SPR_SSWV, 10, 5, {NULL}, S_SSWV_RAISE5 },
+	/*S_SSWV_RAISE5*/{ SPR_SSWV, 9, 5, {NULL}, S_SSWV_RUN1 },
 };
 
 #pragma warning(pop)
@@ -8845,7 +8913,7 @@ S_NULL	   //raisestate
 
 {
 	/*MT_BOSSSPIT*/
-	90,        //doomednum
+	91,        //doomednum
 	S_BRAINEYE,        //spawnstate
 	1000,        //spawnhealth
 	S_BRAINEYESEE,        //seestate
@@ -8875,7 +8943,7 @@ S_NULL	   //raisestate
 {
 	/*MT_BOSSTARGET*/
 	87,        //doomednum
-	S_NULL,        //spawnstate
+	S_TARGET,        //spawnstate
 	1000,        //spawnhealth
 	S_NULL,        //seestate
 	sfx_None/*sfx_000*/,        //seesound
@@ -8986,5 +9054,63 @@ S_NULL	   //raisestate
 	0,        //palette
 	255,        //alpha
 	S_NULL	   //raisestate
+},
+
+{
+	/*MT_RESURRECTOR2*/
+	9009,        //doomednum
+	S_RECT2_STND,        //spawnstate
+	5000,        //spawnhealth
+	S_RECT2_RUN1,        //seestate
+	sfx_rectsit,        //seesound
+	8,        //reactiontime
+	sfx_rectatk,        //attacksound
+	S_RECT2_PAIN,        //painstate
+	20,        //painchance
+	sfx_rectpain,        //painsound
+	S_NULL,        //meleestate
+	S_RECT2_ATK1,        //missilestate
+	S_RECT2_DIE1,        //deathstate
+	S_NULL,        //xdeathstate
+	sfx_rectdie,        //deathsound
+	30,        //speed
+	80 * FRACUNIT,        //radius
+	150 * FRACUNIT,        //height
+	1000,        //mass
+	0,        //damage
+	sfx_rectact,        //activesound
+	MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_DROPOFF | MF_COUNTKILL,        //flags
+	0,        //palette
+	255,        //alpha
+	S_NULL	   //raisestate
+},
+
+{
+	/*MT_WOLFSS*/
+	85,        //doomednum
+	S_SSWV_STND,        //spawnstate
+	50,        //spawnhealth
+	S_SSWV_RUN1,        //seestate
+	sfx_sssit,        //seesound
+	8,        //reactiontime
+	sfx_None,        //attacksound
+	S_SSWV_PAIN,        //painstate
+	170,        //painchance
+	sfx_dbpain1,        //painsound
+	S_NULL,        //meleestate
+	S_SSWV_ATK1,        //missilestate
+	S_SSWV_DIE1,        //deathstate
+	S_NULL,        //xdeathstate
+	sfx_ssdth,        //deathsound
+	8,        //speed
+	32 * FRACUNIT,        //radius
+	87 * FRACUNIT,        //height
+	100,        //mass
+	0,        //damage
+	sfx_posact,        //activesound
+	MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
+	0,        // palette
+	255,        // alpha
+	S_SSWV_RAISE1	   //raisestate
 },
 };

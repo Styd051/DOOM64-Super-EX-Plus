@@ -901,6 +901,9 @@ static void P_Obituary(mobj_t* source, mobj_t* target) {
 		case MT_RESURRECTOR:
 			sprintf(omsg, "you were destroyed\nby the Resurrector.");
 			break;
+		case MT_RESURRECTOR2:
+			sprintf(omsg, "you were destroyed\nby the Resurrector.");
+			break;
 		case MT_PLAYERBOT1:
 		case MT_PLAYERBOT2:
 		case MT_PLAYERBOT3:
@@ -935,6 +938,9 @@ static void P_Obituary(mobj_t* source, mobj_t* target) {
 			break;
 		case MT_SSGZOMBIE:
 			sprintf(omsg, "you were killed\nby a SSG Zombie.");
+			break;
+		case MT_WOLFSS:
+			sprintf(omsg, "you were killed\nby a WolfensteinSS.");
 			break;
 		default:
 			sprintf(omsg, "you died.");
@@ -1034,6 +1040,7 @@ void P_KillMobj(mobj_t* source, mobj_t* target) {
 	// This determines the kind of object spawned
 	// during the death frame of a thing.
 	switch (target->type) {
+	case MT_WOLFSS:
 	case MT_POSSESSED1:
 		item = MT_AMMO_CLIP;
 		break;
@@ -1049,6 +1056,7 @@ void P_KillMobj(mobj_t* source, mobj_t* target) {
 	case MT_SSGZOMBIE:
 		item = MT_WEAP_SSHOTGUN;
 		break;
+
 
 	default:
 		return;

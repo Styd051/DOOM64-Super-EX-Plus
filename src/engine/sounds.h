@@ -155,6 +155,8 @@ typedef enum {
 	sfx_bosdth,
 	sfx_keenpn,
 	sfx_keendt,
+	sfx_sssit,
+	sfx_ssdth,
 	mus_amb01,
 	mus_amb02,
 	mus_amb03,

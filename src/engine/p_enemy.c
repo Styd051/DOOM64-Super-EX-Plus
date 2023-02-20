@@ -211,6 +211,12 @@ boolean P_CheckMissileRange(mobj_t* actor) {
 			return false;	// too far away
 	}
 
+	if (actor->type == MT_RESURRECTOR2)
+	{
+		if (dist > 14 * 64)
+			return false;	// too far away
+	}
+
 	if (actor->type == MT_SKULL) {
 		dist >>= 1;
 	}
@@ -719,7 +725,7 @@ void A_Look(mobj_t* actor) {
 			break;
 		}
 
-		if (actor->type == MT_RESURRECTOR || actor->type == MT_CYBORG) {
+		if (actor->type == MT_RESURRECTOR || actor->type == MT_CYBORG || actor->type == MT_RESURRECTOR2) {
 			// full volume
 			S_StartSound(NULL, sound);
 		}
@@ -2268,6 +2274,7 @@ boolean PIT_VileCheck(mobj_t* thing)
 		return true;	// monster doesn't have a raise state
 
 	maxdist = thing->info->radius + mobjinfo[MT_VILE].radius;
+	maxdist = thing->info->radius + mobjinfo[MT_RESURRECTOR2].radius;
 
 	if (abs(thing->x - viletryx) > maxdist
 		|| abs(thing->y - viletryy) > maxdist)
@@ -2707,4 +2714,205 @@ void A_SpawnFly(mobj_t* mo)
 
 	// remove self (i.e., cube).
 	P_RemoveMobj(mo);
+}
+
+//
+// A_RectChase2
+//
+
+void A_RectChase2(mobj_t* actor) {
+	int			xl;
+	int			xh;
+	int			yl;
+	int			yh;
+
+	int			bx;
+	int			by;
+
+	mobjinfo_t* info;
+	mobj_t* temp;
+
+	if (actor->movedir != DI_NODIR)
+	{
+		// check for corpses to raise
+		viletryx =
+			actor->x + actor->info->speed * xspeed[actor->movedir];
+		viletryy =
+			actor->y + actor->info->speed * yspeed[actor->movedir];
+
+		xl = (viletryx - bmaporgx - MAXRADIUS * 2) >> MAPBLOCKSHIFT;
+		xh = (viletryx - bmaporgx + MAXRADIUS * 2) >> MAPBLOCKSHIFT;
+		yl = (viletryy - bmaporgy - MAXRADIUS * 2) >> MAPBLOCKSHIFT;
+		yh = (viletryy - bmaporgy + MAXRADIUS * 2) >> MAPBLOCKSHIFT;
+
+		vileobj = actor;
+		for (bx = xl; bx <= xh; bx++)
+		{
+			for (by = yl; by <= yh; by++)
+			{
+				// Call PIT_VileCheck to check
+				// whether object is a corpse
+				// that canbe raised.
+				if (!P_BlockThingsIterator(bx, by, PIT_VileCheck))
+				{
+					// got one!
+					temp = actor->target;
+					actor->target = corpsehit;
+					A_FaceTarget(actor);
+					actor->target = temp;
+
+					P_SetMobjState(actor, S_RECT2_HEAL1);
+					S_StartSound(corpsehit, sfx_slop);
+					info = corpsehit->info;
+
+					P_SetMobjState(corpsehit, info->raisestate);
+					corpsehit->height <<= 2;
+					corpsehit->flags = info->flags;
+					corpsehit->health = info->spawnhealth;
+					corpsehit->target = NULL;
+
+					return;
+				}
+			}
+		}
+	}
+
+
+
+	// Return to normal attack.
+	A_Chase(actor);
+}
+
+//
+// A_RectGroundFire2
+//
+
+void A_RectGroundFire2(mobj_t* actor) {
+	mobj_t* mo;
+	angle_t an;
+
+	if (!actor->target) {
+		return;
+	}
+
+	A_FaceTarget(actor);
+
+	mo = P_SpawnMobj(actor->x, actor->y, actor->z, MT_PROJ_RECTFIRE);
+	P_SetTarget(&mo->target, actor);
+	an = actor->angle + R_PointToAngle2(actor->x, actor->y, mo->target->x, mo->target->y);
+
+	mo->angle = an;
+	mo->angle >>= ANGLETOFINESHIFT;
+	mo->momx = FixedMul(mo->info->speed, finecosine[mo->angle]);
+	mo->momy = FixedMul(mo->info->speed, finesine[mo->angle]);
+	mo->angle = an;
+
+	mo = P_SpawnMobj(actor->x, actor->y, actor->z, MT_PROJ_RECTFIRE);
+	P_SetTarget(&mo->target, actor);
+	mo->angle = an - ANG45;
+	mo->angle >>= ANGLETOFINESHIFT;
+	mo->momx = FixedMul(mo->info->speed, finecosine[mo->angle]);
+	mo->momy = FixedMul(mo->info->speed, finesine[mo->angle]);
+	mo->angle = an - ANG45;
+
+	mo = P_SpawnMobj(actor->x, actor->y, actor->z, MT_PROJ_RECTFIRE);
+	P_SetTarget(&mo->target, actor);
+	mo->angle = an + ANG45;
+	mo->angle >>= ANGLETOFINESHIFT;
+	mo->momx = FixedMul(mo->info->speed, finecosine[mo->angle]);
+	mo->momy = FixedMul(mo->info->speed, finesine[mo->angle]);
+	mo->angle = an + ANG45;
+
+	S_StartSound(mo, mo->info->seesound);
+	S_StartSound(actor, sfx_rectatk);
+}
+
+//
+// A_RectMissile2
+//
+
+void A_RectMissile2(mobj_t* actor) {
+	mobj_t* mo;
+	int count = 0;
+	angle_t an = 0;
+	fixed_t x = 0;
+	fixed_t y = 0;
+
+	if (!actor->target) {
+		return;
+	}
+
+	A_FaceTarget(actor);
+	for (mo = mobjhead.next; mo != &mobjhead; mo = mo->next) {
+		// not a rect projectile
+		if (mo->type != MT_PROJ_RECT) {
+			continue;
+		}
+
+		count++;
+	}
+
+	if (!(count < 9)) {
+		return;
+	}
+
+	// Arm 1
+
+	an = (actor->angle - ANG90) >> ANGLETOFINESHIFT;
+	x = FixedMul(68 * FRACUNIT, finecosine[an]);
+	y = FixedMul(68 * FRACUNIT, finesine[an]);
+	mo = P_SpawnMobj(actor->x + x, actor->y + y, actor->z + 68 * FRACUNIT, MT_PROJ_RECT);
+	P_SetTarget(&mo->target, actor);
+	P_SetTarget(&mo->tracer, actor->target);
+	mo->threshold = 5;
+	an = (actor->angle + ANG270);
+	mo->angle = an;
+	an >>= ANGLETOFINESHIFT;
+	mo->momx = FixedMul(mo->info->speed, finecosine[an]);
+	mo->momy = FixedMul(mo->info->speed, finesine[an]);
+
+	// Arm2
+
+	an = (actor->angle - ANG90) >> ANGLETOFINESHIFT;
+	x = FixedMul(50 * FRACUNIT, finecosine[an]);
+	y = FixedMul(50 * FRACUNIT, finesine[an]);
+	mo = P_SpawnMobj(actor->x + x, actor->y + y, actor->z + 139 * FRACUNIT, MT_PROJ_RECT);
+	P_SetTarget(&mo->target, actor);
+	P_SetTarget(&mo->tracer, actor->target);
+	mo->threshold = 1;
+	an = (actor->angle + ANG270);
+	mo->angle = an;
+	an >>= ANGLETOFINESHIFT;
+	mo->momx = FixedMul(mo->info->speed, finecosine[an]);
+	mo->momy = FixedMul(mo->info->speed, finesine[an]);
+
+	// Arm3
+
+	an = (actor->angle + ANG90) >> ANGLETOFINESHIFT;
+	x = FixedMul(68 * FRACUNIT, finecosine[an]);
+	y = FixedMul(68 * FRACUNIT, finesine[an]);
+	mo = P_SpawnMobj(actor->x + x, actor->y + y, actor->z + 68 * FRACUNIT, MT_PROJ_RECT);
+	P_SetTarget(&mo->target, actor);
+	P_SetTarget(&mo->tracer, actor->target);
+	mo->threshold = 5;
+	an = (actor->angle - ANG270);
+	mo->angle = an;
+	an >>= ANGLETOFINESHIFT;
+	mo->momx = FixedMul(mo->info->speed, finecosine[an]);
+	mo->momy = FixedMul(mo->info->speed, finesine[an]);
+
+	// Arm4
+
+	an = (actor->angle + ANG90) >> ANGLETOFINESHIFT;
+	x = FixedMul(50 * FRACUNIT, finecosine[an]);
+	y = FixedMul(50 * FRACUNIT, finesine[an]);
+	mo = P_SpawnMobj(actor->x + x, actor->y + y, actor->z + 139 * FRACUNIT, MT_PROJ_RECT);
+	P_SetTarget(&mo->target, actor);
+	P_SetTarget(&mo->tracer, actor->target);
+	mo->threshold = 1;
+	an = (actor->angle - ANG270);
+	mo->angle = an;
+	an >>= ANGLETOFINESHIFT;
+	mo->momx = FixedMul(mo->info->speed, finecosine[an]);
+	mo->momy = FixedMul(mo->info->speed, finesine[an]);
 }
