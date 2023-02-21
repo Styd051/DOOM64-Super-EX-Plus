@@ -942,6 +942,12 @@ static void P_Obituary(mobj_t* source, mobj_t* target) {
 		case MT_WOLFSS:
 			sprintf(omsg, "you were killed\nby a WolfensteinSS.");
 			break;
+		case MT_BELPHEGOR:
+			sprintf(omsg, "was slain\nby a Belphegor.");
+			break;
+		case MT_HECTEBUS:
+			sprintf(omsg, "was cremated\nby a hectebus.");
+			break;
 		default:
 			sprintf(omsg, "you died.");
 			break;

@@ -338,6 +338,18 @@ static mobj_t* P_MissileAttack(mobj_t* actor, int direction) {
 		type = MT_PROJ_BRUISERDEMON1;
 		aim = true;
 		break;
+	case MT_BELPHEGOR:
+		offs = 0;
+		deltaz = 48;
+		type = MT_PROJ_BRUISER1;
+		aim = true;
+		break;
+	case MT_HECTEBUS:
+		offs = 50;
+		deltaz = 69;
+		type = MT_PROJ_HECTEBUS;
+		aim = true;
+		break;
 	}
 
 	deltax = FixedMul(offs * FRACUNIT, finecosine[angle]);
@@ -2913,6 +2925,112 @@ void A_RectMissile2(mobj_t* actor) {
 	an = (actor->angle - ANG270);
 	mo->angle = an;
 	an >>= ANGLETOFINESHIFT;
+	mo->momx = FixedMul(mo->info->speed, finecosine[an]);
+	mo->momy = FixedMul(mo->info->speed, finesine[an]);
+}
+
+//
+// A_HectAttack1
+//
+
+void A_HectAttack1(mobj_t* actor) {
+	mobj_t* mo;
+	angle_t an;
+
+	if (!actor->target) {
+		return;
+	}
+
+	A_FaceTarget(actor);
+	P_MissileAttack(actor, DP_RIGHT);
+	mo = P_SpawnMissile(actor, actor->target, MT_PROJ_HECTEBUS, 0, 0, 69, true);
+	mo->angle += FATSPREAD / 2;
+	an = mo->angle >> ANGLETOFINESHIFT;
+	mo->momx = FixedMul(mo->info->speed, finecosine[an]);
+	mo->momy = FixedMul(mo->info->speed, finesine[an]);
+
+	mo = P_SpawnMissile(actor, actor->target, MT_PROJ_HECTEBUS, 0, 0, 69, true);
+	mo->angle += FATSPREAD;
+	an = mo->angle >> ANGLETOFINESHIFT;
+	mo->momx = FixedMul(mo->info->speed, finecosine[an]);
+	mo->momy = FixedMul(mo->info->speed, finesine[an]);
+
+	mo = P_SpawnMissile(actor, actor->target, MT_PROJ_HECTEBUS, 0, 0, 69, true);
+	mo->angle += FATSPREAD * 3 / 2;
+	an = mo->angle >> ANGLETOFINESHIFT;
+	mo->momx = FixedMul(mo->info->speed, finecosine[an]);
+	mo->momy = FixedMul(mo->info->speed, finesine[an]);
+}
+
+//
+// A_HectAttack2
+//
+
+void A_HectAttack2(mobj_t* actor) {
+	mobj_t* mo;
+	angle_t an;
+
+	if (!actor->target) {
+		return;
+	}
+
+	A_FaceTarget(actor);
+	P_MissileAttack(actor, DP_LEFT);
+	mo = P_SpawnMissile(actor, actor->target, MT_PROJ_HECTEBUS, 0, 0, 69, true);
+	mo->angle -= FATSPREAD / 2;
+	an = mo->angle >> ANGLETOFINESHIFT;
+	mo->momx = FixedMul(mo->info->speed, finecosine[an]);
+	mo->momy = FixedMul(mo->info->speed, finesine[an]);
+
+	mo = P_SpawnMissile(actor, actor->target, MT_PROJ_HECTEBUS, 0, 0, 69, true);
+	mo->angle -= FATSPREAD;
+	an = mo->angle >> ANGLETOFINESHIFT;
+	mo->momx = FixedMul(mo->info->speed, finecosine[an]);
+	mo->momy = FixedMul(mo->info->speed, finesine[an]);
+
+	mo = P_SpawnMissile(actor, actor->target, MT_PROJ_HECTEBUS, 0, 0, 69, true);
+	mo->angle -= FATSPREAD * 3 / 2;
+	an = mo->angle >> ANGLETOFINESHIFT;
+	mo->momx = FixedMul(mo->info->speed, finecosine[an]);
+	mo->momy = FixedMul(mo->info->speed, finesine[an]);
+}
+
+//
+// A_HectAttack3
+//
+
+void A_HectAttack3(mobj_t* actor) {
+	mobj_t* mo;
+	angle_t an;
+
+	if (!actor->target) {
+		return;
+	}
+
+	A_FaceTarget(actor);
+	P_MissileAttack(actor, DP_RIGHT);
+	P_MissileAttack(actor, DP_LEFT);
+	mo = P_SpawnMissile(actor, actor->target, MT_PROJ_HECTEBUS, 0, 0, 69, true);
+	mo->angle += FATSPREAD / 2;
+	an = mo->angle >> ANGLETOFINESHIFT;
+	mo->momx = FixedMul(mo->info->speed, finecosine[an]);
+	mo->momy = FixedMul(mo->info->speed, finesine[an]);
+
+	mo = P_SpawnMissile(actor, actor->target, MT_PROJ_HECTEBUS, 0, 0, 69, true);
+	mo->angle -= FATSPREAD / 2;
+	an = mo->angle >> ANGLETOFINESHIFT;
+	mo->momx = FixedMul(mo->info->speed, finecosine[an]);
+	mo->momy = FixedMul(mo->info->speed, finesine[an]);
+
+	mo = P_SpawnMissile(actor, actor->target, MT_PROJ_HECTEBUS, 0, 0, 69, true);
+	mo->angle += FATSPREAD;
+	an = mo->angle >> ANGLETOFINESHIFT;
+	mo->momx = FixedMul(mo->info->speed, finecosine[an]);
+	mo->momy = FixedMul(mo->info->speed, finesine[an]);
+
+	mo = P_SpawnMissile(actor, actor->target, MT_PROJ_HECTEBUS, 0, 0, 69, true);
+	mo->angle -= FATSPREAD;
+	an = mo->angle >> ANGLETOFINESHIFT;
 	mo->momx = FixedMul(mo->info->speed, finecosine[an]);
 	mo->momy = FixedMul(mo->info->speed, finesine[an]);
 }

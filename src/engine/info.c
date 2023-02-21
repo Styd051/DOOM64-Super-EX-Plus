@@ -115,6 +115,9 @@ char* sprnames[NUMSPRITES + 1] = {  //0x5FA30
 	"BOSF",
 	"TARG",
 	"SSWV",
+	"BOS3",
+	"HECT",
+	"HECF",
 	NULL
 };
 
@@ -230,6 +233,9 @@ void A_SpawnFly();
 void A_RectChase2();
 void A_RectGroundFire2();
 void A_RectMissile2();
+void A_HectAttack1();
+void A_HectAttack2();
+void A_HectAttack3();
 
 
 #pragma warning(push)
@@ -1909,6 +1915,86 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_SSWV_RAISE3*/{ SPR_SSWV, 11, 5, {NULL}, S_SSWV_RAISE4 },
 	/*S_SSWV_RAISE4*/{ SPR_SSWV, 10, 5, {NULL}, S_SSWV_RAISE5 },
 	/*S_SSWV_RAISE5*/{ SPR_SSWV, 9, 5, {NULL}, S_SSWV_RUN1 },
+
+	/*S_BOSS3_STND*/{ SPR_BOS3, 0, 10, {A_Look}, S_BOSS3_STND2 },
+	/*S_BOSS3_STND2*/{ SPR_BOS3, 1, 10, {A_Look}, S_BOSS3_STND },
+	/*S_BOSS3_RUN1*/{ SPR_BOS3, 0, 3, {A_Chase}, S_BOSS3_RUN2 },
+	/*S_BOSS3_RUN2*/{ SPR_BOS3, 0, 3, {A_Chase}, S_BOSS3_RUN3 },
+	/*S_BOSS3_RUN3*/{ SPR_BOS3, 1, 3, {A_Chase}, S_BOSS3_RUN4 },
+	/*S_BOSS3_RUN4*/{ SPR_BOS3, 1, 3, {A_Chase}, S_BOSS3_RUN5 },
+	/*S_BOSS3_RUN5*/{ SPR_BOS3, 2, 3, {A_Chase}, S_BOSS3_RUN6 },
+	/*S_BOSS3_RUN6*/{ SPR_BOS3, 2, 3, {A_Chase}, S_BOSS3_RUN7 },
+	/*S_BOSS3_RUN7*/{ SPR_BOS3, 3, 3, {A_Chase}, S_BOSS3_RUN8 },
+	/*S_BOSS3_RUN8*/{ SPR_BOS3, 3, 3, {A_Chase}, S_BOSS3_RUN1 },
+	/*S_BOSS3_ATK1*/{ SPR_BOS3, 4, 6, {A_FaceTarget}, S_BOSS3_ATK2 },
+	/*S_BOSS3_ATK2*/{ SPR_BOS3, 5, 6, {A_FaceTarget}, S_BOSS3_ATK3 },
+	/*S_BOSS3_ATK3*/{ SPR_BOS3, 6, 6, {A_BruisAttack}, S_BOSS3_ATK4 },
+	/*S_BOSS3_ATK4*/{ SPR_BOS3, 4, 6, {A_FaceTarget}, S_BOSS3_ATK5 },
+	/*S_BOSS3_ATK5*/{ SPR_BOS3, 5, 6, {A_FaceTarget}, S_BOSS3_ATK6 },
+	/*S_BOSS3_ATK6*/{ SPR_BOS3, 6, 6, {A_BruisAttack}, S_BOSS3_ATK7 },
+	/*S_BOSS3_ATK7*/{ SPR_BOS3, 4, 6, {A_FaceTarget}, S_BOSS3_ATK8 },
+	/*S_BOSS3_ATK8*/{ SPR_BOS3, 5, 6, {A_FaceTarget}, S_BOSS3_ATK9 },
+	/*S_BOSS3_ATK9*/{ SPR_BOS3, 6, 6, {A_BruisAttack}, S_BOSS3_RUN1 },
+	/*S_BOSS3_PAIN*/{ SPR_BOS3, 7, 2, {NULL}, S_BOSS3_PAIN2 },
+	/*S_BOSS3_PAIN2*/{ SPR_BOS3, 7, 2, {A_Pain}, S_BOSS3_RUN1 },
+	/*S_BOSS3_DIE1*/{ SPR_BOS3, 8, 8, {NULL}, S_BOSS3_DIE2 },
+	/*S_BOSS3_DIE2*/{ SPR_BOS3, 9, 8, {A_Scream}, S_BOSS3_DIE3 },
+	/*S_BOSS3_DIE3*/{ SPR_BOS3, 10, 8, {NULL}, S_BOSS3_DIE4 },
+	/*S_BOSS3_DIE4*/{ SPR_BOS3, 11, 8, {A_Fall}, S_BOSS3_DIE5 },
+	/*S_BOSS3_DIE5*/{ SPR_BOS3, 12, 8, {A_OnDeathTrigger}, S_BOSS3_DIE6 },
+	/*S_BOSS3_DIE6*/{ SPR_BOS3, 13, -1, {NULL}, S_NULL },
+	/*S_BOSS3_RAISE1*/{ SPR_BOS3, 13, 8, {NULL}, S_BOSS3_RAISE2 },
+	/*S_BOSS3_RAISE2*/{ SPR_BOS3, 12, 8, {NULL}, S_BOSS3_RAISE3 },
+	/*S_BOSS3_RAISE3*/{ SPR_BOS3, 11, 8, {NULL}, S_BOSS3_RAISE4 },
+	/*S_BOSS3_RAISE4*/{ SPR_BOS3, 10, 8, {NULL}, S_BOSS3_RAISE5 },
+	/*S_BOSS3_RAISE5*/{ SPR_BOS3, 9, 8, {NULL}, S_BOSS3_RAISE6 },
+	/*S_BOSS3_RAISE6*/{ SPR_BOS3, 8, 8, {NULL}, S_BOSS3_RUN1 },
+
+	/*S_HECT_STND*/{ SPR_HECT, 0, 15, {A_Look}, S_HECT_STND2 },
+	/*S_HECT_STND2*/{ SPR_HECT, 1, 15, {A_Look}, S_HECT_STND },
+	/*S_HECT_RUN1*/{ SPR_HECT, 0, 4, {A_Chase}, S_HECT_RUN2 },
+	/*S_HECT_RUN2*/{ SPR_HECT, 0, 4, {A_Chase}, S_HECT_RUN3 },
+	/*S_HECT_RUN3*/{ SPR_HECT, 1, 4, {A_Chase}, S_HECT_RUN4 },
+	/*S_HECT_RUN4*/{ SPR_HECT, 1, 4, {A_Chase}, S_HECT_RUN5 },
+	/*S_HECT_RUN5*/{ SPR_HECT, 2, 4, {A_Chase}, S_HECT_RUN6 },
+	/*S_HECT_RUN6*/{ SPR_HECT, 2, 4, {A_Chase}, S_HECT_RUN7 },
+	/*S_HECT_RUN7*/{ SPR_HECT, 3, 4, {A_Chase}, S_HECT_RUN8 },
+	/*S_HECT_RUN8*/{ SPR_HECT, 3, 4, {A_Chase}, S_HECT_RUN9 },
+	/*S_HECT_RUN9*/{ SPR_HECT, 4, 4, {A_Chase}, S_HECT_RUN10 },
+	/*S_HECT_RUN10*/{ SPR_HECT, 4, 4, {A_Chase}, S_HECT_RUN11 },
+	/*S_HECT_RUN11*/{ SPR_HECT, 5, 4, {A_Chase}, S_HECT_RUN12 },
+	/*S_HECT_RUN12*/{ SPR_HECT, 5, 4, {A_Chase}, S_HECT_RUN1 },
+	/*S_HECT_ATK1*/{ SPR_HECT, 7, 20, {A_FatRaise}, S_HECT_ATK2 },
+	/*S_HECT_ATK2*/{ SPR_HECT, 32774, 10, {A_HectAttack1}, S_HECT_ATK3 },
+	/*S_HECT_ATK3*/{ SPR_HECT, 7, 10, {A_FaceTarget}, S_HECT_ATK4 },
+	/*S_HECT_ATK4*/{ SPR_HECT, 32774, 10, {A_HectAttack2}, S_HECT_ATK5 },
+	/*S_HECT_ATK5*/{ SPR_HECT, 7, 10, {A_FaceTarget}, S_HECT_ATK6 },
+	/*S_HECT_ATK6*/{ SPR_HECT, 32774, 10, {A_HectAttack3}, S_HECT_ATK7 },
+	/*S_HECT_ATK7*/{ SPR_HECT, 7, 10, {A_FaceTarget}, S_HECT_RUN1 },
+	/*S_HECT_PAIN*/{ SPR_HECT, 8, 3, {NULL}, S_HECT_PAIN2 },
+	/*S_HECT_PAIN2*/{ SPR_HECT, 8, 3, {A_Pain}, S_HECT_RUN1 },
+	/*S_HECT_DIE1*/{ SPR_HECT, 9, 6, {NULL}, S_HECT_DIE2 },
+	/*S_HECT_DIE2*/{ SPR_HECT, 10, 6, {A_Scream}, S_HECT_DIE3 },
+	/*S_HECT_DIE3*/{ SPR_HECT, 11, 6, {A_Fall}, S_HECT_DIE4 },
+	/*S_HECT_DIE4*/{ SPR_HECT, 12, 6, {NULL}, S_HECT_DIE5 },
+	/*S_HECT_DIE5*/{ SPR_HECT, 13, 6, {A_OnDeathTrigger}, S_HECT_DIE6 },
+	/*S_HECT_DIE6*/{ SPR_HECT, 14, -1, {NULL}, S_NULL },
+	/*S_HECT_RAISE1*/{ SPR_HECT, 14, 5, {NULL}, S_HECT_RAISE2 },
+	/*S_HECT_RAISE2*/{ SPR_HECT, 13, 5, {NULL}, S_HECT_RAISE3 },
+	/*S_HECT_RAISE3*/{ SPR_HECT, 12, 5, {NULL}, S_HECT_RAISE4 },
+	/*S_HECT_RAISE4*/{ SPR_HECT, 11, 5, {NULL}, S_HECT_RAISE5 },
+	/*S_HECT_RAISE5*/{ SPR_HECT, 10, 5, {NULL}, S_HECT_RAISE6 },
+	/*S_HECT_RAISE6*/{ SPR_HECT, 9, 5, {NULL}, S_HECT_RUN1 },
+
+	/*S_HECF1*/{ SPR_HECF, 32768, 2, {NULL}, S_HECF2 },
+	/*S_HECF2*/{ SPR_HECF, 32769, 2, {NULL}, S_HECF3 },
+	/*S_HECF3*/{ SPR_HECF, 32770, 2, {NULL}, S_HECF1 },
+	/*S_HECF_DIE1*/{ SPR_HECF, 32771, 6, {NULL}, S_HECF_DIE2 },
+	/*S_HECF_DIE2*/{ SPR_HECF, 32772, 4, {A_FadeAlpha}, S_HECF_DIE3 },
+	/*S_HECF_DIE3*/{ SPR_HECF, 32773, 3, {A_FadeAlpha}, S_HECF_DIE4 },
+	/*S_HECF_DIE4*/{ SPR_HECF, 32774, 2, {A_FadeAlpha}, S_HECF_DIE5 },
+	/*S_HECF_DIE5*/{ SPR_HECF, 32775, 2, {NULL}, S_HECF_DIE6 },
+	/*S_HECF_DIE6*/{ SPR_HECF, 32776, 2, {NULL}, S_NULL },
 };
 
 #pragma warning(pop)
@@ -9112,5 +9198,92 @@ S_NULL	   //raisestate
 	0,        // palette
 	255,        // alpha
 	S_SSWV_RAISE1	   //raisestate
+},
+
+{
+	/*MT_BELPHEGOR*/
+	9010,        //doomednum
+	S_BOSS3_STND,        //spawnstate
+	1500,        //spawnhealth
+	S_BOSS3_RUN1,        //seestate
+	sfx_bos1sit,        //seesound
+	8,        //reactiontime
+	sfx_None/*sfx_000*/,        //attacksound
+	S_BOSS3_PAIN,        //painstate
+	25,        //painchance
+	sfx_dbpain2,        //painsound
+	S_BOSS3_ATK1,        //meleestate
+	S_BOSS3_ATK1,        //missilestate
+	S_BOSS3_DIE1,        //deathstate
+	S_NULL,        //xdeathstate
+	sfx_bos1die,        //deathsound
+	8,        //speed
+	24 * FRACUNIT,        //radius
+	100 * FRACUNIT,        //height
+	1000,        //mass
+	0,        //damage
+	sfx_dbact,        //activesound
+	MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
+	0,        //palette
+	255,        //alpha
+	S_BOSS3_RAISE1	   //raisestate
+},
+
+{
+	/*MT_HECTEBUS*/
+	9011,        //doomednum
+	S_HECT_STND,        //spawnstate
+	1200,        //spawnhealth
+	S_HECT_RUN1,        //seestate
+	sfx_fattsit,        //seesound
+	8,        //reactiontime
+	sfx_None/*sfx_000*/,        //attacksound
+	S_HECT_PAIN,        //painstate
+	20,        //painchance
+	sfx_fatthit,        //painsound
+	S_NULL,        //meleestate
+	S_HECT_ATK1,        //missilestate
+	S_HECT_DIE1,        //deathstate
+	S_NULL,        //xdeathstate
+	sfx_fattdie,        //deathsound
+	8,        //speed
+	60 * FRACUNIT,        //radius
+	108 * FRACUNIT,        //height
+	1000,        //mass
+	0,        //damage
+	sfx_posact,        //activesound
+	MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
+	0,        //palette
+	255,        //alpha
+	S_HECT_RAISE1	   //raisestate
+},
+
+{
+	/*MT_PROJ_HECTEBUS*/
+	-1,        //doomednum
+	S_HECF1,        //spawnstate
+	1000,        //spawnhealth
+	S_NULL,        //seestate
+	sfx_bdmissile,        //seesound
+	8,        //reactiontime
+	sfx_None/*sfx_000*/,        //attacksound
+	S_NULL,        //painstate
+	0,        //painchance
+	sfx_None/*sfx_000*/,        //painsound
+	S_NULL,        //meleestate
+	S_NULL,        //missilestate
+	S_HECF_DIE1,        //deathstate
+	S_NULL,        //xdeathstate
+	sfx_implod,        //deathsound
+	22 * FRACUNIT,        //speed
+	6 * FRACUNIT,        //radius
+	8 * FRACUNIT,        //height
+	100,        //mass
+	12,        //damage
+	sfx_None/*sfx_000*/,        //activesound
+	MF_NOBLOCKMAP | MF_DROPOFF | MF_MISSILE,        //flags
+	0,        //palette
+	255,        //alpha
+	S_NULL	   //raisestate
 },
 };

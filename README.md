@@ -2,7 +2,7 @@
 Super EX+ and a custom fork of  EX+ of Gibbon, designed for mappers to use custom content on their map, with a modified DOOM Builder 64 configuration to show custom content, like custom monsters, custom decorations, etc... in the map editor
 
 # Custom Content Added
-currently 15 new monsters have been added
+currently 17 new monsters have been added
 
 -Archvile
 
@@ -33,6 +33,10 @@ currently 15 new monsters have been added
 -Mother Demon rework and who the power to resurrect demons
 
 -WolfensteinSS
+
+-Belphegor (Skulltag)
+
+-Hectebus (Skulltag)
 
 currently 88 new decorations have been added
 
