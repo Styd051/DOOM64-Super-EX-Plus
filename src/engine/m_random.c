@@ -60,6 +60,7 @@ unsigned char rndtable[256] = { // 8005A190
 
 int	rndindex = 0;   // 8005A18C
 int prndindex = 0;  // 8005A188
+int irndindex = 0;  // [Immorpher] New random index
 
 int P_Random(void) // 80002928
 {
@@ -71,6 +72,12 @@ int M_Random(void) // 80002954
 {
 	rndindex = (rndindex + 1) & 0xff;
 	return rndtable[rndindex];
+}
+
+int I_Random(void) // [Immorpher] new randomizer
+{
+	irndindex = (irndindex + 1) & 0xff;
+	return rndtable[255 - irndindex]; // [Immorpher] travels opposite direction!
 }
 
 void M_ClearRandom(void) // 80002980

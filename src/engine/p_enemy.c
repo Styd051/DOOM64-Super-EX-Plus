@@ -350,6 +350,48 @@ static mobj_t* P_MissileAttack(mobj_t* actor, int direction) {
 		type = MT_PROJ_HECTEBUS;
 		aim = true;
 		break;
+	case MT_DARKIMP:
+		offs = 0;
+		deltaz = 64;
+		type = MT_PROJ_DARKIMP;
+		aim = true;
+		break;
+	case MT_CACOLANTERN:
+		offs = 0;
+		deltaz = 46;
+		type = MT_PROJ_CACOLANTERN;
+		aim = true;
+		break;
+	case MT_ABADDON:
+		offs = 0;
+		deltaz = 46;
+		type = MT_PROJ_ABADDON;
+		aim = true;
+		break;
+	case MT_NIGHTMARE_CACODEMON:
+		offs = 0;
+		deltaz = 46;
+		type = MT_PROJ_NIGHTMARE_CACODEMON;
+		aim = true;
+		break;
+	case MT_PAIN_ELEMENTAL_NIGHTMARE:
+		offs = 32;
+		deltaz = 32;
+		type = MT_PROJ_PAIN_ELEMENTAL_NIGHTMARE;
+		aim = true;
+		break;
+	case MT_NIGHTMARE_MANCUBUS:
+		offs = 50;
+		deltaz = 69;
+		type = MT_PROJ_NIGHTMARE_MANCUBUS;
+		aim = true;
+		break;
+	case MT_HELLCENTAUR:
+		offs = 0;
+		deltaz = 48;
+		type = MT_PROJ_BRUISER1;
+		aim = true;
+		break;
 	}
 
 	deltax = FixedMul(offs * FRACUNIT, finecosine[angle]);
@@ -1214,6 +1256,7 @@ void A_HeadAttack(mobj_t* actor) {
 
 	A_FaceTarget(actor);
 	if (P_CheckMeleeRange(actor)) {
+		S_StartSound(actor, sfx_scratch);
 		hitdice = (P_Random() & 7);
 		damage = (hitdice << 3) + 8;
 		P_DamageMobj(actor->target, actor, actor, damage);
@@ -2263,6 +2306,58 @@ void A_BruiserDemonRandomAttack(mobj_t* actor) {
 }
 
 //
+// A_BruiserDemonFire
+//
+
+void A_BruiserDemonFire(mobj_t* actor) {
+	mobj_t* mo;
+	angle_t an;
+
+	if (!actor->target) {
+		return;
+	}
+
+	A_FaceTarget(actor);
+
+	mo = P_SpawnMobj(actor->x, actor->y, actor->z, MT_PROJ_BRUISERDEMON2);
+	P_SetTarget(&mo->target, actor);
+	an = actor->angle + R_PointToAngle2(actor->x, actor->y, mo->target->x, mo->target->y);
+
+	mo->angle = an;
+	mo->angle >>= ANGLETOFINESHIFT;
+	mo->momx = FixedMul(mo->info->speed, finecosine[mo->angle]);
+	mo->momy = FixedMul(mo->info->speed, finesine[mo->angle]);
+	mo->angle = an;
+
+	mo = P_SpawnMobj(actor->x, actor->y, actor->z, MT_PROJ_BRUISERDEMON2);
+	P_SetTarget(&mo->target, actor);
+	mo->angle = an - ANG45;
+	mo->angle >>= ANGLETOFINESHIFT;
+	mo->momx = FixedMul(mo->info->speed, finecosine[mo->angle]);
+	mo->momy = FixedMul(mo->info->speed, finesine[mo->angle]);
+	mo->angle = an - ANG45;
+
+	mo = P_SpawnMobj(actor->x, actor->y, actor->z, MT_PROJ_BRUISERDEMON2);
+	P_SetTarget(&mo->target, actor);
+	mo->angle = an + ANG45;
+	mo->angle >>= ANGLETOFINESHIFT;
+	mo->momx = FixedMul(mo->info->speed, finecosine[mo->angle]);
+	mo->momy = FixedMul(mo->info->speed, finesine[mo->angle]);
+	mo->angle = an + ANG45;
+
+	S_StartSound(mo, mo->info->seesound);
+}
+
+//
+// A_BruiserDemonExplodeFire
+//
+
+void A_BruiserDemonExplodeFire(mobj_t* thingy) {
+	P_RadiusAttack(thingy, thingy->target, 128);
+	S_StartSound(thingy, sfx_explode);
+}
+
+//
 // PIT_VileCheck
 // Detect a corpse that could be raised.
 //
@@ -2535,10 +2630,10 @@ void A_SSGPosAttack(mobj_t* actor) {
 	bangle = actor->angle;
 	slope = P_AimLineAttack(actor, bangle, 0, MISSILERANGE);
 
-	for (i = 0; i < 20; i++) {
+	for (i = 0; i < 7; i++) {
+		damage = 5 * (P_Random() % 3 + 1);
 		angle = bangle + ((P_Random() - P_Random()) << 20);
 		angle += (P_Random() - P_Random()) << 19;
-		damage = 5 * (P_Random() % 3 + 1);
 		P_LineAttack(actor, angle, MISSILERANGE, slope, damage);
 	}
 }
@@ -3033,4 +3128,96 @@ void A_HectAttack3(mobj_t* actor) {
 	an = mo->angle >> ANGLETOFINESHIFT;
 	mo->momx = FixedMul(mo->info->speed, finecosine[an]);
 	mo->momy = FixedMul(mo->info->speed, finesine[an]);
+}
+
+//
+// A_PainElementalNightmareChase
+// Check for ressurecting a body
+//
+void A_PainElementalNightmareChase(mobj_t* actor)
+{
+	int			xl;
+	int			xh;
+	int			yl;
+	int			yh;
+
+	int			bx;
+	int			by;
+
+	mobjinfo_t* info;
+	mobj_t* temp;
+
+	if (actor->movedir != DI_NODIR)
+	{
+		// check for corpses to raise
+		viletryx =
+			actor->x + actor->info->speed * xspeed[actor->movedir];
+		viletryy =
+			actor->y + actor->info->speed * yspeed[actor->movedir];
+
+		xl = (viletryx - bmaporgx - MAXRADIUS * 2) >> MAPBLOCKSHIFT;
+		xh = (viletryx - bmaporgx + MAXRADIUS * 2) >> MAPBLOCKSHIFT;
+		yl = (viletryy - bmaporgy - MAXRADIUS * 2) >> MAPBLOCKSHIFT;
+		yh = (viletryy - bmaporgy + MAXRADIUS * 2) >> MAPBLOCKSHIFT;
+
+		vileobj = actor;
+		for (bx = xl; bx <= xh; bx++)
+		{
+			for (by = yl; by <= yh; by++)
+			{
+				// Call PIT_VileCheck to check
+				// whether object is a corpse
+				// that canbe raised.
+				if (!P_BlockThingsIterator(bx, by, PIT_VileCheck))
+				{
+					// got one!
+					temp = actor->target;
+					actor->target = corpsehit;
+					A_FaceTarget(actor);
+					actor->target = temp;
+
+					P_SetMobjState(actor, S_PAIG_HEAL1);
+					S_StartSound(corpsehit, sfx_slop);
+					info = corpsehit->info;
+
+					P_SetMobjState(corpsehit, info->raisestate);
+					corpsehit->height <<= 2;
+					corpsehit->flags = info->flags;
+					corpsehit->health = info->spawnhealth;
+					corpsehit->target = NULL;
+
+					return;
+				}
+			}
+		}
+	}
+
+	// Return to normal attack.
+	A_Chase(actor);
+}
+
+//
+// A_PainElementalNightmareAttack
+// 
+//
+
+void A_PainElementalNightmareAttack(mobj_t* actor) {
+	if (!actor->target) {
+		return;
+	}
+
+	A_FaceTarget(actor);
+	P_MissileAttack(actor, DP_RIGHT);
+	P_MissileAttack(actor, DP_LEFT);
+}
+
+//
+// A_PainElementalNightmareDie
+//
+
+void A_PainElementalNightmareDie(mobj_t* actor) {
+	A_Fall(actor);
+	
+
+	A_OnDeathTrigger(actor);
 }

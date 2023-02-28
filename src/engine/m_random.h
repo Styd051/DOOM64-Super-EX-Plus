@@ -30,6 +30,7 @@
 extern unsigned char rndtable[256];
 int M_Random(void);
 int P_Random(void);
+int I_Random(void); // [Immorpher] new randomizer
 void M_ClearRandom(void);
 
 #endif

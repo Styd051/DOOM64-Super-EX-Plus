@@ -585,7 +585,7 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 			return;
 		}
 		player->message = GOTQUADDAMAGE;
-		player->messagepic = 35;
+		player->messagepic = 46;
 		sound = sfx_quaddamageact;
 		break;
 
@@ -937,7 +937,7 @@ static void P_Obituary(mobj_t* source, mobj_t* target) {
 			sprintf(omsg, "you were killed\nby a Melee Zombie.");
 			break;
 		case MT_SSGZOMBIE:
-			sprintf(omsg, "you were killed\nby a SSG Zombie.");
+			sprintf(omsg, "was jacked\nby a super shotgun guy.");
 			break;
 		case MT_WOLFSS:
 			sprintf(omsg, "you were killed\nby a WolfensteinSS.");
@@ -947,6 +947,33 @@ static void P_Obituary(mobj_t* source, mobj_t* target) {
 			break;
 		case MT_HECTEBUS:
 			sprintf(omsg, "was cremated\nby a hectebus.");
+			break;
+		case MT_BLOODDEMON:
+			sprintf(omsg, "was chomped on\nby a blood demon.");
+			break;
+		case MT_DARKIMP:
+			sprintf(omsg, "was burned\nby a dark imp.");
+			break;
+		case MT_CACOLANTERN:
+			sprintf(omsg, "was smitten\nby a cacolantern.");
+			break;
+		case MT_ABADDON:
+			sprintf(omsg, "was smitten\nby an abaddon.");
+			break;
+		case MT_NIGHTMARE_SPECTRE:
+			sprintf(omsg, "was eaten\nby a Nightmare Spectre.");
+			break;
+		case MT_NIGHTMARE_CACODEMON:
+			sprintf(omsg, "was scorched\nby a Nightmare Cacodemon.");
+			break;
+		case MT_PAIN_ELEMENTAL_NIGHTMARE:
+			sprintf(omsg, "was overwhelmed\nby a Nightmare Elemental.");
+			break;
+		case MT_NIGHTMARE_MANCUBUS:
+			sprintf(omsg, "was cremated\nby a nightmare mancubus.");
+			break;
+		case MT_HELLCENTAUR:
+			sprintf(omsg, "was Obliterated\nby a Hell Centaur.");
 			break;
 		default:
 			sprintf(omsg, "you died.");
@@ -1223,9 +1250,10 @@ void P_DamageMobj(mobj_t* target, mobj_t* inflictor, mobj_t* source, int damage)
 	}
 
 	target->reactiontime = 0;           // we're awake now...
-	if ((!target->threshold || target->type == MT_VILE)
+	if ((!target->threshold || target->type == MT_VILE || target->type == MT_BRUISERDEMON)
 		&& source && (source->flags & MF_SHOOTABLE)
-		&& source->type != MT_VILE
+		&& source->type != MT_VILE 
+		&& source->type != MT_BRUISERDEMON
 		&& !(target->flags & MF_NOINFIGHTING))
 	{
 		// if not intent on another player,

@@ -55,6 +55,7 @@ void P_CreateFadeOutThinker(mobj_t* mobj, line_t* line);
 
 CVAR(m_nospawnsound, 0);
 CVAR(m_brutal, 0);
+CVAR(m_complexdoom64, 0);
 
 //
 // P_SetMobjState
@@ -160,7 +161,7 @@ void P_MissileHit(mobj_t* mo) {
 		damage = ((P_Random() & 7) + 1) * mo->info->damage;
 		P_DamageMobj(missilething, mo, mo->target, damage);
 
-		if (mo->type == MT_PROJ_RECTFIRE) {
+		if (mo->type == MT_PROJ_RECTFIRE || mo->type == MT_PROJ_BRUISERDEMON2) {
 			if (missilething->player && missilething->info->mass) {
 				missilething->momz += ((1500 / missilething->info->mass) * FRACUNIT);
 			}
@@ -330,7 +331,7 @@ void P_ZMovement(mobj_t* mo) {
 
 		if ((mo->flags & MF_MISSILE)
 			&& !(mo->flags & MF_NOCLIP)
-			&& !(mo->type == MT_PROJ_RECTFIRE)) {
+			&& !(mo->type == MT_PROJ_RECTFIRE || mo->type == MT_PROJ_BRUISERDEMON2)) {
 			mo->mobjfunc = P_ExplodeMissile;
 			return;
 		}
@@ -978,6 +979,7 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 	fixed_t             x;
 	fixed_t             y;
 	fixed_t             z;
+	int randomizernum;  // Immorpher randomizer number
 
 	// count deathmatch start positions
 
@@ -1028,6 +1030,245 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 		I_Error("P_SpawnMapThing: Unknown type %i at (%i, %i)",
 			mthing->type,
 			mthing->x, mthing->y);
+
+// Game Mode Complex DOOM 64 by Styd051 and Immorpher
+  if (m_complexdoom64.value != 0)
+  {
+
+	  // randomizer ammo clip
+	  if (i == MT_AMMO_CLIP) {
+		  randomizernum = I_Random() % 3; // Immorpher randomizer number
+		  if (randomizernum == 2) {
+			  i = MT_AMMO_CLIP;
+		  }
+		  else if (randomizernum == 1) {
+			  i = MT_AMMO_NAILS;
+		  }
+		  else if (randomizernum == 0) {
+			  i = MT_AMMO_CLIPBOX;
+		  }
+
+	  }
+
+	  // randomizer ammo shell
+	  if (i == MT_AMMO_SHELL) {
+		  randomizernum = I_Random() % 2; // Immorpher randomizer number
+		  if (randomizernum == 1) {
+			  i = MT_AMMO_SHELL;
+		  }
+		  else if (randomizernum == 0) {
+			  i = MT_AMMO_SHELLBOX;
+		  }
+
+	  }
+
+	  // randomizer ammo rocket
+	  if (i == MT_AMMO_ROCKET) {
+		  randomizernum = I_Random() % 2; // Immorpher randomizer number
+		  if (randomizernum == 1) {
+			  i = MT_AMMO_ROCKET;
+		  }
+		  else if (randomizernum == 0) {
+			  i = MT_AMMO_ROCKETBOX;
+		  }
+
+	  }
+
+	  // randomizer ammo cell
+	  if (i == MT_AMMO_CELL) {
+		  randomizernum = I_Random() % 2; // Immorpher randomizer number
+		  if (randomizernum == 1) {
+			  i = MT_AMMO_CELL;
+		  }
+		  else if (randomizernum == 0) {
+			  i = MT_AMMO_CELLPACK;
+		  }
+
+	  }
+
+	  // randomizer Quad Damage
+	  if (i == MT_ITEM_AUTOMAP || i == MT_ITEM_INVISSPHERE || i == MT_ITEM_PVIS) {
+		  randomizernum = I_Random(); // Immorpher randomizer number
+		  if (randomizernum < 80) {
+			  i = MT_ITEM_AUTOMAP;
+		  }
+		  else if (randomizernum < 160) {
+			  i = MT_ITEM_INVISSPHERE;
+		  }
+		  else if (randomizernum < 240) {
+			  i = MT_ITEM_PVIS;
+		  }
+		  else if (randomizernum < 256) {
+			  i = MT_ITEM_QUADDAMAGE;
+		  }
+
+	  }
+
+	  // randomizer weapon Chaingun
+	  if (i == MT_WEAP_CHAINGUN) {
+		  randomizernum = I_Random() % 2; // Immorpher randomizer number
+		  if (randomizernum == 1) {
+			  i = MT_WEAP_CHAINGUN;
+		  }
+		  else if (randomizernum == 0) {
+			  i = MT_WEAP_NAILGUN;
+		  }
+		  
+	  }
+
+	// randomizer zombie man and zombie shotgun
+	if (i == MT_POSSESSED1 || i == MT_POSSESSED2) {
+		randomizernum = I_Random() % 5; // Immorpher randomizer number
+		if (randomizernum == 4) {
+			i = MT_MELEEZOMBIE;
+		}
+		else if (randomizernum == 3) {
+			i = MT_POSSESSED1;
+		}
+		else if (randomizernum == 2) {
+			i = MT_POSSESSED2;
+		}
+		else if (randomizernum == 1) {
+			i = MT_CHAINGUY;
+		}
+		else if (randomizernum == 0) {
+			i = MT_SSGZOMBIE;
+		}
+	}
+
+	// randomizer pinky and specter
+	if (i == MT_DEMON1 || i == MT_DEMON2) {
+		randomizernum = I_Random() % 5; // Immorpher randomizer number
+		if (randomizernum == 4) {
+			i = MT_DEMON1;
+		}
+		else if (randomizernum == 3) {
+			i = MT_DEMON2;
+		}
+		else if (randomizernum == 2) {
+			i = MT_BLOODDEMON;
+		}
+		else if (randomizernum == 1) {
+			i = MT_NIGHTMARE_SPECTRE;
+		}
+		else if (randomizernum == 0) {
+			i = MT_HELLHOUND;
+		}
+	}
+
+	// randomizer imp and imp nightmare
+	if (i == MT_IMP1 || i == MT_IMP2) {
+		randomizernum = I_Random() % 3; // Immorpher randomizer number
+		if (randomizernum == 2) {
+			i = MT_IMP1;
+		}
+		else if (randomizernum == 1) {
+			i = MT_IMP2;
+		}
+		else if (randomizernum == 0) {
+			i = MT_DARKIMP;
+		}
+	}
+
+	// randomizer baron of hell
+	if (i == MT_BRUISER1) {
+		randomizernum = I_Random(); // Immorpher randomizer number
+		if (randomizernum < 57) {
+			i = MT_BRUISER1;
+		}
+		else if (randomizernum < 115) {
+			i = MT_BELPHEGOR;
+		}
+		else if (randomizernum < 172) {
+			i = MT_BRUISERDEMON;
+		}
+		else if (randomizernum < 230) {
+			i = MT_HELLCENTAUR;
+		}
+		else if (randomizernum < 256) {
+			i = MT_VILE;
+		}
+	}
+
+	// randomizer hell knight
+	if (i == MT_BRUISER2) {
+		randomizernum = I_Random() % 2; // Immorpher randomizer number
+		if (randomizernum == 1) {
+			i = MT_BRUISER2;
+		}
+		else if (randomizernum == 0) {
+			i = MT_UNDEAD;
+		}
+	}
+
+	// randomizer cacodemon
+	if (i == MT_CACODEMON) {
+		randomizernum = I_Random() % 4; // Immorpher randomizer number
+		if (randomizernum == 3) {
+			i = MT_CACODEMON;
+		}
+		else if (randomizernum == 2) {
+			i = MT_NIGHTMARE_CACODEMON;
+		}
+		else if (randomizernum == 1) {
+			i = MT_CACOLANTERN;
+		}
+		else if (randomizernum == 0) {
+			i = MT_ABADDON;
+		}
+	}
+
+	// randomizer pain elemental
+	if (i == MT_PAIN) {
+		randomizernum = I_Random() % 2; // Immorpher randomizer number
+		if (randomizernum == 1) {
+			i = MT_PAIN;
+		}
+		else if (randomizernum == 0) {
+			i = MT_PAIN_ELEMENTAL_NIGHTMARE;
+		}
+	}
+
+	// randomizer mancubus
+	if (i == MT_MANCUBUS) {
+		randomizernum = I_Random() % 4; // Immorpher randomizer number
+		if (randomizernum == 3) {
+			i = MT_MANCUBUS;
+		}
+		else if (randomizernum == 2) {
+			i = MT_DUKEOFHELL;
+		}
+		else if (randomizernum == 1) {
+			i = MT_HECTEBUS;
+		}
+		else if (randomizernum == 0) {
+			i = MT_NIGHTMARE_MANCUBUS;
+		}
+	}
+
+	// randomizer cyberdemon
+	if (i == MT_CYBORG) {
+		randomizernum = I_Random() % 2; // Immorpher randomizer number
+		if (randomizernum == 1) {
+			i = MT_CYBORG;
+		}
+		else if (randomizernum == 0) {
+			i = MT_ANNIHILATOR;
+		}
+	}
+
+	// randomizer mother demon
+	if (i == MT_RESURRECTOR) {
+		randomizernum = I_Random() % 2; // Immorpher randomizer number
+		if (randomizernum == 1) {
+			i = MT_RESURRECTOR;
+		}
+		else if (randomizernum == 0) {
+			i = MT_RESURRECTOR2;
+		}
+	}
+
+  }
 
 	// don't spawn keycards and players in deathmatch
 
@@ -1120,7 +1361,7 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 	if (mobj->flags == 0) {
 		mobj->blockflag |= BF_MIDPOINTONLY;
 	}
-
+	
 	return mobj;
 }
 
