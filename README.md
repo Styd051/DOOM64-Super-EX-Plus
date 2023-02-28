@@ -2,7 +2,7 @@
 Super EX+ and a custom fork of  EX+ of Gibbon, designed for mappers to use custom content on their map, with a modified DOOM Builder 64 configuration to show custom content, like custom monsters, custom decorations, etc... in the map editor
 
 # Custom Content Added
-currently 17 new monsters have been added
+currently 26 new monsters have been added
 
 -Archvile
 
@@ -38,6 +38,24 @@ currently 17 new monsters have been added
 
 -Hectebus (Skulltag)
 
+-Blood Demon (Skulltag)
+
+-Dark IMP (Skulltag)
+
+-Cacolantern (Skulltag)
+
+-Abaddon (Skulltag)
+
+-Nightmare Specter 
+
+-Nightmare Cacodemon
+
+-Nightmare Pain Elemental
+
+-Nightmare Mancubus
+
+-Hell Centaur
+
 currently 88 new decorations have been added
 
 -the decorations of the version DOOM 64 Alpha (40 new decorations)
@@ -57,7 +75,7 @@ currently 1 new power have been added
 # The Credits
 -Gibbon for the port EX+
 
--CRANEO for the sprite Chaingunner  in style DOOM64 
+-CRANEO for the sprite Chaingunner and Belphegor of BD in style DOOM64 
 
 -DrPyspy for the sprite Revenant and sprite Arch-vile in style DOOM64  
 
@@ -82,3 +100,5 @@ currently 1 new power have been added
 -Bobjet for the sprite Keen Mario
 
 -Velaron for the sprite WolfensteinSS
+
+-Madcat for the sprite Bruiser Demon
