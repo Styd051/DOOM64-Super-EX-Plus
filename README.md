@@ -2,7 +2,7 @@
 Super EX+ and a custom fork of  EX+ of Gibbon, designed for mappers to use custom content on their map, with a modified DOOM Builder 64 configuration to show custom content, like custom monsters, custom decorations, etc... in the map editor
 
 # Custom Content Added
-currently 26 new monsters have been added
+currently 28 new monsters have been added
 
 -Archvile
 
@@ -56,6 +56,10 @@ currently 26 new monsters have been added
 
 -Hell Centaur
 
+-Nightcrawler
+
+-Hardcore IMP (by Styd051)
+
 currently 88 new decorations have been added
 
 -the decorations of the version DOOM 64 Alpha (40 new decorations)
@@ -71,6 +75,12 @@ currently 1 new weapon have been added
 currently 1 new power have been added
 
 -the Quad Damage
+
+# game mode Complex DOOM 64 
+
+What is the game mode Complex DOOM 64 ?
+
+this is a game mode that will completely change the playing experience of DOOM 64 all monsters on the map will be randomized to a version of a much more powerful monster
 
 # The Credits
 -Gibbon for the port EX+
