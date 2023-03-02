@@ -76,11 +76,13 @@ currently 1 new power have been added
 
 -the Quad Damage
 
-# game mode Complex DOOM 64 
+# New game mode Complex DOOM 64 
 
 What is the game mode Complex DOOM 64 ?
 
-this is a game mode that will completely change the playing experience of DOOM 64 all monsters on the map will be randomized to a version of a much more powerful monster
+this is a game mode that will completely change the playing experience of DOOM 64 all monsters on the map will be randomized to a much more powerful version of a monster also some items and ammo are randomized so the player is not out of ammo, to avoid making the map unplayable
+
+a new option has been added called Complex D64 to enable or disable game mode Complex DOOM 64 
 
 # The Credits
 -Gibbon for the port EX+
