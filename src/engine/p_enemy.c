@@ -392,6 +392,18 @@ static mobj_t* P_MissileAttack(mobj_t* actor, int direction) {
 		type = MT_PROJ_BRUISER1;
 		aim = true;
 		break;
+	case MT_NIGHTCRAWLER:
+		offs = 20;
+		deltaz = 28;
+		type = MT_PROJ_ROCKET;
+		aim = false;
+		break;
+	case MT_HARDCORE_IMP:
+		offs = 0;
+		deltaz = 64;
+		type = MT_PROJ_HARDCORE_IMP;
+		aim = true;
+		break;
 	}
 
 	deltax = FixedMul(offs * FRACUNIT, finecosine[angle]);
@@ -1923,6 +1935,18 @@ void A_PlayerScream(mobj_t* mo) {
 void A_SpawnSmoke(mobj_t* mobj) {
 	mobj_t* smoke = P_SpawnMobj(mobj->x, mobj->y, mobj->z, MT_SMOKE_GRAY);
 	smoke->momz = FRACUNIT;
+
+	if (mobj->type == MT_PROJ_GRENADE)
+	{
+		mobj->reactiontime -= 8;
+		if (mobj->reactiontime <= 0)
+		{
+			mobj->momx = mobj->momy = mobj->momz = 0;
+
+			P_SetMobjState(mobj, mobj->info->deathstate);
+			S_StartSound(mobj, mobj->info->deathsound, mobj);
+		}
+	}
 }
 
 //

@@ -975,6 +975,12 @@ static void P_Obituary(mobj_t* source, mobj_t* target) {
 		case MT_HELLCENTAUR:
 			sprintf(omsg, "was Obliterated\nby a Hell Centaur.");
 			break;
+		case MT_NIGHTCRAWLER:
+			sprintf(omsg, "was blown up\nby a nightcrawler.");
+			break;
+		case MT_HARDCORE_IMP:
+			sprintf(omsg, "you were killed\nby a Hardcore Imp.");
+			break;
 		default:
 			sprintf(omsg, "you died.");
 			break;
@@ -1250,10 +1256,11 @@ void P_DamageMobj(mobj_t* target, mobj_t* inflictor, mobj_t* source, int damage)
 	}
 
 	target->reactiontime = 0;           // we're awake now...
-	if ((!target->threshold || target->type == MT_VILE || target->type == MT_BRUISERDEMON)
+	if ((!target->threshold || target->type == MT_VILE || target->type == MT_BRUISERDEMON || target->type == MT_NIGHTCRAWLER)
 		&& source && (source->flags & MF_SHOOTABLE)
 		&& source->type != MT_VILE 
 		&& source->type != MT_BRUISERDEMON
+		&& source->type != MT_NIGHTCRAWLER
 		&& !(target->flags & MF_NOINFIGHTING))
 	{
 		// if not intent on another player,

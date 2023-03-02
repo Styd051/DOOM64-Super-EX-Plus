@@ -1158,15 +1158,18 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	// randomizer imp and imp nightmare
 	if (i == MT_IMP1 || i == MT_IMP2) {
-		randomizernum = I_Random() % 3; // Immorpher randomizer number
-		if (randomizernum == 2) {
+		randomizernum = I_Random() % 4; // Immorpher randomizer number
+		if (randomizernum == 3) {
 			i = MT_IMP1;
 		}
-		else if (randomizernum == 1) {
+		else if (randomizernum == 2) {
 			i = MT_IMP2;
 		}
-		else if (randomizernum == 0) {
+		else if (randomizernum == 1) {
 			i = MT_DARKIMP;
+		}
+		else if (randomizernum == 0) {
+			i = MT_HARDCORE_IMP;
 		}
 	}
 
@@ -1243,6 +1246,17 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 		}
 		else if (randomizernum == 0) {
 			i = MT_NIGHTMARE_MANCUBUS;
+		}
+	}
+
+	// randomizer arachnotron
+	if (i == MT_BABY) {
+		randomizernum = I_Random() % 2; // Immorpher randomizer number
+		if (randomizernum == 1) {
+			i = MT_BABY;
+		}
+		else if (randomizernum == 0) {
+			i = MT_NIGHTCRAWLER;
 		}
 	}
 
