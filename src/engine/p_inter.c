@@ -981,6 +981,9 @@ static void P_Obituary(mobj_t* source, mobj_t* target) {
 		case MT_HARDCORE_IMP:
 			sprintf(omsg, "you were killed\nby a Hardcore Imp.");
 			break;
+		case MT_PlASMAZOMBIE:
+			sprintf(omsg, "was burned\nby plasma zombie.");
+			break;
 		default:
 			sprintf(omsg, "you died.");
 			break;
@@ -1094,6 +1097,10 @@ void P_KillMobj(mobj_t* source, mobj_t* target) {
 
 	case MT_SSGZOMBIE:
 		item = MT_WEAP_SSHOTGUN;
+		break;
+
+	case MT_PlASMAZOMBIE:
+		item = MT_WEAP_PLASMA;
 		break;
 
 

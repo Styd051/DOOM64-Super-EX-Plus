@@ -404,6 +404,12 @@ static mobj_t* P_MissileAttack(mobj_t* actor, int direction) {
 		type = MT_PROJ_HARDCORE_IMP;
 		aim = true;
 		break;
+	case MT_PlASMAZOMBIE:
+		offs = 12;
+		deltaz = 42;
+		type = MT_PROJ_PLASMA;
+		aim = true;
+		break;
 	}
 
 	deltax = FixedMul(offs * FRACUNIT, finecosine[angle]);
@@ -3244,4 +3250,17 @@ void A_PainElementalNightmareDie(mobj_t* actor) {
 	
 
 	A_OnDeathTrigger(actor);
+}
+
+//
+// A_PlasmaZombieAttack
+//
+
+void A_PlasmaZombieAttack(mobj_t* actor) {
+	if (!actor->target) {
+		return;
+	}
+
+	A_FaceTarget(actor);
+	P_MissileAttack(actor, DP_LEFT);
 }
