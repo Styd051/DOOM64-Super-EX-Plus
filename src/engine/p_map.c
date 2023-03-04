@@ -176,17 +176,17 @@ static void P_BlockMapBox(fixed_t* bbox, fixed_t x, fixed_t y, mobj_t* thing) {
 // Adjusts tmfloorz and tmceilingz as lines are contacted
 //
 
-boolean PIT_CheckLine(line_t* li) {
-    sector_t *front, *back;
+boolean PIT_CheckLine(line_t* ld) {
+    sector_t* sector;
 
-    if (tmbbox[BOXRIGHT] <= li->bbox[BOXLEFT]
-        || tmbbox[BOXLEFT] >= li->bbox[BOXRIGHT]
-        || tmbbox[BOXTOP] <= li->bbox[BOXBOTTOM]
-        || tmbbox[BOXBOTTOM] >= li->bbox[BOXTOP]) {
+    if (tmbbox[BOXRIGHT] <= ld->bbox[BOXLEFT]
+        || tmbbox[BOXLEFT] >= ld->bbox[BOXRIGHT]
+        || tmbbox[BOXTOP] <= ld->bbox[BOXBOTTOM]
+        || tmbbox[BOXBOTTOM] >= ld->bbox[BOXTOP]) {
         return true;
     }
 
-    if (P_BoxOnLineSide(tmbbox, li) != -1) {
+    if (P_BoxOnLineSide(tmbbox, ld) != -1) {
         return true;
     }
 
@@ -201,53 +201,60 @@ boolean PIT_CheckLine(line_t* li) {
     // so two special lines that are only 8 pixels apart
     // could be crossed in either order.
 
-    if (!li->backsector) {
+    if (!ld->backsector) {
         if (tmthing->flags & MF_MISSILE) {
-            tmhitline = li;
+            tmhitline = ld;
         }
 
         return false;           // one sided line
     }
 
     if (!(tmthing->flags & MF_MISSILE)) {
-        if (li->flags & ML_BLOCKING) {
+        if (ld->flags & ML_BLOCKING) {
             return false;    // explicitly blocking everything
         }
 
-        if (!tmthing->player && li->flags & ML_BLOCKMONSTERS) {
+        if (!tmthing->player && ld->flags & ML_BLOCKMONSTERS) {
             return false;    // block monsters only
         }
     }
 
-    // [d64] don't cross projectile blockers
-    if ((li->flags & ML_BLOCKPROJECTILES)) //psx doom / doom 64 new
-    {
-        tmhitline = li;
+    // [d64] don't cross mid-pegged lines
+    if (ld->flags & ML_BLOCKPROJECTILES) {
+        tmhitline = ld;
         return false;
     }
 
-    front = li->frontsector;
-    back = li->backsector;
+    // [kex] check if thing's midpoint is inside sector
+    if (tmthing->blockflag & BF_MIDPOINTONLY && ld->backsector) {
+        if (tmthing->subsector->sector != ld->backsector) {
+            return true;
+        }
+    }
+
+    sector = ld->frontsector;
 
     // [d64] check for valid sector heights
-    if (front->ceilingheight == front->floorheight) {
-        tmhitline = li;
+    if (sector->ceilingheight == sector->floorheight) {
+        tmhitline = ld;
         return false;
     }
 
+    sector = ld->backsector;
+
     // [d64] check for valid sector heights
-    if (back->ceilingheight == back->floorheight) {
-        tmhitline = li;
+    if (sector->ceilingheight == sector->floorheight) {
+        tmhitline = ld;
         return false;
     }
 
     // set openrange, opentop, openbottom
-    P_LineOpening(li);
+    P_LineOpening(ld);
 
     // adjust floor / ceiling heights
     if (opentop < tmceilingz) {
         tmceilingz = opentop;
-        tmhitline = li;
+        tmhitline = ld;
     }
 
     if (openbottom > tmfloorz) {
@@ -259,13 +266,13 @@ boolean PIT_CheckLine(line_t* li) {
     }
 
     // if contacted a special line, add it to the list
-    if (li->special & MLU_CROSS)
-    {
-	    //New Psx Doom
-		if (numthingspec < MAXTHINGSPEC)
-		{
-			thingspec[numthingspec] = li;
-			numthingspec++;
+    if (ld->special & MLU_CROSS) {
+        if (numthingspec >= MAXSPECIALCROSS) {
+            CON_Warnf("PIT_CheckLine: spechit overflow!\n");
+        }
+        else {
+            thingspec[numthingspec] = ld;
+            numthingspec++;
         }
     }
 
@@ -418,8 +425,7 @@ boolean P_CheckPosition(mobj_t* thing, fixed_t x, fixed_t y) {
     tmceilingz = newsubsec->sector->ceilingheight;
 
     validcount++;
-
-    numthingspec = 0; //PSX
+    numthingspec = 0;
 
     if (tmflags & MF_NOCLIP) {
         return true;
@@ -465,34 +471,39 @@ boolean P_TryMove(mobj_t* thing, fixed_t x, fixed_t y) {
     line_t* ld;
 
     floatok = false;
-    oldx = thing->x;
-    oldy = thing->y;
-
     if (!P_CheckPosition(thing, x, y)) {
         return false;    // solid wall or thing
     }
 
-    if (!(thing->flags & MF_NOCLIP))
-    {
-        floatok = false;
-
-        if (tmceilingz - thing->z < thing->height)
-            return false;			// doesn't fit
+    if (!(thing->flags & MF_NOCLIP)) {
+        if (tmceilingz - tmfloorz < thing->height) {
+            return false;    // doesn't fit
+        }
 
         floatok = true;
 
-        if (!(thing->flags & MF_TELEPORT) && tmceilingz - thing->z < thing->height)
-            return false;			// mobj must lower itself to fit
-        if (!(thing->flags & MF_TELEPORT) && tmfloorz - thing->z > 24 * FRACUNIT)
-            return false;			// too big a step up
-        if (!(thing->flags & (MF_DROPOFF | MF_FLOAT)) && tmfloorz - tmdropoffz > 24 * FRACUNIT)
-            return false;			// don't stand over a dropoff
+        if (!(thing->flags & MF_TELEPORT)
+            && tmceilingz - thing->z < thing->height) {
+            return false;    // mobj must lower itself to fit
+        }
+
+        if (!(thing->flags & MF_TELEPORT)
+            && tmfloorz - thing->z > 24 * FRACUNIT) {
+            return false;    // too big a step up
+        }
+
+        if (!(thing->flags & (MF_DROPOFF | MF_FLOAT))
+            && tmfloorz - tmdropoffz > 24 * FRACUNIT) {
+            return false;    // don't stand over a dropoff
+        }
     }
 
     // the move is ok,
     // so link the thing into its new position
     P_UnsetThingPosition(thing);
 
+    oldx = thing->x;
+    oldy = thing->y;
     thing->floorz = tmfloorz;
     thing->ceilingz = tmceilingz;
     thing->x = x;
@@ -501,29 +512,19 @@ boolean P_TryMove(mobj_t* thing, fixed_t x, fixed_t y) {
     P_SetThingPosition(thing);
 
     // if any special lines were hit, do the effect
-    if (!(thing->flags & (MF_NOCLIP | MF_TELEPORT)))
-    {
-        while (numthingspec > 0)
-        {
-            numthingspec--;
-
+    if (!(thing->flags & (MF_TELEPORT | MF_NOCLIP))) {
+        while (numthingspec--) {
             // see if the line was crossed
             ld = thingspec[numthingspec];
-
             side = P_PointOnLineSide(thing->x, thing->y, ld);
             oldside = P_PointOnLineSide(oldx, oldy, ld);
-
-            if (side != oldside)
-            {
-                if (!(ld->flags & ML_TRIGGERFRONT) || (side))
-                {
+            if (side != oldside) {
+                if (ld->special & MLU_CROSS) {
                     P_UseSpecialLine(thing, ld, oldside);
                 }
             }
         }
     }
-
-    floatok = true;
 
     return true;
 }
