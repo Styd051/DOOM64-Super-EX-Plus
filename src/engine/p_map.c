@@ -519,7 +519,8 @@ boolean P_TryMove(mobj_t* thing, fixed_t x, fixed_t y) {
             side = P_PointOnLineSide(thing->x, thing->y, ld);
             oldside = P_PointOnLineSide(oldx, oldy, ld);
             if (side != oldside) {
-                if (ld->special & MLU_CROSS) {
+                if (!(ld->flags & ML_TRIGGERFRONT) || (side))
+                {
                     P_UseSpecialLine(thing, ld, oldside);
                 }
             }
