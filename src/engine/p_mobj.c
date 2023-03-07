@@ -1118,24 +1118,27 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	// randomizer zombie man and zombie shotgun
 	if (i == MT_POSSESSED1 || i == MT_POSSESSED2) {
-		randomizernum = I_Random() % 6; // Immorpher randomizer number
-		if (randomizernum == 5) {
+		randomizernum = I_Random(); // Immorpher randomizer number
+		if (randomizernum < 40) {
 			i = MT_MELEEZOMBIE;
 		}
-		else if (randomizernum == 4) {
+		else if (randomizernum < 81) {
 			i = MT_POSSESSED1;
 		}
-		else if (randomizernum == 3) {
+		else if (randomizernum < 122) {
 			i = MT_POSSESSED2;
 		}
-		else if (randomizernum == 2) {
+		else if (randomizernum < 163) {
 			i = MT_CHAINGUY;
 		}
-		else if (randomizernum == 1) {
+		else if (randomizernum < 204) {
 			i = MT_PlASMAZOMBIE;
 		}
-		else if (randomizernum == 0) {
+		else if (randomizernum < 245) {
 			i = MT_SSGZOMBIE;
+		}
+		else if (randomizernum < 256) {
+			i = MT_BFGCOMMANDO;
 		}
 	}
 
@@ -1198,12 +1201,15 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	// randomizer hell knight
 	if (i == MT_BRUISER2) {
-		randomizernum = I_Random() % 2; // Immorpher randomizer number
-		if (randomizernum == 1) {
+		randomizernum = I_Random() % 3; // Immorpher randomizer number
+		if (randomizernum == 2) {
 			i = MT_BRUISER2;
 		}
-		else if (randomizernum == 0) {
+		else if (randomizernum == 1) {
 			i = MT_UNDEAD;
+		}
+		else if (randomizernum == 0) {
+			i = MT_NIGHTMARE_REVENANT;
 		}
 	}
 
@@ -1226,12 +1232,26 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	// randomizer pain elemental
 	if (i == MT_PAIN) {
-		randomizernum = I_Random() % 2; // Immorpher randomizer number
-		if (randomizernum == 1) {
+		randomizernum = I_Random() % 3; // Immorpher randomizer number
+		if (randomizernum == 2) {
 			i = MT_PAIN;
+		}
+		else if (randomizernum == 1) {
+			i = MT_PAIN_ELEMENTAL_STALKER;
 		}
 		else if (randomizernum == 0) {
 			i = MT_PAIN_ELEMENTAL_NIGHTMARE;
+		}
+	}
+
+	// randomizer lost soul
+	if (i == MT_SKULL) {
+		randomizernum = I_Random() % 2; // Immorpher randomizer number
+		if (randomizernum == 1) {
+			i = MT_SKULL;
+		}
+		else if (randomizernum == 0) {
+			i = MT_STALKER;
 		}
 	}
 
@@ -1265,12 +1285,15 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	// randomizer cyberdemon
 	if (i == MT_CYBORG) {
-		randomizernum = I_Random() % 2; // Immorpher randomizer number
-		if (randomizernum == 1) {
+		randomizernum = I_Random() % 3; // Immorpher randomizer number
+		if (randomizernum == 2) {
 			i = MT_CYBORG;
 		}
-		else if (randomizernum == 0) {
+		else if (randomizernum == 1) {
 			i = MT_ANNIHILATOR;
+		}
+		else if (randomizernum == 0) {
+			i = MT_BFGCYBERDEMON;
 		}
 	}
 

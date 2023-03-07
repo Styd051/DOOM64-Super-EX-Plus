@@ -984,6 +984,18 @@ static void P_Obituary(mobj_t* source, mobj_t* target) {
 		case MT_PlASMAZOMBIE:
 			sprintf(omsg, "was burned\nby plasma zombie.");
 			break;
+		case MT_BFGCOMMANDO:
+			sprintf(omsg, "was burned\nby bfg commando.");
+			break;
+		case MT_BFGCYBERDEMON:
+			sprintf(omsg, "you were splattered\nby a BFG Cyberdemon.");
+			break;
+		case MT_STALKER:
+			sprintf(omsg, "didn't see\nthe stalker coming.");
+			break;
+		case MT_NIGHTMARE_REVENANT:
+			sprintf(omsg, "couldn't evade\na nightmare revenant's fireball.");
+			break;
 		default:
 			sprintf(omsg, "you died.");
 			break;
@@ -1101,6 +1113,10 @@ void P_KillMobj(mobj_t* source, mobj_t* target) {
 
 	case MT_PlASMAZOMBIE:
 		item = MT_WEAP_PLASMA;
+		break;
+
+	case MT_BFGCOMMANDO:
+		item = MT_WEAP_BFG;
 		break;
 
 

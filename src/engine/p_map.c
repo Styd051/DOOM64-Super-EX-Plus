@@ -1554,8 +1554,12 @@ boolean PIT_RadiusAttack(mobj_t* thing) {
         return true;
     }
 
-    if (thing->type == MT_SKULL || thing->type == MT_PAIN) {
+    if (thing->type == MT_SKULL || thing->type == MT_PAIN || thing->type == MT_STALKER || thing->type == MT_PAIN_ELEMENTAL_STALKER || thing->type == MT_PAIN_ELEMENTAL_NIGHTMARE) {
         if (bombsource && bombsource->type == MT_SKULL) {
+            return true;
+        }
+
+        if (bombsource && bombsource->type == MT_STALKER) {
             return true;
         }
     }

@@ -2,7 +2,7 @@
 Super EX+ and a custom fork of  EX+ of Gibbon, designed for mappers to use custom content on their map, with a modified DOOM Builder 64 configuration to show custom content, like custom monsters, custom decorations, etc... in the map editor
 
 # Custom Content Added
-currently 28 new monsters have been added
+currently 34 new monsters have been added
 
 -Archvile
 
@@ -60,6 +60,18 @@ currently 28 new monsters have been added
 
 -Hardcore IMP (by Styd051)
 
+-Plasma Zombie
+
+-BFG Commando
+
+-BFG Cyberdemon
+
+-Stalker
+
+-Pain Elemental Stalker (by Styd051)
+
+-Nightmare Revenant
+
 currently 88 new decorations have been added
 
 -the decorations of the version DOOM 64 Alpha (40 new decorations)
@@ -87,13 +99,13 @@ a new option has been added called Complex D64 to enable or disable game mode Co
 # The Credits
 -Gibbon for the port EX+
 
--CRANEO for the sprite Chaingunner and Belphegor of BD in style DOOM64 
+-CRANEO for the sprite Chaingunner, Spider mastermind and Belphegor of BD in style DOOM64 
 
 -DrPyspy for the sprite Revenant and sprite Arch-vile in style DOOM64  
 
 -IDDQD_1337 for the sprite Super Shotgun Zombie in style DOOM64
 
--Immorpher for the sprite Spider mastermind and arch-vile in style mother demon for DOOM64
+-Immorpher for the sprite arch-vile in style mother demon for DOOM64, and for helping me on the randomizer code 
 
 -Onox792 for the sprite Annihilator in style DOOM64
 

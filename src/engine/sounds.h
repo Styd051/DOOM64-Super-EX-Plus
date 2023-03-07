@@ -161,6 +161,8 @@ typedef enum {
 	sfx_belpain,
 	sfx_beldie,
 	sfx_belact,
+	sfx_stlksit,
+	sfx_stlkpain,
 	mus_amb01,
 	mus_amb02,
 	mus_amb03,

@@ -410,6 +410,23 @@ static mobj_t* P_MissileAttack(mobj_t* actor, int direction) {
 		type = MT_PROJ_PLASMA;
 		aim = true;
 		break;
+	case MT_BFGCOMMANDO:
+		offs = 12;
+		deltaz = 32;
+		type = MT_PROJ_BFG;
+		aim = true;
+		break;
+	case MT_BFGCYBERDEMON:
+		offs = 45;
+		deltaz = 88;
+		type = MT_PROJ_BFG;
+		aim = true;
+		break;
+	case MT_STALKER:
+		offs = 0;
+		deltaz = 32;
+		type = MT_PROJ_STALKER1;
+		aim = true;
 	}
 
 	deltax = FixedMul(offs * FRACUNIT, finecosine[angle]);
@@ -3263,4 +3280,250 @@ void A_PlasmaZombieAttack(mobj_t* actor) {
 
 	A_FaceTarget(actor);
 	P_MissileAttack(actor, DP_LEFT);
+}
+
+//
+// A_BFGCommandoRaise
+//
+
+
+void A_BFGCommandoRaise(mobj_t* actor) {
+	if (!actor->target) {
+		return;
+	}
+
+	A_FaceTarget(actor);
+	S_StartSound(actor, sfx_bfg);
+}
+
+//
+// A_BFGCommandoAttack
+//
+
+void A_BFGCommandoAttack(mobj_t* actor) {
+	if (!actor->target) {
+		return;
+	}
+
+	A_FaceTarget(actor);
+	P_MissileAttack(actor, DP_RIGHT);
+}
+
+//
+// A_BFGCyberAttack
+//
+
+void A_BFGCyberAttack(mobj_t* actor) {
+	if (!actor->target) {
+		return;
+	}
+
+	A_FaceTarget(actor);
+	P_MissileAttack(actor, DP_LEFT);
+	S_StartSound(actor, sfx_bfg);
+}
+
+//
+// A_StalkerDecide
+//
+
+void A_StalkerDecide(mobj_t* actor)
+{
+	if (P_Random() < 85)
+	{
+		P_SetMobjState(actor, S_STLK_ATK1_1);
+	}
+	else if (P_Random() < 170)
+	{
+		P_SetMobjState(actor, S_STLK_ATK2_1);
+	}
+	else if (P_Random() < 256)
+	{
+		P_SetMobjState(actor, S_STLK_ATK3_1);
+	}
+}
+
+//
+// A_StalkerMissile
+//
+
+void A_StalkerMissile(mobj_t* actor, int direction)
+{
+	mobj_t* mo;
+	angle_t angle;
+
+	if (direction == DP_LEFT) {
+		angle = actor->angle + ANG45;
+	}
+	else if (direction == DP_RIGHT) {
+		angle = actor->angle - ANG45;
+	}
+	else {
+		angle = actor->angle;
+	}
+	angle >>= ANGLETOFINESHIFT;
+
+	mo = P_SpawnMissile(actor,
+		actor->target,
+		MT_PROJ_STALKER2,
+		FixedMul(26 * FRACUNIT, finecosine[angle]),
+		FixedMul(26 * FRACUNIT, finesine[angle]),
+		32,
+		true);
+	mo->x += mo->momx;
+	mo->y += mo->momy;
+	mo->tracer = actor->target;
+}
+
+//
+// A_StalkerAttack1
+//
+
+void A_StalkerAttack1(mobj_t* actor) {
+	if (!actor->target) {
+		return;
+	}
+
+	A_FaceTarget(actor);
+	P_MissileAttack(actor, DP_STRAIGHT);
+}
+
+//
+// A_StalkerAttack2
+//
+
+void A_StalkerAttack2(mobj_t* actor) {
+	if (!actor->target) {
+		return;
+	}
+
+	A_FaceTarget(actor);
+	A_StalkerMissile(actor, DP_STRAIGHT);
+}
+
+//
+// A_PainElementalStalkerShootSkull
+// Spawn a lost soul and launch it at the target
+//
+
+void A_PainElementalStalkerShootSkull(mobj_t* actor, angle_t angle) {
+	fixed_t     x;
+	fixed_t     y;
+	fixed_t     z;
+	mobj_t* newmobj;
+	angle_t     an;
+	int         prestep;
+	int         count;
+
+	// count total number of skull currently on the level
+	count = 0;
+
+	for (newmobj = mobjhead.next; newmobj != &mobjhead; newmobj = newmobj->next) {
+		if (newmobj->type == MT_STALKER) {
+			count++;
+		}
+	}
+
+	// if there are all ready 17 skulls on the level, don't spit another one
+	if (count >= 17) {
+		return;
+	}
+
+	an = angle >> ANGLETOFINESHIFT;
+
+	prestep = 4 * FRACUNIT + 3 * (actor->info->radius + mobjinfo[MT_STALKER].radius) / 2;
+
+	x = actor->x + FixedMul(prestep, finecosine[an]);
+	y = actor->y + FixedMul(prestep, finesine[an]);
+	z = actor->z + 16 * FRACUNIT;
+
+	newmobj = P_SpawnMobj(x, y, z, MT_STALKER);
+
+	// Check for movements
+
+	if ((!P_TryMove(newmobj, newmobj->x, newmobj->y)) ||
+		(!P_PathTraverse(actor->x, actor->y, newmobj->x, newmobj->y, PT_ADDLINES, PIT_PainCheckLine))) {
+		// kill it immediately
+
+		P_DamageMobj(newmobj, actor, actor, 10000);
+		P_RadiusAttack(newmobj, newmobj, 128);
+		return;
+	}
+
+	P_SetTarget(&newmobj->target, actor->target);
+	P_SetMobjState(newmobj, S_STLK_ATK3_1);
+	A_SkullAttack(newmobj);
+}
+
+//
+// A_PainElementalStalkerAttack
+// Spawn a lost soul and launch it at the target
+//
+
+void A_PainElementalStalkerAttack(mobj_t* actor) {
+	if (!actor->target) {
+		return;
+	}
+
+	A_FaceTarget(actor);
+	A_PainElementalStalkerShootSkull(actor, actor->angle + 0x15550000);
+	A_PainElementalStalkerShootSkull(actor, actor->angle - 0x15550000);
+}
+
+//
+// A_PainElementalStalkerDie
+//
+
+void A_PainElementalStalkerDie(mobj_t* actor) {
+	A_Fall(actor);
+	A_PainElementalStalkerShootSkull(actor, actor->angle + ANG90);
+	A_PainElementalStalkerShootSkull(actor, actor->angle + ANG180);
+	A_PainElementalStalkerShootSkull(actor, actor->angle + ANG270);
+
+	A_OnDeathTrigger(actor);
+}
+
+//
+// A_RevenantNightmareMissile
+//
+
+void A_RevenantNightmareMissile(mobj_t* actor, int direction)
+{
+	mobj_t* mo;
+	angle_t angle;
+
+	if (direction == DP_LEFT) {
+		angle = actor->angle + ANG45;
+	}
+	else if (direction == DP_RIGHT) {
+		angle = actor->angle - ANG45;
+	}
+	else {
+		angle = actor->angle;
+	}
+	angle >>= ANGLETOFINESHIFT;
+
+	mo = P_SpawnMissile(actor,
+		actor->target,
+		MT_PROJ_NIGHTMARE_REVENANT,
+		FixedMul(26 * FRACUNIT, finecosine[angle]),
+		FixedMul(26 * FRACUNIT, finesine[angle]),
+		104,
+		true);
+	mo->x += mo->momx;
+	mo->y += mo->momy;
+	mo->tracer = actor->target;
+}
+
+//
+// A_RevenantNightmareAttack
+//
+
+void A_RevenantNightmareAttack(mobj_t* actor)
+{
+	if (!actor->target)
+		return;
+	A_FaceTarget(actor);
+	A_RevenantNightmareMissile(actor, DP_LEFT);
+	A_RevenantNightmareMissile(actor, DP_RIGHT);
 }
