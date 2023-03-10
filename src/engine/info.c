@@ -144,6 +144,8 @@ char* sprnames[NUMSPRITES + 1] = {  //0x5FA30
 	"STLK",
 	"PAI2",
 	"SKE2",
+	"SHTF",
+	"PLSF",
 	NULL
 };
 
@@ -158,6 +160,7 @@ void A_FirePistol();
 void A_FireShotgun();
 void A_FireShotgun2();
 void A_CheckReload();
+void A_OpenShotgun2();
 void A_LoadShotgun2();
 void A_CloseShotgun2();
 void A_FireCGun();
@@ -1127,27 +1130,30 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_SGUNDOWN*/          { SPR_SHT1, 0, 1, {A_Lower}, S_SGUNDOWN },
 	/*S_SGUNUP*/            { SPR_SHT1, 0, 1, {A_Raise}, S_SGUNUP },
 	/*S_SGUN1*/             { SPR_SHT1, 0, 2, {NULL}, S_SGUN2 },
-	/*S_SGUN2*/             { SPR_SHT1, 0, 4, {A_FireShotgun}, S_SGUN3 },
-	/*S_SGUN3*/             { SPR_SHT1, 1, 18, {NULL}, S_SGUN4 },
-	/*S_SGUN4*/             { SPR_SHT1, 2, 5, {NULL}, S_SGUN5 },
-	/*S_SGUN5*/             { SPR_SHT1, 0, 3, {NULL}, S_SGUN6 },
-	/*S_SGUN6*/             { SPR_SHT1, 0, 7, {A_ReFire}, S_SGUN },
-	/*S_SGUNFLASH*/         { SPR_SHT1, 32771, 4, {NULL}, S_NULL },
+	/*S_SGUN2*/             { SPR_SHT1, 0, 6, {A_FireShotgun}, S_SGUN3 },
+	/*S_SGUN3*/             { SPR_SHT1, 1, 4, {NULL}, S_SGUN4 },
+	/*S_SGUN4*/             { SPR_SHT1, 2, 4, {NULL}, S_SGUN5 },
+	/*S_SGUN5*/             { SPR_SHT1, 3, 3, {NULL}, S_SGUN6 },
+	/*S_SGUN6*/             { SPR_SHT1, 2, 4, {NULL}, S_SGUN7 },
+	/*S_SGUN7*/             { SPR_SHT1, 1, 4, {NULL}, S_SGUN8 },
+	/*S_SGUN8*/             { SPR_SHT1, 0, 2, {NULL}, S_SGUN9 },
+	/*S_SGUN9*/             { SPR_SHT1, 0, 7, {A_ReFire}, S_SGUN },
+	/*S_SGUNFLASH*/         { SPR_SHTF, 32768, 4, {NULL}, S_NULL },
 
 	/*S_SSG*/               { SPR_SHT2, 0, 1, {A_WeaponReady}, S_SSG },
 	/*S_SSGDOWN*/           { SPR_SHT2, 0, 1, {A_Lower}, S_SSGDOWN },
 	/*S_SSGUP*/             { SPR_SHT2, 0, 1, {A_Raise}, S_SSGUP },
-	/*S_SSG1*/              { SPR_SHT2, 0, 1, {NULL}, S_SSG2 },
-	/*S_SSG2*/              { SPR_SHT2, 0, 4, {A_FireShotgun2}, S_SSG3 },
-	/*S_SSG3*/              { SPR_SHT2, 1, 7, {NULL}, S_SSG4 },
-	/*S_SSG4*/              { SPR_SHT2, 1, 5, {A_CheckReload}, S_SSG5 },
-	/*S_SSG5*/              { SPR_SHT2, 1, 5, {NULL}, S_SSG6 },
-	/*S_SSG6*/              { SPR_SHT2, 1, 5, {NULL}, S_SSG7 },
-	/*S_SSG7*/              { SPR_SHT2, 1, 5, {NULL}, S_SSG8 },
-	/*S_SSG8*/              { SPR_SHT2, 1, 5, {A_LoadShotgun2}, S_SSG9 },
-	/*S_SSG9*/              { SPR_SHT2, 2, 4, {A_CloseShotgun2}, S_SSG10 },
+	/*S_SSG1*/              { SPR_SHT2, 0, 2, {NULL}, S_SSG2 },
+	/*S_SSG2*/              { SPR_SHT2, 0, 6, {A_FireShotgun2}, S_SSG3 },
+	/*S_SSG3*/              { SPR_SHT2, 1, 6, {NULL}, S_SSG4 },
+	/*S_SSG4*/              { SPR_SHT2, 2, 6, {A_CheckReload}, S_SSG5 },
+	/*S_SSG5*/              { SPR_SHT2, 3, 6, {A_OpenShotgun2}, S_SSG6 },
+	/*S_SSG6*/              { SPR_SHT2, 4, 6, {NULL}, S_SSG7 },
+	/*S_SSG7*/              { SPR_SHT2, 5, 6, {A_LoadShotgun2}, S_SSG8 },
+	/*S_SSG8*/              { SPR_SHT2, 6, 5, {NULL}, S_SSG9 },
+	/*S_SSG9*/              { SPR_SHT2, 7, 5, {A_CloseShotgun2}, S_SSG10 },
 	/*S_SSG10*/             { SPR_SHT2, 0, 5, {A_ReFire}, S_SSG },
-	/*S_SSGFLASH*/          { SPR_SHT2, 32771, 4, {NULL}, S_NULL },
+	/*S_SSGFLASH*/          { SPR_SHT2, 32776, 5, {NULL}, S_NULL },
 
 	/*S_CHAING*/            { SPR_CHGG, 0, 1, {A_WeaponReady}, S_CHAING },
 	/*S_CHAINGDOWN*/        { SPR_CHGG, 0, 1, {A_Lower}, S_CHAINGDOWN },
@@ -1169,16 +1175,18 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_ROCKETLLIGHT3*/     { SPR_ROCK, 32772, 4, {NULL}, S_ROCKETLLIGHT4 },
 	/*S_ROCKETLLIGHT4*/     { SPR_ROCK, 32773, 4, {NULL}, S_NULL },
 
-	/*S_PLASMAG*/           { SPR_PLAS, 0, 1, {A_WeaponReady}, S_PLASMAG },
-	/*S_PLASMAGDOWN*/       { SPR_PLAS, 0, 1, {A_Lower}, S_PLASMAGDOWN },
-	/*S_PLASMAGUP1*/        { SPR_PLAS, 0, 0, {A_PlasmaAnimate}, S_PLASMAGUP2 },
-	/*S_PLASMAGUP2*/        { SPR_PLAS, 0, 1, {A_Raise}, S_PLASMAGUP2 },
-	/*S_PLASMAG1*/          { SPR_PLAS, 32772, 2, {A_FirePlasma}, S_PLASMAG2 },
-	/*S_PLASMAG2*/          { SPR_PLAS, 0, 2, {A_PlasmaAnimate}, S_PLASMAG3 },
-	/*S_PLASMAG3*/          { SPR_PLAS, 0, 1, {A_ReFire}, S_PLASMAG },
-	/*S_PLASMAGANIM1*/      { SPR_PLAS, 1, 2, {NULL}, S_PLASMAGANIM2 },
-	/*S_PLASMAGANIM2*/      { SPR_PLAS, 2, 2, {NULL}, S_PLASMAGANIM3 },
-	/*S_PLASMAGANIM3*/      { SPR_PLAS, 3, 2, {NULL}, S_PLASMAGANIM1 },
+	/*S_PLASMAG*/           { SPR_PLAS, 3, 1, {A_WeaponReady}, S_PLASMAG },
+	/*S_PLASMAGDOWN*/       { SPR_PLAS, 3, 1, {A_Lower}, S_PLASMAGDOWN },
+	/*S_PLASMAGUP1*/        { SPR_PLAS, 3, 0, {A_PlasmaAnimate}, S_PLASMAGUP2 },
+	/*S_PLASMAGUP2*/        { SPR_PLAS, 3, 1, {A_Raise}, S_PLASMAGUP2 },
+	/*S_PLASMAG1*/          { SPR_PLAS, 3, 4, {A_FirePlasma}, S_PLASMAG2 },
+	/*S_PLASMAG2*/          { SPR_PLAS, 4, 20, {A_ReFire}, S_PLASMAG3 },
+	/*S_PLASMAG3*/          { SPR_PLAS, 3, 1, {A_PlasmaAnimate}, S_PLASMAG },
+	/*S_PLASMAGANIM1*/      { SPR_PLAS, 0, 2, {NULL}, S_PLASMAGANIM2 },
+	/*S_PLASMAGANIM2*/      { SPR_PLAS, 1, 2, {NULL}, S_PLASMAGANIM3 },
+	/*S_PLASMAGANIM3*/      { SPR_PLAS, 2, 2, {NULL}, S_PLASMAGANIM1 },
+	/*S_PLASMAFLASH1*/      { SPR_PLSF, 32768, 4, {NULL}, S_NULL },
+	/*S_PLASMAFLASH2*/      { SPR_PLSF, 32769, 4, {NULL}, S_NULL },
 
 	/*S_BFG*/               { SPR_BFGG, 0, 1, {A_WeaponReady}, S_BFG },
 	/*S_BFGDOWN*/           { SPR_BFGG, 0, 1, {A_Lower}, S_BFGDOWN },
@@ -1563,7 +1571,7 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_A64A_RUN4*/{ SPR_A64A, 1, 4, {A_Chase}, S_A64A_RUN5 },
 	/*S_A64A_RUN5*/{ SPR_A64A, 2, 4, {A_Chase}, S_A64A_RUN6 },
 	/*S_A64A_RUN6*/{ SPR_A64A, 2, 4, {A_Chase}, S_A64A_RUN7 },
-	/*S_A64A_RUN7*/{ SPR_A64A, 3, 4, {A_Metal}, S_A64A_RUN8 },
+	/*S_A64A_RUN7*/{ SPR_A64A, 3, 4, {A_AnnihilatorHoof}, S_A64A_RUN8 },
 	/*S_A64A_RUN8*/{ SPR_A64A, 3, 4, {A_Chase}, S_A64A_RUN1 },
 	/*S_A64A_ATK1*/{ SPR_A64A, 32772, 6, {A_FaceTarget}, S_A64A_ATK2 },
 	/*S_A64A_ATK2*/{ SPR_A64A, 5, 12, {A_AnnihilatorAttack1}, S_A64A_ATK3 },
@@ -10724,7 +10732,7 @@ S_NULL	   //raisestate
 	/*MT_PAIN_ELEMENTAL_STALKER*/
 	9027,        //doomednum
 	S_PAIN_STND,        //spawnstate
-	400,        //spawnhealth
+	600,        //spawnhealth
 	S_PAI2_RUN,        //seestate
 	sfx_pesit,        //seesound
 	8,        //reactiontime

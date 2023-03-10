@@ -1550,7 +1550,7 @@ boolean PIT_RadiusAttack(mobj_t* thing) {
     }
 
     // Boss Annihilator take no damage from concussion.
-    if (thing->type == MT_ANNIHILATOR) {
+    if (thing->type == MT_ANNIHILATOR || thing->type == MT_BFGCYBERDEMON) {
         return true;
     }
 

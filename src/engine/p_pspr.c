@@ -65,7 +65,7 @@ weaponinfo_t    weaponinfo[NUMWEAPONS] = {
 	{ am_shell,     S_SSGUP, S_SSGDOWN, S_SSG, S_SSG1, S_SSGFLASH },    // super shotgun
 	{ am_clip,      S_CHAINGUP, S_CHAINGDOWN, S_CHAING, S_CHAING1, S_CHAINGLIGHT1 },    // chaingun
 	{ am_misl,      S_ROCKETLUP, S_ROCKETLDOWN, S_ROCKETL, S_ROCKETL1, S_ROCKETLLIGHT1 },    // rocket launcher
-	{ am_cell,      S_PLASMAGUP1, S_PLASMAGDOWN, S_PLASMAG, S_PLASMAG1, S_NULL },    // plasma gun
+	{ am_cell,      S_PLASMAGUP1, S_PLASMAGDOWN, S_PLASMAG, S_PLASMAG1, S_PLASMAFLASH1 },    // plasma gun
 	{ am_cell,      S_BFGUP, S_BFGDOWN, S_BFG, S_BFG1, S_BFGLIGHT1 },    // bfg
 	{ am_cell,      S_LASERGUP, S_LASERGDOWN, S_LASERG, S_LASERG1, S_LASERGLIGHT },    // laser rifle
 	{ am_nails,      S_NAILGUP, S_NAILGDOWN, S_NAILG, S_NAILG1, S_NULL }    // nailgun
@@ -601,7 +601,7 @@ void A_PlasmaAnimate(player_t* player, pspdef_t* psp) {
 void A_FirePlasma(player_t* player, pspdef_t* psp) {
 	player->ammo[weaponinfo[player->readyweapon].ammo]--;
 
-	P_SetPsprite(player, ps_flash, S_NULL);
+	P_SetPsprite(player, ps_flash, weaponinfo[player->readyweapon].flashstate + (P_Random() & 1));
 
 	if (player->powers[pw_quaddamage]) {
 
@@ -853,11 +853,19 @@ void A_BFGsound(player_t* player, pspdef_t* psp) {
 }
 
 //
+// A_OpenShotgun2
+//
+
+void A_OpenShotgun2(player_t* player, pspdef_t* psp) {
+	S_StartSound(player->mo, sfx_sht2load1);
+}
+
+//
 // A_LoadShotgun2
 //
 
 void A_LoadShotgun2(player_t* player, pspdef_t* psp) {
-	S_StartSound(player->mo, sfx_sht2load1);
+	S_StartSound(player->mo, sfx_sht2load3);
 }
 
 //

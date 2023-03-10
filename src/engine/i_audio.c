@@ -123,7 +123,7 @@ static int seqready = 0;
 // DEFINES
 //
 
-#define MIDI_CHANNELS   64
+#define MIDI_CHANNELS   240
 #define MIDI_MESSAGE    0x07
 #define MIDI_END        0x2f
 #define MIDI_SET_TEMPO  0x51

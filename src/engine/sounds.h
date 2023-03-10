@@ -59,6 +59,7 @@ typedef enum {
 	sfx_sht2fire,   //shot2fire
 	sfx_sht2load1,  //shot2load1
 	sfx_sht2load2,  //shot2load2
+	sfx_sht2load3,  //shot2load2
 	sfx_plrpain,    //playerpain
 	sfx_plrdie,     //playerdie
 	sfx_slop,       //slop
