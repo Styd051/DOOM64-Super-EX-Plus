@@ -2429,6 +2429,7 @@ boolean PIT_VileCheck(mobj_t* thing)
 
 	maxdist = thing->info->radius + mobjinfo[MT_VILE].radius;
 	maxdist = thing->info->radius + mobjinfo[MT_RESURRECTOR2].radius;
+	maxdist = thing->info->radius + mobjinfo[MT_NIGHTMARE_LOSTSOUL].radius;
 
 	if (abs(thing->x - viletryx) > maxdist
 		|| abs(thing->y - viletryy) > maxdist)
@@ -3244,11 +3245,96 @@ void A_PainElementalNightmareChase(mobj_t* actor)
 }
 
 //
+// A_PainElementalNightmareDecide
+//
+
+void A_PainElementalNightmareDecide(mobj_t* actor)
+{
+	if (P_Random() < 128)
+	{
+		P_SetMobjState(actor, S_PAIG_ATK1_1);
+	}
+	else if (P_Random() < 256)
+	{
+		P_SetMobjState(actor, S_PAIG_ATK2_1);
+	}
+}
+
+//
+// A_PainElementalNightmareShootSkull
+// Spawn a lost soul and launch it at the target
+//
+
+void A_PainElementalNightmareShootSkull(mobj_t* actor, angle_t angle) {
+	fixed_t     x;
+	fixed_t     y;
+	fixed_t     z;
+	mobj_t* newmobj;
+	angle_t     an;
+	int         prestep;
+	int         count;
+
+	// count total number of skull currently on the level
+	count = 0;
+
+	for (newmobj = mobjhead.next; newmobj != &mobjhead; newmobj = newmobj->next) {
+		if (newmobj->type == MT_NIGHTMARE_LOSTSOUL) {
+			count++;
+		}
+	}
+
+	// if there are all ready 17 skulls on the level, don't spit another one
+	if (count >= 17) {
+		return;
+	}
+
+	an = angle >> ANGLETOFINESHIFT;
+
+	prestep = 4 * FRACUNIT + 3 * (actor->info->radius + mobjinfo[MT_NIGHTMARE_LOSTSOUL].radius) / 2;
+
+	x = actor->x + FixedMul(prestep, finecosine[an]);
+	y = actor->y + FixedMul(prestep, finesine[an]);
+	z = actor->z + 16 * FRACUNIT;
+
+	newmobj = P_SpawnMobj(x, y, z, MT_NIGHTMARE_LOSTSOUL);
+
+	// Check for movements
+
+	if ((!P_TryMove(newmobj, newmobj->x, newmobj->y)) ||
+		(!P_PathTraverse(actor->x, actor->y, newmobj->x, newmobj->y, PT_ADDLINES, PIT_PainCheckLine))) {
+		// kill it immediately
+
+		P_DamageMobj(newmobj, actor, actor, 10000);
+		P_RadiusAttack(newmobj, newmobj, 128);
+		return;
+	}
+
+	P_SetTarget(&newmobj->target, actor->target);
+	P_SetMobjState(newmobj, newmobj->info->missilestate);
+	A_SkullAttack(newmobj);
+}
+
+//
 // A_PainElementalNightmareAttack
-// 
+// Spawn a lost soul and launch it at the target
 //
 
 void A_PainElementalNightmareAttack(mobj_t* actor) {
+	if (!actor->target) {
+		return;
+	}
+
+	A_FaceTarget(actor);
+	A_PainElementalNightmareShootSkull(actor, actor->angle + 0x15550000);
+	A_PainElementalNightmareShootSkull(actor, actor->angle - 0x15550000);
+}
+
+//
+// A_PainElementalNightmareAttack2
+// 
+//
+
+void A_PainElementalNightmareAttack2(mobj_t* actor) {
 	if (!actor->target) {
 		return;
 	}
@@ -3264,7 +3350,9 @@ void A_PainElementalNightmareAttack(mobj_t* actor) {
 
 void A_PainElementalNightmareDie(mobj_t* actor) {
 	A_Fall(actor);
-	
+	A_PainElementalNightmareShootSkull(actor, actor->angle + ANG90);
+	A_PainElementalNightmareShootSkull(actor, actor->angle + ANG180);
+	A_PainElementalNightmareShootSkull(actor, actor->angle + ANG270);
 
 	A_OnDeathTrigger(actor);
 }
@@ -3526,4 +3614,70 @@ void A_RevenantNightmareAttack(mobj_t* actor)
 	A_FaceTarget(actor);
 	A_RevenantNightmareMissile(actor, DP_LEFT);
 	A_RevenantNightmareMissile(actor, DP_RIGHT);
+}
+
+//
+// A_NightmareLostSoulChase
+// Check for ressurecting a body
+//
+void A_NightmareLostSoulChase(mobj_t* actor)
+{
+	int			xl;
+	int			xh;
+	int			yl;
+	int			yh;
+
+	int			bx;
+	int			by;
+
+	mobjinfo_t* info;
+	mobj_t* temp;
+
+	if (actor->movedir != DI_NODIR)
+	{
+		// check for corpses to raise
+		viletryx =
+			actor->x + actor->info->speed * xspeed[actor->movedir];
+		viletryy =
+			actor->y + actor->info->speed * yspeed[actor->movedir];
+
+		xl = (viletryx - bmaporgx - MAXRADIUS * 2) >> MAPBLOCKSHIFT;
+		xh = (viletryx - bmaporgx + MAXRADIUS * 2) >> MAPBLOCKSHIFT;
+		yl = (viletryy - bmaporgy - MAXRADIUS * 2) >> MAPBLOCKSHIFT;
+		yh = (viletryy - bmaporgy + MAXRADIUS * 2) >> MAPBLOCKSHIFT;
+
+		vileobj = actor;
+		for (bx = xl; bx <= xh; bx++)
+		{
+			for (by = yl; by <= yh; by++)
+			{
+				// Call PIT_VileCheck to check
+				// whether object is a corpse
+				// that canbe raised.
+				if (!P_BlockThingsIterator(bx, by, PIT_VileCheck))
+				{
+					// got one!
+					temp = actor->target;
+					actor->target = corpsehit;
+					A_FaceTarget(actor);
+					actor->target = temp;
+
+					P_SetMobjState(actor, S_SKUG_HEAL1);
+					S_StartSound(corpsehit, sfx_slop);
+					info = corpsehit->info;
+
+					P_SetMobjState(corpsehit, info->raisestate);
+					corpsehit->height <<= 2;
+					corpsehit->flags = info->flags;
+					corpsehit->health = info->spawnhealth;
+					corpsehit->target = NULL;
+
+					return;
+				}
+			}
+		}
+	}
+
+	// Return to normal attack.
+	A_Chase(actor);
 }

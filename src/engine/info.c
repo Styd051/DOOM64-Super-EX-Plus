@@ -146,6 +146,7 @@ char* sprnames[NUMSPRITES + 1] = {  //0x5FA30
 	"SKE2",
 	"SHTF",
 	"PLSF",
+	"SKUG",
 	NULL
 };
 
@@ -268,7 +269,9 @@ void A_HectAttack1();
 void A_HectAttack2();
 void A_HectAttack3();
 void A_PainElementalNightmareChase();
+void A_PainElementalNightmareDecide();
 void A_PainElementalNightmareAttack();
+void A_PainElementalNightmareAttack2();
 void A_PainElementalNightmareDie();
 void A_PlasmaZombieAttack();
 void A_BFGCommandoRaise();
@@ -280,6 +283,7 @@ void A_StalkerAttack2();
 void A_PainElementalStalkerAttack();
 void A_PainElementalStalkerDie();
 void A_RevenantNightmareAttack();
+void A_NightmareLostSoulChase();
 
 
 #pragma warning(push)
@@ -2292,10 +2296,15 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 
 	/*S_PAIG_STND*/{ SPR_PAIG, 0, 5, {A_Look}, S_PAIG_STND },
 	/*S_PAIG_RUN*/{ SPR_PAIG, 0, 3, {A_PainElementalNightmareChase}, S_PAIG_RUN },
-	/*S_PAIG_ATK1*/{ SPR_PAIG, 32769, 5, {A_FaceTarget}, S_PAIG_ATK2 },
-	/*S_PAIG_ATK2*/{ SPR_PAIG, 32769, 5, {A_FaceTarget}, S_PAIG_ATK3 },
-	/*S_PAIG_ATK3*/{ SPR_PAIG, 32770, 5, {A_FaceTarget}, S_PAIG_ATK4 },
-	/*S_PAIG_ATK4*/{ SPR_PAIG, 32770, 0, {A_PainElementalNightmareAttack}, S_PAIG_RUN },
+	/*S_PAIG_DECIDE*/{ SPR_PAIG, 0, 1, {A_PainElementalNightmareDecide}, S_PAIG_DECIDE },
+	/*S_PAIG_ATK1_1*/{ SPR_PAIG, 32769, 5, {A_FaceTarget}, S_PAIG_ATK1_2 },
+	/*S_PAIG_ATK1_2*/{ SPR_PAIG, 32769, 5, {A_FaceTarget}, S_PAIG_ATK1_3 },
+	/*S_PAIG_ATK1_3*/{ SPR_PAIG, 32770, 5, {A_FaceTarget}, S_PAIG_ATK1_4 },
+	/*S_PAIG_ATK1_4*/{ SPR_PAIG, 32770, 0, {A_PainElementalNightmareAttack}, S_PAIG_RUN },
+	/*S_PAIG_ATK2_1*/{ SPR_PAIG, 32769, 5, {A_FaceTarget}, S_PAIG_ATK2_2 },
+	/*S_PAIG_ATK2_2*/{ SPR_PAIG, 32769, 5, {A_FaceTarget}, S_PAIG_ATK2_3 },
+	/*S_PAIG_ATK2_3*/{ SPR_PAIG, 32770, 5, {A_FaceTarget}, S_PAIG_ATK2_4 },
+	/*S_PAIG_ATK2_4*/{ SPR_PAIG, 32770, 0, {A_PainElementalNightmareAttack2}, S_PAIG_RUN },
 	/*S_PAIG_HEAL1*/{ SPR_PAIG, 32770, 10, {NULL}, S_PAIG_RUN },
 	/*S_PAIG_PAIN*/{ SPR_PAIG, 3, 6, {NULL}, S_PAIG_PAIN2 },
 	/*S_PAIG_PAIN2*/{ SPR_PAIG, 3, 6, {A_Pain}, S_PAIG_RUN },
@@ -2682,6 +2691,31 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_SKE2_RAISE4*/{ SPR_SKE2, 13, 5, {NULL}, S_SKE2_RAISE5 },
 	/*S_SKE2_RAISE5*/{ SPR_SKE2, 12, 5, {NULL}, S_SKE2_RAISE6 },
 	/*S_SKE2_RAISE6*/{ SPR_SKE2, 11, 5, {NULL}, S_SKE2_RUN1 },
+
+	/*S_SKUG_STND*/{ SPR_SKUG, 0, 5, {A_Look}, S_SKUG_STND2 },
+	/*S_SKUG_STND2*/{ SPR_SKUG, 1, 5, {A_Look}, S_SKUG_STND3 },
+	/*S_SKUG_STND3*/{ SPR_SKUG, 2, 5, {A_Look}, S_SKUG_STND },
+	/*S_SKUG_RUN1*/{ SPR_SKUG, 0, 3, {A_NightmareLostSoulChase}, S_SKUG_RUN2 },
+	/*S_SKUG_RUN2*/{ SPR_SKUG, 1, 3, {A_NightmareLostSoulChase}, S_SKUG_RUN3 },
+	/*S_SKUG_RUN3*/{ SPR_SKUG, 2, 3, {A_NightmareLostSoulChase}, S_SKUG_RUN1 },
+	/*S_SKUG_ATK1*/{ SPR_SKUG, 3, 6, {A_FaceTarget}, S_SKUG_ATK2 },
+	/*S_SKUG_ATK2*/{ SPR_SKUG, 4, 4, {A_SkullAttack}, S_SKUG_ATK3 },
+	/*S_SKUG_ATK3*/{ SPR_SKUG, 3, 4, {NULL}, S_SKUG_ATK4 },
+	/*S_SKUG_ATK4*/{ SPR_SKUG, 4, 4, {NULL}, S_SKUG_ATK3 },
+	/*S_SKUG_HEAL1*/{ SPR_SKUG, 32771, 10, {NULL}, S_SKUG_HEAL2 },
+	/*S_SKUG_HEAL2*/{ SPR_SKUG, 32772, 10, {NULL}, S_SKUG_RUN1 },
+	/*S_SKUG_PAIN*/{ SPR_SKUG, 5, 3, {NULL}, S_SKUG_PAIN2 },
+	/*S_SKUG_PAIN2*/{ SPR_SKUG, 5, 3, {A_Pain}, S_SKUG_RUN1 },
+	/*S_SKUG_DIE1*/{ SPR_SKUG, 32774, 5, {NULL}, S_SKUG_DIE2 },
+	/*S_SKUG_DIE2*/{ SPR_SKUG, 32775, 5, {A_Scream}, S_SKUG_DIE3 },
+	/*S_SKUG_DIE3*/{ SPR_SKUG, 32776, 5, {A_Fall}, S_SKUG_DIE4 },
+	/*S_SKUG_DIE4*/{ SPR_SKUG, 32777, 5, {A_OnDeathTrigger}, S_SKUG_DIE5 },
+	/*S_SKUG_DIE5*/{ SPR_SKUG, 32778, 4, {A_SkullSetAlpha}, S_SKUG_DIE6 },
+	/*S_SKUG_DIE6*/{ SPR_SKUG, 32779, 3, {NULL}, S_SKUG_DIE7 },
+	/*S_SKUG_DIE7*/{ SPR_SKUG, 32780, 2, {NULL}, S_SKUG_DIE8 },
+	/*S_SKUG_DIE8*/{ SPR_SKUG, 32781, 2, {NULL}, S_SKUG_DIE9 },
+	/*S_SKUG_DIE9*/{ SPR_SKUG, 32782, 1, {NULL}, S_SKUG_DIE10 },
+	/*S_SKUG_DIE10*/{ SPR_SKUG, 32783, 1, {NULL}, S_NULL },
 };
 
 #pragma warning(pop)
@@ -10231,7 +10265,7 @@ S_NULL	   //raisestate
 	sfx_dbact,        //activesound
 	MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL | MF_SHADOW,        //flags
 	0,        //palette
-	127,        //alpha
+	128,        //alpha
 	S_SAR3_RAISE1	   //raisestate
 },
 
@@ -10260,7 +10294,7 @@ S_NULL	   //raisestate
 	sfx_dbact,        //activesound
 	MF_SOLID | MF_SHOOTABLE | MF_FLOAT | MF_COUNTKILL | MF_SHADOW,        //flags
 	0,        //palette
-	127,        //alpha
+	128,        //alpha
 	S_HEA2_RAISE1	   //raisestate
 },
 
@@ -10306,7 +10340,7 @@ S_NULL	   //raisestate
 	10,        //painchance
 	sfx_pepain,        //painsound
 	S_NULL,        //meleestate
-	S_PAIG_ATK1,        //missilestate
+	S_PAIG_DECIDE,        //missilestate
 	S_PAIG_DIE1,        //deathstate
 	S_NULL,        //xdeathstate
 	sfx_pedie,        //deathsound
@@ -10318,7 +10352,7 @@ S_NULL	   //raisestate
 	sfx_dbact,        //activesound
 	MF_SOLID | MF_SHOOTABLE | MF_FLOAT | MF_COUNTKILL | MF_SHADOW,        //flags
 	0,        //palette
-	127,        //alpha
+	128,        //alpha
 	S_NULL	   //raisestate
 },
 
@@ -10376,7 +10410,7 @@ S_NULL	   //raisestate
 	sfx_posact,        //activesound
 	MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL | MF_SHADOW,        //flags
 	0,        //palette
-	127,        //alpha
+	128,        //alpha
 	S_FAT3_RAISE1	   //raisestate
 },
 
@@ -10782,7 +10816,7 @@ S_NULL	   //raisestate
 	sfx_skelact,        // activesound
 	MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL | MF_SHADOW,        // flags
 	0,        // palette
-	127,        //alpha
+	128,        //alpha
 	S_SKE2_RAISE1	   //raisestate
 },
 
@@ -10812,6 +10846,35 @@ S_NULL	   //raisestate
 	MF_NOBLOCKMAP | MF_DROPOFF | MF_MISSILE,        //flags
 	0,        //palette
 	255,        //alpha
+	S_NULL	   //raisestate
+},
+
+{
+	/*MT_NIGHTMARE_LOSTSOUL*/
+	9029,        //doomednum
+	S_SKUG_STND,        //spawnstate
+	60,        //spawnhealth
+	S_SKUG_RUN1,        //seestate
+	sfx_None/*sfx_000*/,        //seesound
+	8,        //reactiontime
+	sfx_skullatk,        //attacksound
+	S_SKUG_PAIN,        //painstate
+	256,        //painchance
+	sfx_dbpain2,        //painsound
+	S_NULL,        //meleestate
+	S_SKUG_ATK1,        //missilestate
+	S_SKUG_DIE1,        //deathstate
+	S_NULL,        //xdeathstate
+	sfx_implod,        //deathsound
+	8,        //speed
+	28 * FRACUNIT,        //radius
+	64 * FRACUNIT,        //height
+	50,        //mass
+	3,        //damage
+	sfx_dbact,        //activesound
+	MF_SOLID | MF_SHOOTABLE | MF_FLOAT | MF_COUNTKILL | MF_SHADOW,        //flags
+	0,        //palette
+	128,        //alpha
 	S_NULL	   //raisestate
 },
 };

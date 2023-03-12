@@ -2646,7 +2646,7 @@ void M_DoFeature(int choice) {
 
 	case features_securitykeys:
 		showfullitemvalue[2] = true;
-
+		
 		for (i = 0; i < NUMCARDS; i++) {
 			players[consoleplayer].cards[i] = true;
 		}
