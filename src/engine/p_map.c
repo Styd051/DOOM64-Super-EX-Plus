@@ -46,7 +46,7 @@
 #include "deh_misc.h"
 
 fixed_t         tmbbox[4];
-mobj_t*         tmthing;
+mobj_t* tmthing;
 int             tmflags;
 fixed_t         tmx;
 fixed_t         tmy;
@@ -56,7 +56,7 @@ mobj_t* blockthing;
 
 // If "floatok" true, move would be ok
 // if within "tmfloorz - tmceilingz".
-boolean        floatok;
+int             floatok;
 
 fixed_t         tmfloorz;
 fixed_t         tmceilingz;
@@ -77,7 +77,7 @@ int numthingspec = 0;
 //
 
 d_inline
-static boolean P_CheckThingCollision(mobj_t* thing) {
+static int P_CheckThingCollision(mobj_t* thing) {
     fixed_t blockdist;
 
     if (netgame && (tmthing->type == MT_PLAYER && thing->type == MT_PLAYER)) {
@@ -284,7 +284,7 @@ boolean PIT_CheckLine(line_t* ld) {
 //
 
 boolean PIT_CheckThing(mobj_t* thing) {
-    boolean    solid;
+    int    solid;
 
     if (!(thing->flags & (MF_SOLID | MF_SPECIAL | MF_SHOOTABLE))) {
         return true;
@@ -631,8 +631,8 @@ boolean P_TeleportMove(mobj_t* thing, fixed_t x, fixed_t y) {
 // and false will be returned.
 //
 
-static boolean P_ThingHeightClip(mobj_t* thing) {
-    boolean            onfloor;
+static int P_ThingHeightClip(mobj_t* thing) {
+    int            onfloor;
 
     onfloor = (thing->z == thing->floorz);
 
@@ -697,7 +697,7 @@ static boolean PIT_CheckMobjZ(mobj_t* thing) {
 // P_CheckOnMobj
 //
 
-void P_ZMovement(mobj_t* mo, boolean checkmissile);
+void P_ZMovement(mobj_t* mo, int checkmissile);
 
 mobj_t* P_CheckOnMobj(mobj_t* thing) {
     int    bx, by;
@@ -979,8 +979,8 @@ fixed_t         shootdirx;
 fixed_t         shootdiry;
 fixed_t         shootdirz;
 
-//boolean        shotsideline = false;
-//boolean        aimlaser = false;
+//int        shotsideline = false;
+//int        aimlaser = false;
 
 // Height if not aiming up or down
 // ???: use slope for monsters?
@@ -1108,7 +1108,7 @@ boolean PTR_ShootTraverse(intercept_t* in) {
     fixed_t     dist;
     fixed_t     thingtopslope;
     fixed_t     thingbottomslope;
-    boolean    hitplane = false;
+    int    hitplane = false;
     int         lineside;
     sector_t* sidesector;
     fixed_t     hitz;
@@ -1396,15 +1396,15 @@ void P_LineAttack(mobj_t* t1, angle_t angle, fixed_t distance, fixed_t slope, in
 //
 
 static mobj_t* usething = NULL;
-static boolean     usecontext = false;
-static boolean     displaycontext = false;
+static int     usecontext = false;
+static int     displaycontext = false;
 line_t* contextline = NULL;
 
 //
 // P_CheckUseHeight
 //
 
-static boolean P_CheckUseHeight(line_t* line, mobj_t* thing) {
+static int P_CheckUseHeight(line_t* line, mobj_t* thing) {
     fixed_t check = 0;
 
     if (!(line->flags & ML_SWITCHX02 ||
@@ -1493,7 +1493,7 @@ boolean PTR_UseTraverse(intercept_t* in) {
 // Looks for special lines in front of the player to activate.
 //
 
-boolean P_UseLines(player_t* player, boolean showcontext) {
+boolean P_UseLines(player_t* player, int showcontext) {
     int        angle;
     fixed_t    x1;
     fixed_t    y1;
@@ -1545,12 +1545,7 @@ boolean PIT_RadiusAttack(mobj_t* thing) {
     }
 
     // Boss cyborg take no damage from concussion.
-    if (thing->type == MT_CYBORG || thing->type == MT_SPIDER) {
-        return true;
-    }
-
-    // Boss Annihilator take no damage from concussion.
-    if (thing->type == MT_ANNIHILATOR || thing->type == MT_BFGCYBERDEMON) {
+    if (thing->type == MT_CYBORG || thing->type == MT_SPIDER || thing->type == MT_ANNIHILATOR || thing->type == MT_BFGCYBERDEMON) {
         return true;
     }
 
@@ -1637,7 +1632,7 @@ void P_RadiusAttack(mobj_t* spot, mobj_t* source, int damage) {
 //  to undo the changes.
 //
 static int crushchange;
-static boolean nofit;
+static int nofit;
 
 
 //
@@ -1704,7 +1699,7 @@ boolean PIT_ChangeSector(mobj_t* thing) {
 //
 // P_ChangeSector
 //
-boolean P_ChangeSector(sector_t* sector, boolean crunch) {
+boolean P_ChangeSector(sector_t* sector, int crunch) {
     int         x;
     int         y;
 
@@ -1797,4 +1792,3 @@ void P_CheckChaseCamPosition(mobj_t* target, mobj_t* camera, fixed_t x, fixed_t 
         camera->y = y;
     }
 }
-
