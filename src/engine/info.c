@@ -10795,7 +10795,7 @@ S_NULL	   //raisestate
 {
 	/*MT_PAIN_ELEMENTAL_STALKER*/
 	9027,        //doomednum
-	S_PAIN_STND,        //spawnstate
+	S_PAI2_STND,        //spawnstate
 	600,        //spawnhealth
 	S_PAI2_RUN,        //seestate
 	sfx_pesit,        //seesound
