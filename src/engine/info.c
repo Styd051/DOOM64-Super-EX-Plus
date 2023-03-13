@@ -9201,7 +9201,7 @@ S_NULL	   //raisestate
 	/*MT_ANNIHILATOR*/
 	9000,        //doomednum
 	S_A64A_STND,        //spawnstate
-	6000,        //spawnhealth
+	5000,        //spawnhealth
 	S_A64A_RUN1,        //seestate
 	sfx_annsit,        //seesound
 	8,        //reactiontime
