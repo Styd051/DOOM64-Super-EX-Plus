@@ -937,64 +937,70 @@ static void P_Obituary(mobj_t* source, mobj_t* target) {
 			sprintf(omsg, "you were killed\nby a Melee Zombie.");
 			break;
 		case MT_SSGZOMBIE:
-			sprintf(omsg, "was jacked\nby a super shotgun guy.");
+			sprintf(omsg, "you jacked\nby a super shotgun guy.");
 			break;
 		case MT_WOLFSS:
 			sprintf(omsg, "you were killed\nby a WolfensteinSS.");
 			break;
 		case MT_BELPHEGOR:
-			sprintf(omsg, "was slain\nby a Belphegor.");
+			sprintf(omsg, "you was slain\nby a Belphegor.");
 			break;
 		case MT_HECTEBUS:
-			sprintf(omsg, "was cremated\nby a hectebus.");
+			sprintf(omsg, "you was cremated\nby a Hectebus.");
 			break;
 		case MT_BLOODDEMON:
-			sprintf(omsg, "was chomped on\nby a blood demon.");
+			sprintf(omsg, "you was chomped on\nby a Blood Demon.");
 			break;
 		case MT_DARKIMP:
-			sprintf(omsg, "was burned\nby a dark imp.");
+			sprintf(omsg, "you was burned\nby a Dark IMP.");
 			break;
 		case MT_CACOLANTERN:
-			sprintf(omsg, "was smitten\nby a cacolantern.");
+			sprintf(omsg, "you was smitten\nby a Cacolantern.");
 			break;
 		case MT_ABADDON:
-			sprintf(omsg, "was smitten\nby an abaddon.");
+			sprintf(omsg, "you was smitten\nby an Abaddon.");
 			break;
 		case MT_NIGHTMARE_SPECTRE:
-			sprintf(omsg, "was eaten\nby a Nightmare Spectre.");
+			sprintf(omsg, "you was eaten\nby a Nightmare Spectre.");
 			break;
 		case MT_NIGHTMARE_CACODEMON:
-			sprintf(omsg, "was scorched\nby a Nightmare Cacodemon.");
+			sprintf(omsg, "you was scorched\nby a Nightmare Cacodemon.");
 			break;
 		case MT_PAIN_ELEMENTAL_NIGHTMARE:
-			sprintf(omsg, "was overwhelmed\nby a Nightmare Elemental.");
+			sprintf(omsg, "you was overwhelmed\nby a Nightmare Elemental.");
 			break;
 		case MT_NIGHTMARE_MANCUBUS:
-			sprintf(omsg, "was cremated\nby a nightmare mancubus.");
+			sprintf(omsg, "you was cremated\nby a nightmare mancubus.");
 			break;
 		case MT_HELLCENTAUR:
-			sprintf(omsg, "was Obliterated\nby a Hell Centaur.");
+			sprintf(omsg, "you was Obliterated\nby a Hell Centaur.");
 			break;
 		case MT_NIGHTCRAWLER:
-			sprintf(omsg, "was blown up\nby a nightcrawler.");
+			sprintf(omsg, "you was blown up\nby a nightcrawler.");
 			break;
 		case MT_HARDCORE_IMP:
 			sprintf(omsg, "you were killed\nby a Hardcore Imp.");
 			break;
 		case MT_PlASMAZOMBIE:
-			sprintf(omsg, "was burned\nby plasma zombie.");
+			sprintf(omsg, "you was burned\nby plasma zombie.");
 			break;
 		case MT_BFGCOMMANDO:
-			sprintf(omsg, "was burned\nby bfg commando.");
+			sprintf(omsg, "you was burned\nby bfg commando.");
 			break;
 		case MT_BFGCYBERDEMON:
 			sprintf(omsg, "you were splattered\nby a BFG Cyberdemon.");
 			break;
 		case MT_STALKER:
-			sprintf(omsg, "didn't see\nthe stalker coming.");
+			sprintf(omsg, "you didn't see\nthe stalker coming.");
 			break;
 		case MT_NIGHTMARE_REVENANT:
-			sprintf(omsg, "couldn't evade\na nightmare revenant's fireball.");
+			sprintf(omsg, "you couldn't evade\na nightmare revenant's fireball.");
+			break;
+		case MT_NIGHTMARE_LOSTSOUL:
+			sprintf(omsg, "A Nightmare Lost Soul slammed\ninto you.");
+			break;
+		case MT_ARTHRONAILER:
+			sprintf(omsg, "you have been nailed\nby an Arthronailer.");
 			break;
 		default:
 			sprintf(omsg, "you died.");
@@ -1279,11 +1285,14 @@ void P_DamageMobj(mobj_t* target, mobj_t* inflictor, mobj_t* source, int damage)
 	}
 
 	target->reactiontime = 0;           // we're awake now...
-	if ((!target->threshold || target->type == MT_VILE || target->type == MT_BRUISERDEMON || target->type == MT_NIGHTCRAWLER)
+	// Fixed a bug with the Cacodemon attacking itself when taking explosion damage from Barrel.
+	if ((!target->threshold || target->type == MT_VILE || target->type == MT_CACODEMON || target->type == MT_NIGHTMARE_CACODEMON || target->type == MT_CACOLANTERN || target->type == MT_ABADDON)
 		&& source && (source->flags & MF_SHOOTABLE)
 		&& source->type != MT_VILE 
-		&& source->type != MT_BRUISERDEMON
-		&& source->type != MT_NIGHTCRAWLER
+		&& source->type != MT_CACODEMON
+		&& source->type != MT_NIGHTMARE_CACODEMON
+		&& source->type != MT_CACOLANTERN
+		&& source->type != MT_ABADDON
 		&& !(target->flags & MF_NOINFIGHTING))
 	{
 		// if not intent on another player,

@@ -427,6 +427,13 @@ static mobj_t* P_MissileAttack(mobj_t* actor, int direction) {
 		deltaz = 32;
 		type = MT_PROJ_STALKER1;
 		aim = true;
+		break;
+	case MT_ARTHRONAILER:
+		offs = 20;
+		deltaz = 28;
+		type = MT_PROJ_ARTHRONAILER;
+		aim = false;
+		break;
 	}
 
 	deltax = FixedMul(offs * FRACUNIT, finecosine[angle]);
@@ -3680,4 +3687,19 @@ void A_NightmareLostSoulChase(mobj_t* actor)
 
 	// Return to normal attack.
 	A_Chase(actor);
+}
+
+//
+// A_ArthronailerAttack
+//
+
+void A_ArthronailerAttack(mobj_t* actor) {
+	if (!actor->target) {
+		return;
+	}
+
+	A_FaceTarget(actor);
+	P_MissileAttack(actor, DP_LEFT);
+	P_MissileAttack(actor, DP_RIGHT);
+	S_StartSound(actor, sfx_nailgun);
 }

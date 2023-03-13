@@ -1246,12 +1246,15 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	// randomizer lost soul
 	if (i == MT_SKULL) {
-		randomizernum = I_Random() % 2; // Immorpher randomizer number
-		if (randomizernum == 1) {
+		randomizernum = I_Random() % 3; // Immorpher randomizer number
+		if (randomizernum == 2) {
 			i = MT_SKULL;
 		}
-		else if (randomizernum == 0) {
+		else if (randomizernum == 1) {
 			i = MT_STALKER;
+		}
+		else if (randomizernum == 0) {
+			i = MT_NIGHTMARE_LOSTSOUL;
 		}
 	}
 
@@ -1274,12 +1277,15 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	// randomizer arachnotron
 	if (i == MT_BABY) {
-		randomizernum = I_Random() % 2; // Immorpher randomizer number
-		if (randomizernum == 1) {
+		randomizernum = I_Random() % 3; // Immorpher randomizer number
+		if (randomizernum == 2) {
 			i = MT_BABY;
 		}
-		else if (randomizernum == 0) {
+		else if (randomizernum == 1) {
 			i = MT_NIGHTCRAWLER;
+		}
+		else if (randomizernum == 0) {
+			i = MT_ARTHRONAILER;
 		}
 	}
 

@@ -147,6 +147,7 @@ char* sprnames[NUMSPRITES + 1] = {  //0x5FA30
 	"SHTF",
 	"PLSF",
 	"SKUG",
+	"BSP2",
 	NULL
 };
 
@@ -284,6 +285,7 @@ void A_PainElementalStalkerAttack();
 void A_PainElementalStalkerDie();
 void A_RevenantNightmareAttack();
 void A_NightmareLostSoulChase();
+void A_ArthronailerAttack();
 
 
 #pragma warning(push)
@@ -2716,6 +2718,34 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_SKUG_DIE8*/{ SPR_SKUG, 32781, 2, {NULL}, S_SKUG_DIE9 },
 	/*S_SKUG_DIE9*/{ SPR_SKUG, 32782, 1, {NULL}, S_SKUG_DIE10 },
 	/*S_SKUG_DIE10*/{ SPR_SKUG, 32783, 1, {NULL}, S_NULL },
+
+	/*S_BSP2_STND*/{ SPR_BSP2, 0, 10, {A_Look}, S_BSP2_STND2 },
+	/*S_BSP2_STND2*/{ SPR_BSP2, 1, 10, {A_Look}, S_BSP2_STND },
+	/*S_BSP2_RUN1*/{ SPR_BSP2, 0, 20, {NULL}, S_BSP2_RUN2 },
+	/*S_BSP2_RUN2*/{ SPR_BSP2, 0, 3, {A_BabyMetal}, S_BSP2_RUN3 },
+	/*S_BSP2_RUN3*/{ SPR_BSP2, 0, 3, {A_Chase}, S_BSP2_RUN4 },
+	/*S_BSP2_RUN4*/{ SPR_BSP2, 1, 3, {A_Chase}, S_BSP2_RUN5 },
+	/*S_BSP2_RUN5*/{ SPR_BSP2, 1, 3, {A_Chase}, S_BSP2_RUN6 },
+	/*S_BSP2_RUN6*/{ SPR_BSP2, 2, 3, {A_Chase}, S_BSP2_RUN7 },
+	/*S_BSP2_RUN7*/{ SPR_BSP2, 2, 3, {A_Chase}, S_BSP2_RUN8 },
+	/*S_BSP2_RUN8*/{ SPR_BSP2, 3, 3, {A_Chase}, S_BSP2_RUN9 },
+	/*S_BSP2_RUN9*/{ SPR_BSP2, 3, 3, {A_Chase}, S_BSP2_RUN2 },
+	/*S_BSP2_ATK1*/{ SPR_BSP2, 0, 15, {A_BspiFaceTarget}, S_BSP2_ATK2 },
+	/*S_BSP2_ATK2*/{ SPR_BSP2, 32772, 6, {A_ArthronailerAttack}, S_BSP2_ATK3 },
+	/*S_BSP2_ATK3*/{ SPR_BSP2, 32772, 1, {A_SpidRefire}, S_BSP2_ATK2 },
+	/*S_BSP2_PAIN*/{ SPR_BSP2, 5, 3, {NULL}, S_BSP2_PAIN2 },
+	/*S_BSP2_PAIN2*/{ SPR_BSP2, 5, 3, {A_Pain}, S_BSP2_RUN2 },
+	/*S_BSP2_DIE1*/{ SPR_BSP2, 6, 20, {A_Scream}, S_BSP2_DIE2 },
+	/*S_BSP2_DIE2*/{ SPR_BSP2, 7, 7, {A_Fall}, S_BSP2_DIE3 },
+	/*S_BSP2_DIE3*/{ SPR_BSP2, 8, 7, {NULL}, S_BSP2_DIE4 },
+	/*S_BSP2_DIE4*/{ SPR_BSP2, 9, 7, {A_OnDeathTrigger}, S_BSP2_DIE5 },
+	/*S_BSP2_DIE5*/{ SPR_BSP2, 10, -1, {NULL}, S_NULL },
+	/*S_BSP2_RAISE1*/{ SPR_BSP2, 10, 5, {NULL}, S_BSP2_RAISE2 },
+	/*S_BSP2_RAISE2*/{ SPR_BSP2, 9, 5, {NULL}, S_BSP2_RAISE3 },
+	/*S_BSP2_RAISE3*/{ SPR_BSP2, 8, 5, {NULL}, S_BSP2_RAISE4 },
+	/*S_BSP2_RAISE4*/{ SPR_BSP2, 7, 5, {NULL}, S_BSP2_RAISE5 },
+	/*S_BSP2_RAISE5*/{ SPR_BSP2, 6, 5, {NULL}, S_BSP2_RUN2 },
+	
 };
 
 #pragma warning(pop)
@@ -10875,6 +10905,64 @@ S_NULL	   //raisestate
 	MF_SOLID | MF_SHOOTABLE | MF_FLOAT | MF_COUNTKILL | MF_SHADOW,        //flags
 	0,        //palette
 	128,        //alpha
+	S_NULL	   //raisestate
+},
+
+{
+	/*MT_ARTHRONAILER*/
+	9030,        //doomednum
+	S_BSP2_STND,        //spawnstate
+	500,        //spawnhealth
+	S_BSP2_RUN1,        //seestate
+	sfx_bspisit,        //seesound
+	8,        //reactiontime
+	sfx_None/*sfx_000*/,        //attacksound
+	S_BSP2_PAIN,        //painstate
+	128,        //painchance
+	sfx_dbpain2,        //painsound
+	S_NULL,        //meleestate
+	S_BSP2_ATK1,        //missilestate
+	S_BSP2_DIE1,        //deathstate
+	S_NULL,        //xdeathstate
+	sfx_bspidie,        //deathsound
+	12,        //speed
+	64 * FRACUNIT,        //radius
+	80 * FRACUNIT,        //height
+	600,        //mass
+	0,        //damage
+	sfx_bspilift,        //activesound
+	MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
+	0,        //palette
+	255,        //alpha
+	S_BSP2_RAISE1	   //raisestate
+},
+
+{
+	/*MT_PROJ_ARTHRONAILER*/
+	-1,        //doomednum
+	S_DART,        //spawnstate
+	1000,        //spawnhealth
+	S_NULL,        //seestate
+	sfx_None/*sfx_000*/,        //seesound
+	8,        //reactiontime
+	sfx_None/*sfx_000*/,        //attacksound
+	S_NULL,        //painstate
+	0,        //painchance
+	sfx_None/*sfx_000*/,        //painsound
+	S_NULL,        //meleestate
+	S_NULL,        //missilestate
+	S_PUFF1,        //deathstate
+	S_NULL,        //xdeathstate
+	sfx_nailtink,        //deathsound
+	25 * FRACUNIT,        //speed
+	13 * FRACUNIT,        //radius
+	8 * FRACUNIT,        //height
+	100,        //mass
+	4,        //damage
+	sfx_None/*sfx_000*/,        //activesound
+	MF_NOBLOCKMAP | MF_DROPOFF | MF_MISSILE,        //flags
+	0,        //palette
+	255,        //alpha
 	S_NULL	   //raisestate
 },
 };
