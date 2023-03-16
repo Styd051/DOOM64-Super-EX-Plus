@@ -161,6 +161,9 @@ CVAR_EXTERNAL(m_obituaries);
 CVAR_EXTERNAL(m_brutal);
 CVAR_EXTERNAL(st_hud_color);
 CVAR_EXTERNAL(m_complexdoom64);
+CVAR_EXTERNAL(m_keepartifacts);
+
+CVAR(m_keepartifacts, 0);
 
 //
 // G_RegisterCvars
@@ -184,6 +187,7 @@ void G_RegisterCvars(void) {
 	CON_CvarRegister(&m_obituaries);
 	CON_CvarRegister(&compat_mobjpass);
 	CON_CvarRegister(&m_complexdoom64);
+	CON_CvarRegister(&m_keepartifacts);
 }
 
 //
@@ -1144,6 +1148,7 @@ void G_PlayerReborn(int player) {
 	boolean    wpns[NUMWEAPONS];
 	int         pammo[NUMAMMO];
 	int         pmaxammo[NUMAMMO];
+	int         artifacts;
 
 	dmemcpy(frags, players[player].frags, sizeof(frags));
 	dmemcpy(cards, players[player].cards, sizeof(boolean) * NUMCARDS);
@@ -1151,6 +1156,7 @@ void G_PlayerReborn(int player) {
 	dmemcpy(pammo, players[player].ammo, sizeof(int) * NUMAMMO);
 	dmemcpy(pmaxammo, players[player].maxammo, sizeof(int) * NUMAMMO);
 
+	artifacts = players[player].artifacts;
 	killcount = players[player].killcount;
 	itemcount = players[player].itemcount;
 	secretcount = players[player].secretcount;
@@ -1179,6 +1185,11 @@ void G_PlayerReborn(int player) {
 
 	for (i = 0; i < NUMAMMO; i++) {
 		p->maxammo[i] = maxammo[i];
+	}
+
+	if (m_keepartifacts.value == 1)
+	{
+	    p->artifacts = artifacts;
 	}
 
 	if (netgame) {
