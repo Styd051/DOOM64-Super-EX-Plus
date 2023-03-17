@@ -646,12 +646,12 @@ void R_DrawPSprite(pspdef_t* psp, sector_t* sector, player_t* player) {
 	//
 	// setup texture environment for effects
 	//
-	int lightlevel = (sector->lightlevel + 64); // haleyjd: slightly brighter
+	int l = (sector->lightlevel >> 1);
 
-	if (lightlevel > 0xff)
-	{
-		GL_SetTextureMode(GL_BLEND);
-	}
+	GL_SetTextureUnit(1, true);
+	GL_SetTextureMode(GL_ADD);
+	GL_UpdateEnvTexture(D_RGBA(l, l, l, 0xff));
+	GL_SetTextureUnit(0, true);
 
 	if (nolights)
 	{
