@@ -63,7 +63,7 @@ static byte tryopentype[3];
 //
 
 typedef struct {
-	boolean isreverse;
+	int isreverse;
 	int delay;
 	int texnum;
 	int tic;
@@ -169,7 +169,7 @@ void P_InitPicAnims(void) {
 
 	P_InitAnimdef();
 
-	animinfo = (animinfo_t*)Z_Malloc(sizeof(animinfo_t) * numanimdef, PU_STATIC, 0);
+	animinfo = Z_Malloc(sizeof(animinfo_t) * numanimdef, PU_STATIC, 0);
 
 	//    Init animation
 	for (i = 0; i < numanimdef; i++) {
