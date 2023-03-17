@@ -2573,7 +2573,7 @@ menu_t featuresDef = {
 void M_Features(int choice) {
 	M_SetupNextMenu(&featuresDef);
 
-	showfullitemvalue[0] = showfullitemvalue[1] = showfullitemvalue[2] = false;
+	showfullitemvalue[0] = showfullitemvalue[1] = showfullitemvalue[2] = showfullitemvalue[3] = false;
 }
 
 void M_DrawFeaturesMenu(void) {
