@@ -75,7 +75,7 @@ typedef struct {
 //
 
 int         numanimdef;
-animdef_t* animdefs;
+animdef_t*	animdefs;
 
 static scdatatable_t animdatatable[] = {
 	{   "RESTARTDELAY", (int64_t) & ((animdef_t*)0)->delay,   'i' },
@@ -411,7 +411,7 @@ fixed_t P_FindLowestCeilingSurrounding(sector_t* sec) {
 	int         i;
 	line_t* check;
 	sector_t* other;
-	fixed_t     height = D_MAXINT;
+	fixed_t     height = INT_MAX;
 
 	for (i = 0; i < sec->linecount; i++) {
 		check = sec->lines[i];
