@@ -2533,6 +2533,7 @@ enum {
 	features_invulnerable,
 	features_healthboost,
 	features_securitykeys,
+	features_artifacts,
 	features_weapons,
 	features_mapeverything,
 	features_lockmonsters,
@@ -2544,6 +2545,7 @@ menuitem_t FeaturesMenu[] = {
 	{2,"Invulnerable",M_DoFeature,'i'},
 	{2,"Health Boost",M_DoFeature,'h'},
 	{2,"Security Keys",M_DoFeature,'k'},
+	{2,"Artifacts",M_DoFeature,'a'},
 	{2,"Weapons",M_DoFeature,'w'},
 	{2,"Map Everything",M_DoFeature,'m'},
 	{2,"Lock Monsters",M_DoFeature,'o'},
@@ -2599,6 +2601,9 @@ void M_DrawFeaturesMenu(void) {
 
 	/*Full Keys*/
 	M_DrawSmbString(showfullitemvalue[2] ? "100%%" : "-", &featuresDef, features_securitykeys);
+
+	/*Full Artifacts*/
+	M_DrawSmbString(showfullitemvalue[3] ? "100%%" : "-", &featuresDef, features_artifacts);
 }
 
 void M_DoFeature(int choice) {
@@ -2660,6 +2665,15 @@ void M_DoFeature(int choice) {
 		for (i = 0; i < NUMCARDS; i++) {
 			players[consoleplayer].cards[i] = true;
 		}
+
+		break;
+
+	case features_artifacts:
+		showfullitemvalue[3] = true;
+
+		players[consoleplayer].artifacts |= (1 << ART_FAST);
+		players[consoleplayer].artifacts |= (1 << ART_DOUBLE);
+		players[consoleplayer].artifacts |= (1 << ART_TRIPLE);
 
 		break;
 
