@@ -132,7 +132,7 @@ void P_ExplodeMissile(mobj_t* mo) {
 
 	mo->momx = mo->momy = mo->momz = 0;
 
-	mo->tics -= P_Random() & 1;
+	mo->tics -= P_Random(pr_explode) & 1;
 
 	if (mo->tics < 1) {
 		mo->tics = 1;
@@ -158,7 +158,7 @@ void P_MissileHit(mobj_t* mo) {
 	damage = 0;
 
 	if (missilething) {
-		damage = ((P_Random() & 7) + 1) * mo->info->damage;
+		damage = ((P_Random(pr_damage) & 7) + 1) * mo->info->damage;
 		P_DamageMobj(missilething, mo, mo->target, damage);
 
 		if (mo->type == MT_PROJ_RECTFIRE || mo->type == MT_PROJ_BRUISERDEMON2) {
@@ -194,7 +194,7 @@ void P_SkullBash(mobj_t* mo) {
 	skullthing = (mobj_t*)mo->extradata;
 
 	if (skullthing) {
-		damage = ((P_Random() & 7) + 1) * mo->info->damage;
+		damage = ((P_Random(pr_skullfly) & 7) + 1) * mo->info->damage;
 		P_DamageMobj(skullthing, mo, mo, damage);
 	}
 
@@ -395,7 +395,7 @@ void P_NightmareRespawn(mobj_t* mobj) {
 		return;
 	}
 
-	if (P_Random() > 4) {
+	if (P_Random(pr_respawn) > 4) {
 		return;
 	}
 
@@ -1037,7 +1037,7 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	  // randomizer ammo clip
 	  if (i == MT_AMMO_CLIP) {
-		  randomizernum = I_Random() % 3; // Immorpher randomizer number
+		  randomizernum = P_Random(pr_randomizer) % 3; // Immorpher randomizer number
 		  if (randomizernum == 2) {
 			  i = MT_AMMO_CLIP;
 		  }
@@ -1052,7 +1052,7 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	  // randomizer ammo shell
 	  if (i == MT_AMMO_SHELL) {
-		  randomizernum = I_Random() % 2; // Immorpher randomizer number
+		  randomizernum = P_Random(pr_randomizer) % 2; // Immorpher randomizer number
 		  if (randomizernum == 1) {
 			  i = MT_AMMO_SHELL;
 		  }
@@ -1064,7 +1064,7 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	  // randomizer ammo rocket
 	  if (i == MT_AMMO_ROCKET) {
-		  randomizernum = I_Random() % 2; // Immorpher randomizer number
+		  randomizernum = P_Random(pr_randomizer) % 2; // Immorpher randomizer number
 		  if (randomizernum == 1) {
 			  i = MT_AMMO_ROCKET;
 		  }
@@ -1076,7 +1076,7 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	  // randomizer ammo cell
 	  if (i == MT_AMMO_CELL) {
-		  randomizernum = I_Random() % 2; // Immorpher randomizer number
+		  randomizernum = P_Random(pr_randomizer) % 2; // Immorpher randomizer number
 		  if (randomizernum == 1) {
 			  i = MT_AMMO_CELL;
 		  }
@@ -1088,7 +1088,7 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	  // randomizer Quad Damage
 	  if (i == MT_ITEM_AUTOMAP || i == MT_ITEM_INVISSPHERE || i == MT_ITEM_PVIS) {
-		  randomizernum = I_Random(); // Immorpher randomizer number
+		  randomizernum = P_Random(pr_randomizer); // Immorpher randomizer number
 		  if (randomizernum < 80) {
 			  i = MT_ITEM_AUTOMAP;
 		  }
@@ -1106,7 +1106,7 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	  // randomizer weapon Chaingun
 	  if (i == MT_WEAP_CHAINGUN) {
-		  randomizernum = I_Random() % 2; // Immorpher randomizer number
+		  randomizernum = P_Random(pr_randomizer) % 2; // Immorpher randomizer number
 		  if (randomizernum == 1) {
 			  i = MT_WEAP_CHAINGUN;
 		  }
@@ -1118,7 +1118,7 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	  // randomizer health bonus
 	  if (i == MT_ITEM_BONUSHEALTH) {
-		  randomizernum = I_Random() % 2; // Immorpher randomizer number
+		  randomizernum = P_Random(pr_randomizer) % 2; // Immorpher randomizer number
 		  if (randomizernum == 1) {
 			  i = MT_ITEM_BONUSHEALTH;
 		  }
@@ -1130,7 +1130,7 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	  // randomizer armor bonus
 	  if (i == MT_ITEM_BONUSARMOR) {
-		  randomizernum = I_Random() % 2; // Immorpher randomizer number
+		  randomizernum = P_Random(pr_randomizer) % 2; // Immorpher randomizer number
 		  if (randomizernum == 1) {
 			  i = MT_ITEM_BONUSARMOR;
 		  }
@@ -1142,7 +1142,7 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	  // randomizer blue armor
 	  if (i == MT_ITEM_ARMOR2) {
-		  randomizernum = I_Random() % 2; // Immorpher randomizer number
+		  randomizernum = P_Random(pr_randomizer) % 2; // Immorpher randomizer number
 		  if (randomizernum == 1) {
 			  i = MT_ITEM_ARMOR2;
 		  }
@@ -1154,7 +1154,7 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	// randomizer zombie man and zombie shotgun
 	if (i == MT_POSSESSED1 || i == MT_POSSESSED2) {
-		randomizernum = I_Random(); // Immorpher randomizer number
+		randomizernum = P_Random(pr_randomizer); // Immorpher randomizer number
 		if (randomizernum < 40) {
 			i = MT_MELEEZOMBIE;
 		}
@@ -1180,7 +1180,7 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	// randomizer pinky and specter
 	if (i == MT_DEMON1 || i == MT_DEMON2) {
-		randomizernum = I_Random() % 5; // Immorpher randomizer number
+		randomizernum = P_Random(pr_randomizer) % 5; // Immorpher randomizer number
 		if (randomizernum == 4) {
 			i = MT_DEMON1;
 		}
@@ -1200,7 +1200,7 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	// randomizer imp and imp nightmare
 	if (i == MT_IMP1 || i == MT_IMP2) {
-		randomizernum = I_Random() % 4; // Immorpher randomizer number
+		randomizernum = P_Random(pr_randomizer) % 4; // Immorpher randomizer number
 		if (randomizernum == 3) {
 			i = MT_IMP1;
 		}
@@ -1217,7 +1217,7 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	// randomizer baron of hell
 	if (i == MT_BRUISER1) {
-		randomizernum = I_Random(); // Immorpher randomizer number
+		randomizernum = P_Random(pr_randomizer); // Immorpher randomizer number
 		if (randomizernum < 57) {
 			i = MT_BRUISER1;
 		}
@@ -1237,7 +1237,7 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	// randomizer hell knight
 	if (i == MT_BRUISER2) {
-		randomizernum = I_Random() % 3; // Immorpher randomizer number
+		randomizernum = P_Random(pr_randomizer) % 3; // Immorpher randomizer number
 		if (randomizernum == 2) {
 			i = MT_BRUISER2;
 		}
@@ -1251,7 +1251,7 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	// randomizer cacodemon
 	if (i == MT_CACODEMON) {
-		randomizernum = I_Random() % 4; // Immorpher randomizer number
+		randomizernum = P_Random(pr_randomizer) % 4; // Immorpher randomizer number
 		if (randomizernum == 3) {
 			i = MT_CACODEMON;
 		}
@@ -1268,7 +1268,7 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	// randomizer pain elemental
 	if (i == MT_PAIN) {
-		randomizernum = I_Random() % 3; // Immorpher randomizer number
+		randomizernum = P_Random(pr_randomizer) % 3; // Immorpher randomizer number
 		if (randomizernum == 2) {
 			i = MT_PAIN;
 		}
@@ -1282,7 +1282,7 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	// randomizer lost soul
 	if (i == MT_SKULL) {
-		randomizernum = I_Random() % 3; // Immorpher randomizer number
+		randomizernum = P_Random(pr_randomizer) % 3; // Immorpher randomizer number
 		if (randomizernum == 2) {
 			i = MT_SKULL;
 		}
@@ -1296,7 +1296,7 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	// randomizer mancubus
 	if (i == MT_MANCUBUS) {
-		randomizernum = I_Random() % 4; // Immorpher randomizer number
+		randomizernum = P_Random(pr_randomizer) % 4; // Immorpher randomizer number
 		if (randomizernum == 3) {
 			i = MT_MANCUBUS;
 		}
@@ -1313,7 +1313,7 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	// randomizer arachnotron
 	if (i == MT_BABY) {
-		randomizernum = I_Random() % 3; // Immorpher randomizer number
+		randomizernum = P_Random(pr_randomizer) % 3; // Immorpher randomizer number
 		if (randomizernum == 2) {
 			i = MT_BABY;
 		}
@@ -1327,7 +1327,7 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	// randomizer cyberdemon
 	if (i == MT_CYBORG) {
-		randomizernum = I_Random() % 3; // Immorpher randomizer number
+		randomizernum = P_Random(pr_randomizer) % 3; // Immorpher randomizer number
 		if (randomizernum == 2) {
 			i = MT_CYBORG;
 		}
@@ -1341,7 +1341,7 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	// randomizer mother demon
 	if (i == MT_RESURRECTOR) {
-		randomizernum = I_Random() % 2; // Immorpher randomizer number
+		randomizernum = P_Random(pr_randomizer) % 2; // Immorpher randomizer number
 		if (randomizernum == 1) {
 			i = MT_RESURRECTOR;
 		}
@@ -1407,7 +1407,7 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 	}
 
 	if (mobj->tics > 0) {
-		mobj->tics = 1 + (P_Random() % mobj->tics);
+		mobj->tics = 1 + (P_Random(pr_spawnthing) % mobj->tics);
 	}
 
 	mobj->angle = ANG45 * (mthing->angle / 45);
@@ -1458,15 +1458,14 @@ extern fixed_t attackrange;
 
 void P_SpawnPuff(fixed_t x, fixed_t y, fixed_t z) {
 	mobj_t* th;
-	int rnd1, rnd2;
+	
 
-	rnd1 = P_Random();
-	rnd2 = P_Random();
+	
 
-	z += ((rnd2 - rnd1) << 10);
+	z += P_RandomShift(pr_spawnpuff, 10);
 	th = P_SpawnMobj(x, y, z, MT_SMOKE_SMALL);
 	th->momz = FRACUNIT;
-	th->tics -= P_Random() & 1;
+	th->tics -= P_Random(pr_spawnpuff) & 1;
 
 	if (th->tics < 1) {
 		th->tics = 1;
@@ -1486,13 +1485,13 @@ void P_SpawnBlood(fixed_t x, fixed_t y, fixed_t z, int damage) {
 	int i = 0;
 
 	for (i = 0; i < 3; i++) {
-		x += ((P_Random() - P_Random()) << 12);
-		y += ((P_Random() - P_Random()) << 12);
-		z += ((P_Random() - P_Random()) << 11);
+		z += P_RandomShift(pr_spawnblood, 11);
+		x += P_RandomShift(pr_spawnblood, 12);
+		y += P_RandomShift(pr_spawnblood, 12);
 
 		th = P_SpawnMobj(x, y, z, MT_BLOOD);
 		th->momz = FRACUNIT * 2;
-		th->tics -= (P_Random() & 1);
+		th->tics -= (P_Random(pr_spawnblood) & 1);
 
 		if (th->tics < 1) {
 			th->tics = 1;
@@ -1632,7 +1631,7 @@ mobj_t* P_SpawnMissile(mobj_t* source, mobj_t* dest, mobjtype_t type,
 	fixed_t x;
 	fixed_t y;
 	fixed_t z;
-	int rnd1, rnd2;
+	
 
 	x = source->x + xoffs;
 	y = source->y + yoffs;
@@ -1654,9 +1653,8 @@ mobj_t* P_SpawnMissile(mobj_t* source, mobj_t* dest, mobjtype_t type,
 
 	if (dest && (dest->flags & MF_SHADOW))
 	{
-		rnd1 = P_Random();
-		rnd2 = P_Random();
-		an += ((rnd2 - rnd1) << 20);
+		
+		an += P_RandomShift(pr_shadow, 20);
 	}
 
 	speed = th->info->speed;
