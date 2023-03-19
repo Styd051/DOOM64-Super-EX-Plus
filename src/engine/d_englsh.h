@@ -85,6 +85,9 @@
 #define GOTMEDINEED     "You pick up a medikit that you REALLY\nneed!"
 #define GOTMEDIKIT      "You pick up a medikit."
 #define GOTSUPER        "Supercharge!"
+#define GOTHELLPOTION   "You pick up a Hell Potion."
+#define GOTREDARMOR     "You got the Ultra Armor!"
+#define GOTMAXARMORBONUS     "You pick up an max armor bonus."
 
 #define GOTBLUECARD     "You pick up a blue keycard."
 #define GOTYELWCARD     "You pick up a yellow keycard."

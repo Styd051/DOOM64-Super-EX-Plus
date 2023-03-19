@@ -420,6 +420,14 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 		player->messagepic = 24;
 		break;
 
+	case SPR_ARM3:
+		if (!P_GiveArmor(player, deh_red_armor_class))
+			return;
+
+		player->message = GOTREDARMOR;
+		player->messagepic = 48;
+		break;
+
 		// bonus items
 	case SPR_BON1:
 		player->health += 2;		// can go over 100%
@@ -439,6 +447,32 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 		}
 		player->message = GOTARMBONUS;
 		player->messagepic = 4;
+		break;
+
+	case SPR_BON3:
+		player->health += 2;		// can go over 100%
+		player->armorpoints += 2;
+		if (player->health > deh_max_health)
+			player->health = deh_max_health;
+		if (player->armorpoints > deh_max_armor)
+			player->armorpoints = deh_max_armor;
+		player->mo->health = player->health;
+		if (!player->armortype) {
+			player->armortype = 1;
+		}
+		player->message = GOTHELLPOTION;
+		player->messagepic = 47;
+		break;
+
+	case SPR_BON4:
+		player->armorpoints += 4;		// can go over 100%
+		if (player->armorpoints > deh_max_armor)
+			player->armorpoints = deh_max_armor;
+		if (!player->armortype) {
+			player->armortype = 1;
+		}
+		player->message = GOTMAXARMORBONUS;
+		player->messagepic = 49;
 		break;
 
 	case SPR_SOUL:

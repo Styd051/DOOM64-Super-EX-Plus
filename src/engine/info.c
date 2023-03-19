@@ -148,6 +148,9 @@ char* sprnames[NUMSPRITES + 1] = {  //0x5FA30
 	"PLSF",
 	"SKUG",
 	"BSP2",
+	"BON3",
+	"ARM3",
+	"BON4",
 	NULL
 };
 
@@ -2746,6 +2749,20 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_BSP2_RAISE4*/{ SPR_BSP2, 7, 5, {NULL}, S_BSP2_RAISE5 },
 	/*S_BSP2_RAISE5*/{ SPR_BSP2, 6, 5, {NULL}, S_BSP2_RUN2 },
 	
+	/*S_BONUS3A*/{ SPR_BON3, 0, 3, {NULL}, S_BONUS3B },
+	/*S_BONUS3B*/{ SPR_BON3, 1, 3, {NULL}, S_BONUS3C },
+	/*S_BONUS3C*/{ SPR_BON3, 2, 3, {NULL}, S_BONUS3D },
+	/*S_BONUS3D*/{ SPR_BON3, 3, 3, {NULL}, S_BONUS3A },
+
+	/*S_ARMOR3A*/{ SPR_ARM3, 32768, 6, {NULL}, S_ARMOR3B },
+	/*S_ARMOR3B*/{ SPR_ARM3, 32769, 6, {NULL}, S_ARMOR3A },
+
+	/*S_BONUS4A*/{ SPR_BON4, 0, 3, {NULL}, S_BONUS4B },
+	/*S_BONUS4B*/{ SPR_BON4, 1, 3, {NULL}, S_BONUS4C },
+	/*S_BONUS4C*/{ SPR_BON4, 2, 3, {NULL}, S_BONUS4D },
+	/*S_BONUS4D*/{ SPR_BON4, 3, 3, {NULL}, S_BONUS4E },
+	/*S_BONUS4E*/{ SPR_BON4, 2, 3, {NULL}, S_BONUS4F },
+	/*S_BONUS4F*/{ SPR_BON4, 1, 3, {NULL}, S_BONUS4A },
 };
 
 #pragma warning(pop)
@@ -10961,6 +10978,93 @@ S_NULL	   //raisestate
 	4,        //damage
 	sfx_None/*sfx_000*/,        //activesound
 	MF_NOBLOCKMAP | MF_DROPOFF | MF_MISSILE,        //flags
+	0,        //palette
+	255,        //alpha
+	S_NULL	   //raisestate
+},
+
+{
+	/*MT_ITEM_HELLPOTION*/
+	9031,        //doomednum
+	S_BONUS3A,        //spawnstate
+	1000,        //spawnhealth
+	S_NULL,        //seestate
+	sfx_None/*sfx_000*/,        //seesound
+	8,        //reactiontime
+	sfx_None/*sfx_000*/,        //attacksound
+	S_NULL,        //painstate
+	0,        //painchance
+	sfx_None/*sfx_000*/,        //painsound
+	S_NULL,        //meleestate
+	S_NULL,        //missilestate
+	S_NULL,        //deathstate
+	S_NULL,        //xdeathstate
+	sfx_None/*sfx_000*/,        //deathsound
+	0,        //speed
+	20 * FRACUNIT,        //radius
+	16 * FRACUNIT,        //height
+	100,        //mass
+	0,        //damage
+	sfx_None/*sfx_000*/,        //activesound
+	MF_SPECIAL | MF_COUNTITEM,        //flags
+	0,        //palette
+	255,        //alpha
+	S_NULL	   //raisestate
+},
+
+{
+	/*MT_ITEM_ARMOR3*/
+	9032,        //doomednum
+	S_ARMOR3A,        //spawnstate
+	1000,        //spawnhealth
+	S_NULL,        //seestate
+	sfx_None/*sfx_000*/,        //seesound
+	8,        //reactiontime
+	sfx_None/*sfx_000*/,        //attacksound
+	S_NULL,        //painstate
+	0,        //painchance
+	sfx_None/*sfx_000*/,        //painsound
+	S_NULL,        //meleestate
+	S_NULL,        //missilestate
+	S_NULL,        //deathstate
+	S_NULL,        //xdeathstate
+	sfx_None/*sfx_000*/,        //deathsound
+	0,        //speed
+	20 * FRACUNIT,        //radius
+	16 * FRACUNIT,        //height
+	100,        //mass
+	0,        //damage
+	sfx_None/*sfx_000*/,        //activesound
+	MF_SPECIAL,        //flags
+	0,        //palette
+	255,        //alpha
+	S_NULL	   //raisestate
+},
+
+{
+	/*MT_ITEM_MAXARMORBONUS*/
+	9033,        //doomednum
+	S_BONUS4A,        //spawnstate
+	1000,        //spawnhealth
+	S_NULL,        //seestate
+	sfx_None/*sfx_000*/,        //seesound
+	8,        //reactiontime
+	sfx_None/*sfx_000*/,        //attacksound
+	S_NULL,        //painstate
+	0,        //painchance
+	sfx_None/*sfx_000*/,        //painsound
+	S_NULL,        //meleestate
+	S_NULL,        //missilestate
+	S_NULL,        //deathstate
+	S_NULL,        //xdeathstate
+	sfx_None/*sfx_000*/,        //deathsound
+	0,        //speed
+	20 * FRACUNIT,        //radius
+	16 * FRACUNIT,        //height
+	100,        //mass
+	0,        //damage
+	sfx_None/*sfx_000*/,        //activesound
+	MF_SPECIAL | MF_COUNTITEM,        //flags
 	0,        //palette
 	255,        //alpha
 	S_NULL	   //raisestate

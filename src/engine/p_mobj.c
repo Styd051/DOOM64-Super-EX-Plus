@@ -1116,6 +1116,42 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 		  
 	  }
 
+	  // randomizer health bonus
+	  if (i == MT_ITEM_BONUSHEALTH) {
+		  randomizernum = I_Random() % 2; // Immorpher randomizer number
+		  if (randomizernum == 1) {
+			  i = MT_ITEM_BONUSHEALTH;
+		  }
+		  else if (randomizernum == 0) {
+			  i = MT_ITEM_HELLPOTION;
+		  }
+
+	  }
+
+	  // randomizer armor bonus
+	  if (i == MT_ITEM_BONUSARMOR) {
+		  randomizernum = I_Random() % 2; // Immorpher randomizer number
+		  if (randomizernum == 1) {
+			  i = MT_ITEM_BONUSARMOR;
+		  }
+		  else if (randomizernum == 0) {
+			  i = MT_ITEM_MAXARMORBONUS;
+		  }
+
+	  }
+
+	  // randomizer blue armor
+	  if (i == MT_ITEM_ARMOR2) {
+		  randomizernum = I_Random() % 2; // Immorpher randomizer number
+		  if (randomizernum == 1) {
+			  i = MT_ITEM_ARMOR2;
+		  }
+		  else if (randomizernum == 0) {
+			  i = MT_ITEM_ARMOR3;
+		  }
+
+	  }
+
 	// randomizer zombie man and zombie shotgun
 	if (i == MT_POSSESSED1 || i == MT_POSSESSED2) {
 		randomizernum = I_Random(); // Immorpher randomizer number
