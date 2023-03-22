@@ -76,6 +76,18 @@ currently 36 new monsters have been added
 
 -Arthronailer 
 
+currently there are 5 items has been added
+
+-Small Box of Nail
+
+-Box of Nail
+
+-Hell Potion
+
+-Red Armor
+
+-Max Armor Bonus
+
 currently 88 new decorations have been added
 
 -the decorations of the version DOOM 64 Alpha (40 new decorations)
@@ -99,6 +111,10 @@ What is the game mode Complex DOOM 64 ?
 this is a game mode that will completely change the playing experience of DOOM 64 all monsters on the map will be randomized to a much more powerful version of a monster also some items and ammo are randomized so the player is not out of ammo, to avoid making the map unplayable
 
 a new option has been added called Complex D64 to enable or disable game mode Complex DOOM 64 
+
+# Known Problem
+
+-the MAP40 Panic is currently unplayable because when you trigger the lindefs which allows the tracers to appear, it crashes the port
 
 # The Credits
 -Gibbon for the port EX+
