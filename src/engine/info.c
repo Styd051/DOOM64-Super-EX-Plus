@@ -85,6 +85,7 @@ char* sprnames[NUMSPRITES + 1] = {  //0x5FA30
 	"FRCK",
 	"NLGN",
 	"NLBX",
+	"NLB2",
 	"NLGP",
 	"64SG",
 	"BSTK",
@@ -1161,7 +1162,7 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_SSG7*/              { SPR_SHT2, 5, 6, {A_LoadShotgun2}, S_SSG8 },
 	/*S_SSG8*/              { SPR_SHT2, 6, 5, {NULL}, S_SSG9 },
 	/*S_SSG9*/              { SPR_SHT2, 7, 5, {A_CloseShotgun2}, S_SSG10 },
-	/*S_SSG10*/             { SPR_SHT2, 0, 5, {A_ReFire}, S_SSG },
+	/*S_SSG10*/             { SPR_SHT2, 0, 0, {A_ReFire}, S_SSG },
 	/*S_SSGFLASH*/          { SPR_SHT2, 32776, 5, {NULL}, S_NULL },
 
 	/*S_CHAING*/            { SPR_CHGG, 0, 1, {A_WeaponReady}, S_CHAING },
@@ -1232,6 +1233,8 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_NAILG12*/{ SPR_NLGN, 0, 5, {A_ReFire}, S_NAILG },
 
 	/*S_NAILSAMMO*/{ SPR_NLBX, 0, -1, {NULL}, S_NULL },
+
+	/*S_NAILSAMMO2*/{ SPR_NLB2, 0, -1, {NULL}, S_NULL },
 
 	/*S_NLGP*/{ SPR_NLGP, 0, -1, {NULL}, S_NULL },
 
@@ -9708,9 +9711,38 @@ S_NULL	   //raisestate
 },
 
 {
-	/*MT_AMMO_NAILS*/
+	/*MT_AMMO_NAILSMALLBOX*/
 	9008,        //doomednum
 	S_NAILSAMMO,        //spawnstate
+	1000,        //spawnhealth
+	S_NULL,        //seestate
+	sfx_None/*sfx_000*/,        //seesound
+	8,        //reactiontime
+	sfx_None/*sfx_000*/,        //attacksound
+	S_NULL,        //painstate
+	0,        //painchance
+	sfx_None/*sfx_000*/,        //painsound
+	S_NULL,        //meleestate
+	S_NULL,        //missilestate
+	S_NULL,        //deathstate
+	S_NULL,        //xdeathstate
+	sfx_None/*sfx_000*/,        //deathsound
+	0,        //speed
+	20 * FRACUNIT,        //radius
+	16 * FRACUNIT,        //height
+	100,        //mass
+	0,        //damage
+	sfx_None/*sfx_000*/,        //activesound
+	MF_SPECIAL,        //flags
+	0,        //palette
+	255,        //alpha
+	S_NULL	   //raisestate
+},
+
+{
+	/*MT_AMMO_NAILBOX*/
+	9034,        //doomednum
+	S_NAILSAMMO2,        //spawnstate
 	1000,        //spawnhealth
 	S_NULL,        //seestate
 	sfx_None/*sfx_000*/,        //seesound

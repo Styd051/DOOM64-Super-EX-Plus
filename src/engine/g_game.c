@@ -147,6 +147,7 @@ NETCVAR_PARAM(sv_keepitems, 0, gameflags, GF_KEEPITEMS);
 NETCVAR_PARAM(p_allowjump, 0, gameflags, GF_ALLOWJUMP);
 NETCVAR_PARAM(p_autoaim, 1, gameflags, GF_ALLOWAUTOAIM);
 NETCVAR_PARAM(compat_mobjpass, 1, compatflags, COMPATF_MOBJPASS);
+NETCVAR_PARAM(compat_limitpain, 1, compatflags, COMPATF_LIMITPAIN);
 
 CVAR_EXTERNAL(v_mlook);
 CVAR_EXTERNAL(v_mlookinvert);
@@ -161,7 +162,6 @@ CVAR_EXTERNAL(m_obituaries);
 CVAR_EXTERNAL(m_brutal);
 CVAR_EXTERNAL(st_hud_color);
 CVAR_EXTERNAL(m_complexdoom64);
-CVAR_EXTERNAL(m_keepartifacts);
 
 CVAR(m_keepartifacts, 0);
 
@@ -186,6 +186,7 @@ void G_RegisterCvars(void) {
 	CON_CvarRegister(&st_hud_color);
 	CON_CvarRegister(&m_obituaries);
 	CON_CvarRegister(&compat_mobjpass);
+	CON_CvarRegister(&compat_limitpain);
 	CON_CvarRegister(&m_complexdoom64);
 	CON_CvarRegister(&m_keepartifacts);
 }
@@ -870,6 +871,7 @@ static void G_SetGameFlags(void) {
 	if (p_autoaim.value > 0)        gameflags |= GF_ALLOWAUTOAIM;
 
 	if (compat_mobjpass.value > 0)  compatflags |= COMPATF_MOBJPASS;
+	if (compat_limitpain.value > 0)  compatflags |= COMPATF_LIMITPAIN;
 }
 
 //

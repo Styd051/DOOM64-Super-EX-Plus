@@ -715,8 +715,16 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 		if (!P_GiveAmmo(player, am_nails, 1)) {
 			return;
 		}
-		player->message = GOTNAILSAMMO;
+		player->message = GOTNAILSAMMOSMALLBOX;
 		player->messagepic = 45;
+		break;
+
+	case SPR_NLB2:
+		if (!P_GiveAmmo(player, am_nails, 5)) {
+			return;
+		}
+		player->message = GOTNAILSAMMOBOX;
+		player->messagepic = 50;
 		break;
 
 		// weapons

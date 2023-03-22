@@ -119,7 +119,8 @@
 #define GOTSHELLS2      "Picked up 8 shotgun shells."
 #define GOTSHELLBOX     "Picked up a box of shells."
 #define GOTBACKPACK     "You got the backpack!"
-#define GOTNAILSAMMO     "Picked up some Nails."
+#define GOTNAILSAMMOSMALLBOX     "Picked up a small box of nails."
+#define GOTNAILSAMMOBOX     "Picked up a box of nails."
 
 #define GOTBFG9000      "You got the BFG9000!  Oh, yes."
 #define GOTCHAINGUN     "You got the chaingun!"

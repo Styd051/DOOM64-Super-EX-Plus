@@ -1005,6 +1005,7 @@ CVAR_EXTERNAL(p_autorun);
 CVAR_EXTERNAL(p_usecontext);
 CVAR_EXTERNAL(m_complexdoom64);
 CVAR_EXTERNAL(m_keepartifacts);
+CVAR_EXTERNAL(compat_limitpain);
 CVAR_EXTERNAL(compat_mobjpass);
 CVAR_EXTERNAL(r_wipe);
 CVAR_EXTERNAL(hud_disablesecretmessages);
@@ -1039,6 +1040,7 @@ enum {
 	misc_obituaries,
 	misc_brutal,
 	misc_header5,
+	misc_comp_pain,
 	misc_comp_pass,
 	misc_disablesecretmessages,
 	misc_default,
@@ -1071,6 +1073,7 @@ menuitem_t MiscMenu[] = {
 	{2,"Obituaries:",M_MiscChoice },
 	{2,"Brutal Mode:",M_MiscChoice },
 	{-1,"N64 Compatibility",0 },
+	{2,"Limit Lost Souls:",M_MiscChoice,'l'},
 	{2,"Tall Actors:",M_MiscChoice,'i'},
 	{2,"Secret Messages:",M_MiscChoice,'x'},
 	{-2,"Default",M_DoDefaults,'d'},
@@ -1102,6 +1105,7 @@ char* MiscHints[misc_end] = {
 	"death messages",
 	"get knee deep in the gibs",
 	NULL,
+	"limit max amount of lost souls spawn by pain elemental to 17",
 	"emulate infinite height bug for all solid actors",
 	"disable the secret message text",
 	NULL,
@@ -1127,6 +1131,7 @@ menudefault_t MiscDefault[] = {
 	{ &m_nospawnsound, 0 },
 	{ &m_obituaries, 0 },
 	{ &m_brutal, 0 },
+	{ &compat_limitpain, 1 },
 	{ &compat_mobjpass, 1 },
 	{ NULL, -1 }
 };
@@ -1263,6 +1268,10 @@ void M_MiscChoice(int choice) {
 		M_SetOptionValue(choice, 0, 1, 1, &m_brutal);
 		break;
 
+	case misc_comp_pain:
+		M_SetOptionValue(choice, 0, 1, 1, &compat_limitpain);
+		break;
+
 	case misc_comp_pass:
 		M_SetOptionValue(choice, 0, 1, 1, &compat_mobjpass);
 		break;
@@ -1312,6 +1321,7 @@ void M_DrawMisc(void) {
 	DRAWMISCITEM(misc_nospawnsound, m_nospawnsound.value, disablesecretmessages);
 	DRAWMISCITEM(misc_obituaries, m_obituaries.value, autoruntype);
 	DRAWMISCITEM(misc_brutal, m_brutal.value, autoruntype);
+	DRAWMISCITEM(misc_comp_pain, compat_limitpain.value, msgNames);
 	DRAWMISCITEM(misc_comp_pass, !compat_mobjpass.value, msgNames);
 	DRAWMISCITEM(misc_disablesecretmessages, hud_disablesecretmessages.value, disablesecretmessages);
 

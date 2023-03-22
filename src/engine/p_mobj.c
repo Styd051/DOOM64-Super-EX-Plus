@@ -1032,20 +1032,35 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 			mthing->x, mthing->y);
 
 // Game Mode Complex DOOM 64 by Styd051 and Immorpher
-  if (m_complexdoom64.value != 0)
+  if (m_complexdoom64.value == 1)
   {
 
 	  // randomizer ammo clip
 	  if (i == MT_AMMO_CLIP) {
-		  randomizernum = P_Random(pr_randomizer) % 3; // Immorpher randomizer number
-		  if (randomizernum == 2) {
+		  randomizernum = P_Random(pr_randomizer) % 4; // Immorpher randomizer number
+		  if (randomizernum == 3) {
 			  i = MT_AMMO_CLIP;
 		  }
+		  else if (randomizernum == 2) {
+			  i = MT_AMMO_NAILSMALLBOX;
+		  }
 		  else if (randomizernum == 1) {
-			  i = MT_AMMO_NAILS;
+			  i = MT_AMMO_CLIPBOX;
 		  }
 		  else if (randomizernum == 0) {
+			  i = MT_AMMO_NAILBOX;
+		  }
+
+	  }
+
+	  // randomizer box of ammo 
+	  if (i == MT_AMMO_CLIPBOX) {
+		  randomizernum = P_Random(pr_randomizer) % 2; // Immorpher randomizer number
+		  if (randomizernum == 1) {
 			  i = MT_AMMO_CLIPBOX;
+		  }
+		  else if (randomizernum == 0) {
+			  i = MT_AMMO_NAILBOX;
 		  }
 
 	  }
@@ -1087,16 +1102,10 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 	  }
 
 	  // randomizer Quad Damage
-	  if (i == MT_ITEM_AUTOMAP || i == MT_ITEM_INVISSPHERE || i == MT_ITEM_PVIS) {
+	  if (i == MT_ITEM_INVISSPHERE) {
 		  randomizernum = P_Random(pr_randomizer); // Immorpher randomizer number
-		  if (randomizernum < 80) {
-			  i = MT_ITEM_AUTOMAP;
-		  }
-		  else if (randomizernum < 160) {
+		  if (randomizernum < 236) {
 			  i = MT_ITEM_INVISSPHERE;
-		  }
-		  else if (randomizernum < 240) {
-			  i = MT_ITEM_PVIS;
 		  }
 		  else if (randomizernum < 256) {
 			  i = MT_ITEM_QUADDAMAGE;
