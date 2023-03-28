@@ -195,7 +195,6 @@ typedef enum {
 	wp_plasma,
 	wp_bfg,
 	wp_laser,
-	wp_nailgun,
 	NUMWEAPONS,
 
 	// No pending weapon change.
@@ -208,7 +207,6 @@ typedef enum {
 	am_shell,   // Shotgun / double barreled shotgun.
 	am_cell,    // Plasma rifle, BFG.
 	am_misl,    // Missile launcher.
-	am_nails,    // Nailgun
 	NUMAMMO,
 	am_noammo    // Unlimited for chainsaw / fist.
 } ammotype_t;
@@ -221,7 +219,6 @@ typedef enum {
 	pw_ironfeet,
 	pw_allmap,
 	pw_infrared,
-	pw_quaddamage,
 	NUMPOWERS
 } powertype_t;
 
@@ -236,8 +233,7 @@ typedef enum {
 	INVISTICS = (60 * TICRATE),
 	INFRATICS = (120 * TICRATE),
 	IRONTICS = (60 * TICRATE),
-	STRTICS = (3 * TICRATE),
-	QUADDAMAGETICS = (30 * TICRATE)
+	STRTICS = (3 * TICRATE)
 } powerduration_t;
 
 // 20120209 villsa - game flags
@@ -256,8 +252,7 @@ enum {
 
 // 20120209 villsa - compatibility flags
 enum {
-	COMPATF_MOBJPASS = (1 << 1),     // allow mobjs to stand on top one another
-	COMPATF_LIMITPAIN = (1 << 2)     // pain elemental limited to 17 lost souls?
+	COMPATF_MOBJPASS = (1 << 1)     // allow mobjs to stand on top one another
 };
 
 extern boolean windowpause;

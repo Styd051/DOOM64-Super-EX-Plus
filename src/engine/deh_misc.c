@@ -132,15 +132,6 @@ int deh_bfg_cells_per_shot = DEH_DEFAULT_BFG_CELLS_PER_SHOT;
 
 int deh_species_infighting = DEH_DEFAULT_SPECIES_INFIGHTING;
 
-// Dehacked: "Red Armor Class"
-// This is the armor class that is given when picking up the blue 
-// armor or a megasphere. See P_TouchSpecialThing in p_inter.c
-//
-// DOS dehacked only modifies the Ultra Armor behavior and not
-// the MegaSphere, which always gives armor type 2.
-
-int deh_red_armor_class = DEH_DEFAULT_RED_ARMOR_CLASS;
-
 static struct
 {
     char *deh_name;
@@ -161,7 +152,6 @@ static struct
     {"IDKFA Armor",         &deh_idkfa_armor},
     {"IDKFA Armor Class",   &deh_idkfa_armor_class},
     {"BFG Cells/Shot",      &deh_bfg_cells_per_shot},
-    {"Red Armor Class",    &deh_red_armor_class},
 };
 
 static void *DEH_MiscStart(deh_context_t *context, char *line)

@@ -996,11 +996,9 @@ fixed_t         aimpitch;
 extern fixed_t  topslope;
 extern fixed_t  bottomslope;
 
-// [kex]
-fixed_t laserhit_x;
-fixed_t laserhit_y;
-fixed_t laserhit_z;
-
+extern fixed_t laserhit_x;
+extern fixed_t laserhit_y;
+extern fixed_t laserhit_z;
 
 //
 // PTR_AimTraverse
@@ -1545,20 +1543,12 @@ boolean PIT_RadiusAttack(mobj_t* thing) {
     }
 
     // Boss cyborg take no damage from concussion.
-    if (thing->type == MT_CYBORG || thing->type == MT_SPIDER || thing->type == MT_ANNIHILATOR || thing->type == MT_BFGCYBERDEMON || thing->type == MT_NIGHTCRAWLER || thing->type == MT_BRUISERDEMON || thing->type == MT_CYBERBARON) {
+    if (thing->type == MT_CYBORG || thing->type == MT_SPIDER) {
         return true;
     }
 
-    if (thing->type == MT_SKULL || thing->type == MT_PAIN || thing->type == MT_STALKER || thing->type == MT_PAIN_ELEMENTAL_STALKER || thing->type == MT_PAIN_ELEMENTAL_NIGHTMARE || thing->type == MT_NIGHTMARE_LOSTSOUL) {
+    if (thing->type == MT_SKULL || thing->type == MT_PAIN) {
         if (bombsource && bombsource->type == MT_SKULL) {
-            return true;
-        }
-
-        if (bombsource && bombsource->type == MT_STALKER) {
-            return true;
-        }
-
-        if (bombsource && bombsource->type == MT_NIGHTMARE_LOSTSOUL) {
             return true;
         }
     }
@@ -1685,8 +1675,8 @@ boolean PIT_ChangeSector(mobj_t* thing) {
 
             // spray blood in a random direction
             mo = P_SpawnMobj(thing->x, thing->y, thing->z + thing->height / 2, MT_BLOOD);
-            mo->momx = P_RandomShift(pr_crush, 12);
-            mo->momy = P_RandomShift(pr_crush, 12);
+            mo->momx = (P_Random() - P_Random()) << 12;
+            mo->momy = (P_Random() - P_Random()) << 12;
         }
     }
 

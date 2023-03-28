@@ -21,7 +21,7 @@
 #define DEH_DEFAULT_INITIAL_HEALTH 100
 #define DEH_DEFAULT_INITIAL_BULLETS 50
 #define DEH_DEFAULT_MAX_HEALTH 200
-#define DEH_DEFAULT_MAX_ARMOR 300
+#define DEH_DEFAULT_MAX_ARMOR 200
 #define DEH_DEFAULT_GREEN_ARMOR_CLASS 1
 #define DEH_DEFAULT_BLUE_ARMOR_CLASS 2
 #define DEH_DEFAULT_MAX_SOULSPHERE 200
@@ -34,7 +34,6 @@
 #define DEH_DEFAULT_IDKFA_ARMOR_CLASS 2
 #define DEH_DEFAULT_BFG_CELLS_PER_SHOT 40
 #define DEH_DEFAULT_SPECIES_INFIGHTING 0
-#define DEH_DEFAULT_RED_ARMOR_CLASS 3
 
 extern int deh_initial_health;
 extern int deh_initial_bullets;
@@ -52,7 +51,6 @@ extern int deh_idkfa_armor;
 extern int deh_idkfa_armor_class;
 extern int deh_bfg_cells_per_shot;
 extern int deh_species_infighting;
-extern int deh_red_armor_class;
 
 #if 0
 
@@ -74,7 +72,6 @@ extern int deh_red_armor_class;
 #define deh_idkfa_armor_class   DEH_DEFAULT_IDKFA_ARMOR_CLASS
 #define deh_bfg_cells_per_shot  DEH_DEFAULT_BFG_CELLS_PER_SHOT
 #define deh_species_infighting  DEH_DEFAULT_SPECIES_INFIGHTING
-#define deh_red_armor_class     DEH_DEFAULT_RED_ARMOR_CLASS
 
 #endif
 

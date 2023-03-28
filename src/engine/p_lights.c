@@ -61,7 +61,7 @@ void T_FireFlicker(fireflicker_t* flick) {
 		return;
 	}
 
-	amount = (P_Random(pr_lights) & 31);
+	amount = (P_Random() & 31);
 	flick->sector->lightlevel = amount;
 	flick->count = 3;
 }
@@ -109,11 +109,11 @@ void T_LightFlash(lightflash_t* flash) {
 
 		if (flash->sector->lightlevel == 32) {
 			flash->sector->lightlevel = 0;
-			flash->count = (P_Random(pr_lights) & 7) + 1;
+			flash->count = (P_Random() & 7) + 1;
 		}
 		else {
 			flash->sector->lightlevel = 32;
-			flash->count = (P_Random(pr_lights) & 32) + 1;
+			flash->count = (P_Random() & 32) + 1;
 		}
 	}
 }
@@ -135,7 +135,7 @@ void P_SpawnLightFlash(sector_t* sector) {
 		flash->thinker.function.acp1 = (actionf_p1)T_LightFlash;
 		flash->sector = sector;
 		flash->special = sector->special;
-		flash->count = (P_Random(pr_lights) & 63) + 1;
+		flash->count = (P_Random() & 63) + 1;
 	}
 }
 
@@ -196,7 +196,7 @@ void P_SpawnStrobeFlash(sector_t* sector, int speed) {
 		flash->brighttime = STROBEBRIGHT;
 		flash->maxlight = 16;
 		flash->darktime = speed;
-		flash->count = (P_Random(pr_lights) & 7) + 1;
+		flash->count = (P_Random() & 7) + 1;
 	}
 }
 
@@ -279,7 +279,7 @@ void T_Glow(glow_t* g) {
 				g->sector->lightlevel = g->minlight;
 
 				if (g->type == PULSERANDOM)
-					g->maxlight = (P_Random(pr_lights) & 31) + 17;
+					g->maxlight = (P_Random() & 31) + 17;
 
 				g->direction = 1;
 			}
@@ -291,7 +291,7 @@ void T_Glow(glow_t* g) {
 				g->sector->lightlevel = g->maxlight;
 
 				if (g->type == PULSERANDOM)
-					g->minlight = (P_Random(pr_lights) & 15);
+					g->minlight = (P_Random() & 15);
 
 				g->direction = -1;
 			}

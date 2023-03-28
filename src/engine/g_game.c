@@ -147,7 +147,6 @@ NETCVAR_PARAM(sv_keepitems, 0, gameflags, GF_KEEPITEMS);
 NETCVAR_PARAM(p_allowjump, 0, gameflags, GF_ALLOWJUMP);
 NETCVAR_PARAM(p_autoaim, 1, gameflags, GF_ALLOWAUTOAIM);
 NETCVAR_PARAM(compat_mobjpass, 1, compatflags, COMPATF_MOBJPASS);
-NETCVAR_PARAM(compat_limitpain, 1, compatflags, COMPATF_LIMITPAIN);
 
 CVAR_EXTERNAL(v_mlook);
 CVAR_EXTERNAL(v_mlookinvert);
@@ -161,9 +160,7 @@ CVAR_EXTERNAL(m_nospawnsound);
 CVAR_EXTERNAL(m_obituaries);
 CVAR_EXTERNAL(m_brutal);
 CVAR_EXTERNAL(st_hud_color);
-CVAR_EXTERNAL(m_complexdoom64);
-
-CVAR(m_keepartifacts, 0);
+CVAR_EXTERNAL(m_extendedcast);
 
 //
 // G_RegisterCvars
@@ -186,9 +183,7 @@ void G_RegisterCvars(void) {
 	CON_CvarRegister(&st_hud_color);
 	CON_CvarRegister(&m_obituaries);
 	CON_CvarRegister(&compat_mobjpass);
-	CON_CvarRegister(&compat_limitpain);
-	CON_CvarRegister(&m_complexdoom64);
-	CON_CvarRegister(&m_keepartifacts);
+	CON_CvarRegister(&m_extendedcast);
 }
 
 //
@@ -373,7 +368,6 @@ static CMD(Cheat) {
 				CON_Printf(AQUA, "6: Plasma Rifle\n");
 				CON_Printf(AQUA, "7: BFG 9000\n");
 				CON_Printf(AQUA, "8: Demon Artifact\n");
-				CON_Printf(AQUA, "9: Nailgun\n");
 				return;
 			}
 
@@ -568,7 +562,6 @@ void G_SaveDefaults(void) {
 void G_ReloadDefaults(void) {
 	gameflags = savegameflags;
 	compatflags = savecompatflags;
-	rngseed += I_GetRandomTimeSeed() + gametic;
 }
 
 CVAR_EXTERNAL(p_autorun);
@@ -655,11 +648,11 @@ void G_BuildTiccmd(ticcmd_t* cmd) {
 			cmd->pitch -= angleturn[lookheld + (speed ? SLOWTURNTICS : 0)] << 2;
 		}
 
-		cmd->angleturn -= pc->mousex * 0x8;
+		cmd->angleturn -= pc->mousex * 0x4;
 
 		if (forcefreelook != 2) {
 			if ((int)v_mlook.value || forcefreelook) {
-				cmd->pitch -= (int)v_mlookinvert.value ? pc->mousey * 0x8 : -(pc->mousey * 0x8);
+				cmd->pitch -= (int)v_mlookinvert.value ? pc->mousey * 0x4 : -(pc->mousey * 0x4);
 			}
 		}
 	}
@@ -871,7 +864,6 @@ static void G_SetGameFlags(void) {
 	if (p_autoaim.value > 0)        gameflags |= GF_ALLOWAUTOAIM;
 
 	if (compat_mobjpass.value > 0)  compatflags |= COMPATF_MOBJPASS;
-	if (compat_limitpain.value > 0)  compatflags |= COMPATF_LIMITPAIN;
 }
 
 //
@@ -1151,7 +1143,6 @@ void G_PlayerReborn(int player) {
 	boolean    wpns[NUMWEAPONS];
 	int         pammo[NUMAMMO];
 	int         pmaxammo[NUMAMMO];
-	int         artifacts;
 
 	dmemcpy(frags, players[player].frags, sizeof(frags));
 	dmemcpy(cards, players[player].cards, sizeof(boolean) * NUMCARDS);
@@ -1159,7 +1150,6 @@ void G_PlayerReborn(int player) {
 	dmemcpy(pammo, players[player].ammo, sizeof(int) * NUMAMMO);
 	dmemcpy(pmaxammo, players[player].maxammo, sizeof(int) * NUMAMMO);
 
-	artifacts = players[player].artifacts;
 	killcount = players[player].killcount;
 	itemcount = players[player].itemcount;
 	secretcount = players[player].secretcount;
@@ -1188,11 +1178,6 @@ void G_PlayerReborn(int player) {
 
 	for (i = 0; i < NUMAMMO; i++) {
 		p->maxammo[i] = maxammo[i];
-	}
-
-	if (m_keepartifacts.value == 1)
-	{
-	    p->artifacts = artifacts;
 	}
 
 	if (netgame) {
@@ -1279,7 +1264,7 @@ void G_DeathMatchSpawnPlayer(int playernum) {
 	}
 
 	for (j = 0; j < 20; j++) {
-		i = P_Random(pr_dmspawn) % selections;
+		i = P_Random() % selections;
 		if (G_CheckSpot(playernum, &deathmatchstarts[i])) {
 			deathmatchstarts[i].type = playernum + 1;
 			P_SpawnPlayer(&deathmatchstarts[i]);

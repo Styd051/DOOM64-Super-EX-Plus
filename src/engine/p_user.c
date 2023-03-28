@@ -417,7 +417,7 @@ void P_DeathThink(player_t* player) {
 
     //mocking text
     if (!((gametic - deathmocktics) < MAXMOCKTIME)) {
-        player->message = mockstrings[(P_Random(pr_playermock) % MAXMOCKTEXT)];
+        player->message = mockstrings[(P_Random() % MAXMOCKTEXT)];
         deathmocktics = gametic;
     }
 
@@ -651,12 +651,6 @@ void P_PlayerThink(player_t* player) {
                 newweapon = wp_supershotgun;
             }
 
-            if (newweapon == wp_chaingun
-                && player->weaponowned[wp_nailgun]
-                && player->readyweapon != wp_nailgun) {
-                newweapon = wp_nailgun;
-            }
-
             if (player->weaponowned[newweapon] && newweapon != player->readyweapon) {
                 player->pendingweapon = newweapon;
             }
@@ -748,10 +742,6 @@ void P_PlayerThink(player_t* player) {
 
     if (player->powers[pw_ironfeet]) {
         player->powers[pw_ironfeet]--;
-    }
-
-    if (player->powers[pw_quaddamage]) {
-        player->powers[pw_quaddamage]--;
     }
 
     if (player->damagecount) {

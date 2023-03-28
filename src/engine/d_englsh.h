@@ -85,9 +85,6 @@
 #define GOTMEDINEED     "You pick up a medikit that you REALLY\nneed!"
 #define GOTMEDIKIT      "You pick up a medikit."
 #define GOTSUPER        "Supercharge!"
-#define GOTHELLPOTION   "You pick up a Hell Potion."
-#define GOTREDARMOR     "You got the Ultra Armor!"
-#define GOTMAXARMORBONUS     "You pick up an max armor bonus."
 
 #define GOTBLUECARD     "You pick up a blue keycard."
 #define GOTYELWCARD     "You pick up a yellow keycard."
@@ -107,7 +104,6 @@
 #define GOTMAP          "Computer Area Map"
 #define GOTVISOR        "Light Amplification Goggles"
 #define GOTMSPHERE      "Mega Sphere!"
-#define GOTQUADDAMAGE   "Quad Damage!"
 
 #define GOTCLIP         "Picked up a clip."
 #define GOTCLIPBOX      "Picked up a box of bullets."
@@ -119,8 +115,6 @@
 #define GOTSHELLS2      "Picked up 8 shotgun shells."
 #define GOTSHELLBOX     "Picked up a box of shells."
 #define GOTBACKPACK     "You got the backpack!"
-#define GOTNAILSAMMOSMALLBOX     "Picked up a small box of nails."
-#define GOTNAILSAMMOBOX     "Picked up a box of nails."
 
 #define GOTBFG9000      "You got the BFG9000!  Oh, yes."
 #define GOTCHAINGUN     "You got the chaingun!"
@@ -130,7 +124,6 @@
 #define GOTSHOTGUN      "You got the shotgun!"
 #define GOTSHOTGUN2     "You got the super shotgun!"
 #define GOTLASER        "What the !@#%%* is this!"
-#define GOTNAILGUN     "You got the Nailgun!"
 
 #define FOUNDSECRET     "You found a secret area!"
 #define FOUNDSECRETITEM "You found a secret item!"
@@ -225,6 +218,7 @@
 
 #define CC_ZOMBIE   "Zombieman"
 #define CC_SHOTGUN  "Shotgun Guy"
+#define CC_HEAVY	"Heavy Weapon Dude"
 #define CC_IMP      "Imp"
 #define CC_IMP2     "Nightmare Imp"
 #define CC_DEMON    "Demon"
@@ -235,8 +229,12 @@
 #define CC_BARON    "Baron Of Hell"
 #define CC_ARACH    "Arachnotron"
 #define CC_PAIN     "Pain Elemental"
+#define CC_REVEN	"Revenant"
 #define CC_MANCU    "Mancubus"
+#define CC_ARCH		"Arch-Vile"
+#define CC_SPIDER	"The Spider Mastermind"
 #define CC_CYBER    "The Cyberdemon"
+#define CC_MOTH     "The Mother Demon"
 #define CC_HERO     "Our Hero"
 
 #endif
