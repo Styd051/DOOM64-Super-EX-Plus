@@ -47,7 +47,6 @@ static angle_t am_viewangle;
 
 CVAR_EXTERNAL(am_fulldraw);
 CVAR_EXTERNAL(am_ssect);
-CVAR_EXTERNAL(r_texturecombiner);
 
 //
 // AM_BeginDraw
@@ -55,16 +54,6 @@ CVAR_EXTERNAL(r_texturecombiner);
 
 void AM_BeginDraw(angle_t view, fixed_t x, fixed_t y) {
 	am_viewangle = view;
-
-	    if(r_texturecombiner.value > 0 && am_overlay.value) {
-        GL_SetState(GLSTATE_BLEND, 1);
-
-        //
-        // increase the rgb scale so the automap can look good while transparent (overlay mode)
-        //
-        GL_SetTextureMode(GL_COMBINE);
-        dglTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE, 4);
-    }
 
 	dglDepthRange(0.0f, 0.0f);
 	dglMatrixMode(GL_PROJECTION);
@@ -88,16 +77,10 @@ void AM_BeginDraw(angle_t view, fixed_t x, fixed_t y) {
 //
 
 void AM_EndDraw(void) {
-    dglPopMatrix();
-    dglDepthRange(0.0f, 1.0f);
+	dglPopMatrix();
+	dglDepthRange(0.0f, 1.0f);
 
-    if(r_texturecombiner.value > 0 && am_overlay.value) {
-        GL_SetState(GLSTATE_BLEND, 0);
-        GL_SetTextureMode(GL_COMBINE);
-        GL_SetColorScale();
-    }
-
-    GL_SetDefaultCombiner();
+	GL_SetDefaultCombiner();
 }
 
 //
@@ -250,24 +233,14 @@ void AM_DrawLeafs(float scale) {
 	//
 	// process draw list
 	//
-    DL_BeginDrawList(!am_ssect.value && r_fillmode.value, 0);
+	DL_BeginDrawList(!am_ssect.value && 1);
 
-    if(r_texturecombiner.value > 0) {
-        if(!nolights) {
-            dglTexCombModulate(GL_TEXTURE0_ARB, GL_PRIMARY_COLOR);
-        }
-        else {
-            dglTexCombReplace();
-        }
-    }
-    else {
-        if(!nolights) {
-            GL_SetTextureMode(GL_MODULATE);
-        }
-        else {
-            GL_SetTextureMode(GL_REPLACE);
-        }
-    }
+	if (!nolights) {
+		GL_SetTextureMode(GL_MODULATE);
+	}
+	else {
+		GL_SetTextureMode(GL_REPLACE);
+	}
 
 	DL_ProcessDrawList(DLT_AMAP, DL_ProcessAutomap);
 }
@@ -341,9 +314,7 @@ void AM_DrawTriangle(mobj_t* mobj, float scale, boolean solid, byte r, byte g, b
 		return;
 	}
 
-    if(r_fillmode.value) {
-        dglPolygonMode(GL_FRONT_AND_BACK, (solid == 1) ? GL_LINE : GL_FILL);
-    }
+	dglPolygonMode(GL_FRONT_AND_BACK, (solid == 1) ? GL_LINE : GL_FILL);
 
 	dglSetVertex(tri);
 	RB_AddTriangle(0, 1, 2);
@@ -351,9 +322,7 @@ void AM_DrawTriangle(mobj_t* mobj, float scale, boolean solid, byte r, byte g, b
 	dglDrawGeometry(3, tri);
 	dglEnable(GL_TEXTURE_2D);
 
-    if(r_fillmode.value) {
-        dglPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    }
+	dglPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	if (devparm) {
 		vertCount += 3;

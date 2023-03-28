@@ -140,7 +140,7 @@ void I_InitScreen(void) {
 		flags |= SDL_WINDOW_BORDERLESS;
 	}
 
-	sprintf(title, "Doom64EX+ - Version Date: %s", version_date);
+	sprintf(title, "Doom64SuperEX+ - Version Date: %s", version_date);
 	window = SDL_CreateWindow(title,
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,

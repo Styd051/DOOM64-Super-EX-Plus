@@ -70,7 +70,6 @@ CVAR(st_hud_color, 0);
 CVAR_EXTERNAL(p_usecontext);
 CVAR_EXTERNAL(p_damageindicator);
 CVAR_EXTERNAL(v_accessibility);
-CVAR_EXTERNAL(r_texturecombiner);
 
 //
 // STATUS BAR DATA
@@ -743,11 +742,11 @@ void ST_Drawer(void) {
 	// flash overlay
 	//
 
-    if((st_flashoverlay.value ||
-            gl_max_texture_units <= 2 ||
-            r_texturecombiner.value <= 0) && flashcolor) {
-        ST_FlashingScreen(st_flash_r, st_flash_g, st_flash_b, st_flash_a);
-    }
+	if ((st_flashoverlay.value ||
+		gl_max_texture_units <= 2 ||
+		flashcolor)) {
+		ST_FlashingScreen(st_flash_r, st_flash_g, st_flash_b, st_flash_a);
+	}
 
 	if (iwadDemo) {
 		return;
@@ -818,6 +817,9 @@ void ST_Drawer(void) {
 				break;
 			case am_cell:
 				Draw_Sprite2D(SPR_CELL, 0, 0, 524, 464, 0.5f, 0, WHITEALPHA(0xC0));
+				break;
+			case am_nails:
+				Draw_Sprite2D(SPR_NLBX, 0, 0, 524, 460, 0.5f, 0, WHITEALPHA(0xC0));
 				break;
 			}
 
@@ -1014,6 +1016,14 @@ void ST_UpdateFlash(void) {
 		flashcolor = D_RGBA(128, 128, 128, 0xff);
 		st_flash_r = 255;
 		st_flash_g = 255;
+		st_flash_b = 255;
+		st_flash_a = 64;
+	}
+	// quad damage flash (purple)
+	else if (p->powers[pw_quaddamage] > 61 || (p->powers[pw_quaddamage] & 8)) {
+		flashcolor = D_RGBA(128, 128, 128, 0xff);
+		st_flash_r = 128;
+		st_flash_g = 0;
 		st_flash_b = 255;
 		st_flash_a = 64;
 	}

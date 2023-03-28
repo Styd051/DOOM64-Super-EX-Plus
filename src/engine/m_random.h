@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C -*-
+// Emacs style mode select   -*- C++ -*-
 //-----------------------------------------------------------------------------
 //
 // Copyright(C) 1993-1997 Id Software, Inc.
@@ -21,15 +21,113 @@
 //
 //-----------------------------------------------------------------------------
 
+
 #ifndef __M_RANDOM__
 #define __M_RANDOM__
+
 
 #include "doomtype.h"
 #include "d_keywds.h"
 
-extern unsigned char rndtable[256];
+typedef int pr_class_t;
+enum {
+    pr_skullfly,                // #1
+    pr_damage,                  // #2
+    pr_crush,                   // #3
+    pr_genlift,                 // #4
+    pr_killtics,                // #5
+    pr_damagemobj,              // #6
+    pr_painchance,              // #7
+    pr_lights,                  // #8
+    pr_explode,                 // #9
+    pr_respawn,                 // #10
+    pr_lastlook,                // #11
+    pr_spawnthing,              // #12
+    pr_spawnpuff,               // #13
+    pr_spawnblood,              // #14
+    pr_missile,                 // #15
+    pr_shadow,                  // #16
+    pr_plats,                   // #17
+    pr_punch,                   // #18
+    pr_punchangle,              // #19
+    pr_saw,                     // #20
+    pr_plasma,                  // #21
+    pr_gunshot,                 // #22
+    pr_misfire,                 // #23
+    pr_shotgun,                 // #24
+    pr_bfg,                     // #25
+    pr_slimehurt,               // #26
+    pr_dmspawn,                 // #27
+    pr_missrange,               // #28
+    pr_trywalk,                 // #29
+    pr_newchase,                // #30
+    pr_newchasedir,             // #31
+    pr_see,                     // #32
+    pr_facetarget,              // #33
+    pr_posattack,               // #34
+    pr_sposattack,              // #35
+    pr_spidrefire,              // #36
+    pr_troopattack,             // #37
+    pr_sargattack,              // #38
+    pr_headattack,              // #39
+    pr_bruisattack,             // #40
+    pr_tracer,                  // #41
+    pr_scream,                  // #42
+    pr_spawnfly,                // #43
+    pr_misc,                    // #44
+    pr_all_in_one,              // #45
+    pr_mobjexplode,             // #46
+    pr_playattack,              // #47
+    pr_chaingun,                // #48
+    pr_laser,                   // #49
+    pr_randomtrigger,           // #50
+    pr_quake,                   // #51
+    pr_playermock,              // #52
+    pr_cposattack,              // #53
+    pr_cposrefire,              // #54
+    pr_skelfist,                // #55
+    pr_spidattack,              // #56
+    pr_hellhoundattack,         // #57
+    pr_bruiserdemondecide,      // #58
+    pr_meleezombieattack,       // #59
+    pr_ssgposattack,            // #60
+    pr_brainscream,             // #61
+    pr_painelementalnightmaredecide,   // #62
+    pr_stalkerdecide,           // #63
+    pr_nailgun,                 // #64
+    pr_cyberbarondecide,        // #65
+    pr_cyberbaronattack,        // #66
+    pr_cyberdemonshotgunattack, // #67
+    pr_cyberdemonshotgunrefire, // #68
+    pr_randomizer,              // #69
+
+    // End of new entries
+    NUMPRCLASS               // MUST be last item in list
+};
+
+// The random number generator's state.
+typedef struct {
+    unsigned int seed[NUMPRCLASS];       // Each block's random seed
+    int rndindex, prndindex;             // For compatibility support
+} rng_t;
+
+extern rng_t rng;                      // The rng's state
+
+extern unsigned int rngseed;           // The starting seed (not part of state)
+
+// Returns a number from 0 to 255,
+// from a lookup table.
+extern byte rndtable[256];
+
 int M_Random(void);
-int P_Random(void);
+
+// As M_Random, but used only by the play simulation.
+int P_Random(pr_class_t pr_class);
+
+// Fix randoms for demos.
 void M_ClearRandom(void);
+
+int P_RandomShift(pr_class_t pr_class, int shift);
+
 
 #endif

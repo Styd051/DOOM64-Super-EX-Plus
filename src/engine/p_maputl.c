@@ -649,7 +649,7 @@ P_TraverseIntercepts
 	in = 0;            // shut up compiler warning
 
 	while (count--) {
-		dist = INT_MAX;
+		dist = D_MAXINT;
 		for (scan = intercepts; scan < intercept_p; scan++) {
 			if (scan->frac < dist) {
 				dist = scan->frac;
@@ -678,7 +678,7 @@ P_TraverseIntercepts
 			return false;    // don't bother going farther
 		}
 
-		in->frac = INT_MAX;
+		in->frac = D_MAXINT;
 	}
 
 	return true;        // everything was traversed

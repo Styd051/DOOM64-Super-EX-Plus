@@ -1003,13 +1003,17 @@ CVAR_EXTERNAL(am_overlay);
 CVAR_EXTERNAL(r_skybox);
 CVAR_EXTERNAL(p_autorun);
 CVAR_EXTERNAL(p_usecontext);
+CVAR_EXTERNAL(m_complexdoom64);
+CVAR_EXTERNAL(m_keepartifacts);
+CVAR_EXTERNAL(compat_limitpain);
 CVAR_EXTERNAL(compat_mobjpass);
 CVAR_EXTERNAL(r_wipe);
 CVAR_EXTERNAL(hud_disablesecretmessages);
 CVAR_EXTERNAL(m_nospawnsound);
 CVAR_EXTERNAL(m_obituaries);
 CVAR_EXTERNAL(m_brutal);
-CVAR_EXTERNAL(m_extendedcast);
+
+
 
 enum {
 	misc_header1,
@@ -1022,6 +1026,8 @@ enum {
 	misc_jump,
 	misc_autorun,
 	misc_context,
+	misc_complexdoom64,
+	misc_keepartifacts,
 	misc_header3,
 	misc_wipe,
 	misc_skybox,
@@ -1030,12 +1036,11 @@ enum {
 	misc_showlocks,
 	misc_amobjects,
 	misc_amoverlay,
-	misc_header5,
 	misc_nospawnsound,
 	misc_obituaries,
 	misc_brutal,
-	misc_extendedcast,
-	misc_header6,
+	misc_header5,
+	misc_comp_pain,
 	misc_comp_pass,
 	misc_disablesecretmessages,
 	misc_default,
@@ -1054,6 +1059,8 @@ menuitem_t MiscMenu[] = {
 	{2,"Jumping:",M_MiscChoice, 'j'},
 	{2,"Always Run:",M_MiscChoice, 'z' },
 	{2,"Use Context:",M_MiscChoice, 'u'},
+	{2,"Complex D64:",M_MiscChoice, 'c' },
+	{2,"Keep Artifacts:",M_MiscChoice, 'k' },
 	{-1,"Misc",0 },
 	{2,"Screen Melt:",M_MiscChoice, 's' },
 	{2,"Skybox:",M_MiscChoice,'k'},
@@ -1062,12 +1069,11 @@ menuitem_t MiscMenu[] = {
 	{2,"Locked Doors:",M_MiscChoice },
 	{2,"Draw Objects:",M_MiscChoice },
 	{2,"Overlay:",M_MiscChoice },
-	{-1,"Extras",0 },
-	{2,"Spawn Sound:",M_MiscChoice },
+	{2,"No Spawn Sound:",M_MiscChoice },
 	{2,"Obituaries:",M_MiscChoice },
 	{2,"Brutal Mode:",M_MiscChoice },
-	{2,"New Cast Roll:",M_MiscChoice },
 	{-1,"N64 Compatibility",0 },
+	{2,"Limit Lost Souls:",M_MiscChoice,'l'},
 	{2,"Tall Actors:",M_MiscChoice,'i'},
 	{2,"Secret Messages:",M_MiscChoice,'x'},
 	{-2,"Default",M_DoDefaults,'d'},
@@ -1085,6 +1091,8 @@ char* MiscHints[misc_end] = {
 	"toggle the ability to jump",
 	"enable autorun",
 	"if enabled interactive objects will highlight when near",
+	"enable randomizer for all monsters to make your game harder",
+	"enable to keep your artifacts when you die",
 	NULL,
 	"enable the melt effect when completing a level",
 	"toggle skies to render either normally or as skyboxes",
@@ -1093,12 +1101,11 @@ char* MiscHints[misc_end] = {
 	"colorize locked doors accordingly to the key in automap",
 	"set how objects are rendered in automap",
 	"render the automap into the player hud",
-	NULL,
 	"spawn sound toggle",
 	"death messages",
 	"get knee deep in the gibs",
-	"enable new monsters in the cast of characters sequence",
 	NULL,
+	"limit max amount of lost souls spawn by pain elemental to 17",
 	"emulate infinite height bug for all solid actors",
 	"disable the secret message text",
 	NULL,
@@ -1112,6 +1119,8 @@ menudefault_t MiscDefault[] = {
 	{ &p_allowjump, 0 },
 	{ &p_autorun, 1 },
 	{ &p_usecontext, 0 },
+	{ &m_complexdoom64, 0 },
+	{ &m_keepartifacts, 0 },
 	{ &r_wipe, 1 },
 	{ &r_skybox, 0 },
 	{ &hud_disablesecretmessages, 0 },
@@ -1122,7 +1131,7 @@ menudefault_t MiscDefault[] = {
 	{ &m_nospawnsound, 0 },
 	{ &m_obituaries, 0 },
 	{ &m_brutal, 0 },
-	{ &m_extendedcast, 0 },
+	{ &compat_limitpain, 1 },
 	{ &compat_mobjpass, 1 },
 	{ NULL, -1 }
 };
@@ -1207,6 +1216,14 @@ void M_MiscChoice(int choice) {
 		M_SetOptionValue(choice, 0, 1, 1, &p_usecontext);
 		break;
 
+	case misc_complexdoom64:
+		M_SetOptionValue(choice, 0, 1, 1, &m_complexdoom64);
+		break;
+
+	case misc_keepartifacts:
+		M_SetOptionValue(choice, 0, 1, 1, &m_keepartifacts);
+		break;
+
 	case misc_wipe:
 		M_SetOptionValue(choice, 0, 1, 1, &r_wipe);
 		break;
@@ -1251,8 +1268,8 @@ void M_MiscChoice(int choice) {
 		M_SetOptionValue(choice, 0, 1, 1, &m_brutal);
 		break;
 
-	case misc_extendedcast:
-		M_SetOptionValue(choice, 0, 1, 1, &m_extendedcast);
+	case misc_comp_pain:
+		M_SetOptionValue(choice, 0, 1, 1, &compat_limitpain);
 		break;
 
 	case misc_comp_pass:
@@ -1292,6 +1309,8 @@ void M_DrawMisc(void) {
 	DRAWMISCITEM(misc_menumouse, m_menumouse.value, msgNames);
 	DRAWMISCITEM(misc_jump, p_allowjump.value, msgNames);
 	DRAWMISCITEM(misc_context, p_usecontext.value, mapdisplaytype);
+	DRAWMISCITEM(misc_complexdoom64, m_complexdoom64.value, autoruntype);
+	DRAWMISCITEM(misc_keepartifacts, m_keepartifacts.value, autoruntype);
 	DRAWMISCITEM(misc_wipe, r_wipe.value, msgNames);
 	DRAWMISCITEM(misc_autorun, p_autorun.value, autoruntype);
 	DRAWMISCITEM(misc_skybox, r_skybox.value, msgNames);
@@ -1302,7 +1321,7 @@ void M_DrawMisc(void) {
 	DRAWMISCITEM(misc_nospawnsound, m_nospawnsound.value, disablesecretmessages);
 	DRAWMISCITEM(misc_obituaries, m_obituaries.value, autoruntype);
 	DRAWMISCITEM(misc_brutal, m_brutal.value, autoruntype);
-	DRAWMISCITEM(misc_extendedcast, m_extendedcast.value, autoruntype);
+	DRAWMISCITEM(misc_comp_pain, compat_limitpain.value, msgNames);
 	DRAWMISCITEM(misc_comp_pass, !compat_mobjpass.value, msgNames);
 	DRAWMISCITEM(misc_disablesecretmessages, hud_disablesecretmessages.value, disablesecretmessages);
 
@@ -2524,6 +2543,7 @@ enum {
 	features_invulnerable,
 	features_healthboost,
 	features_securitykeys,
+	features_artifacts,
 	features_weapons,
 	features_mapeverything,
 	features_lockmonsters,
@@ -2535,6 +2555,7 @@ menuitem_t FeaturesMenu[] = {
 	{2,"Invulnerable",M_DoFeature,'i'},
 	{2,"Health Boost",M_DoFeature,'h'},
 	{2,"Security Keys",M_DoFeature,'k'},
+	{2,"Artifacts",M_DoFeature,'a'},
 	{2,"Weapons",M_DoFeature,'w'},
 	{2,"Map Everything",M_DoFeature,'m'},
 	{2,"Lock Monsters",M_DoFeature,'o'},
@@ -2562,7 +2583,7 @@ menu_t featuresDef = {
 void M_Features(int choice) {
 	M_SetupNextMenu(&featuresDef);
 
-	showfullitemvalue[0] = showfullitemvalue[1] = showfullitemvalue[2] = false;
+	showfullitemvalue[0] = showfullitemvalue[1] = showfullitemvalue[2] = showfullitemvalue[3] = false;
 }
 
 void M_DrawFeaturesMenu(void) {
@@ -2590,6 +2611,9 @@ void M_DrawFeaturesMenu(void) {
 
 	/*Full Keys*/
 	M_DrawSmbString(showfullitemvalue[2] ? "100%%" : "-", &featuresDef, features_securitykeys);
+
+	/*Full Artifacts*/
+	M_DrawSmbString(showfullitemvalue[3] ? "100%%" : "-", &featuresDef, features_artifacts);
 }
 
 void M_DoFeature(int choice) {
@@ -2647,10 +2671,19 @@ void M_DoFeature(int choice) {
 
 	case features_securitykeys:
 		showfullitemvalue[2] = true;
-
+		
 		for (i = 0; i < NUMCARDS; i++) {
 			players[consoleplayer].cards[i] = true;
 		}
+
+		break;
+
+	case features_artifacts:
+		showfullitemvalue[3] = true;
+
+		players[consoleplayer].artifacts |= (1 << ART_FAST);
+		players[consoleplayer].artifacts |= (1 << ART_DOUBLE);
+		players[consoleplayer].artifacts |= (1 << ART_TRIPLE);
 
 		break;
 

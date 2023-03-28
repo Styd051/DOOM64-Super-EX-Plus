@@ -55,6 +55,7 @@ void P_CreateFadeOutThinker(mobj_t* mobj, line_t* line);
 
 CVAR(m_nospawnsound, 0);
 CVAR(m_brutal, 0);
+CVAR(m_complexdoom64, 0);
 
 //
 // P_SetMobjState
@@ -131,7 +132,7 @@ void P_ExplodeMissile(mobj_t* mo) {
 
 	mo->momx = mo->momy = mo->momz = 0;
 
-	mo->tics -= P_Random() & 1;
+	mo->tics -= P_Random(pr_explode) & 1;
 
 	if (mo->tics < 1) {
 		mo->tics = 1;
@@ -157,10 +158,10 @@ void P_MissileHit(mobj_t* mo) {
 	damage = 0;
 
 	if (missilething) {
-		damage = ((P_Random() & 7) + 1) * mo->info->damage;
+		damage = ((P_Random(pr_damage) & 7) + 1) * mo->info->damage;
 		P_DamageMobj(missilething, mo, mo->target, damage);
 
-		if (mo->type == MT_PROJ_RECTFIRE) {
+		if (mo->type == MT_PROJ_RECTFIRE || mo->type == MT_PROJ_BRUISERDEMON2) {
 			if (missilething->player && missilething->info->mass) {
 				missilething->momz += ((1500 / missilething->info->mass) * FRACUNIT);
 			}
@@ -193,7 +194,7 @@ void P_SkullBash(mobj_t* mo) {
 	skullthing = (mobj_t*)mo->extradata;
 
 	if (skullthing) {
-		damage = ((P_Random() & 7) + 1) * mo->info->damage;
+		damage = ((P_Random(pr_skullfly) & 7) + 1) * mo->info->damage;
 		P_DamageMobj(skullthing, mo, mo, damage);
 	}
 
@@ -330,7 +331,7 @@ void P_ZMovement(mobj_t* mo) {
 
 		if ((mo->flags & MF_MISSILE)
 			&& !(mo->flags & MF_NOCLIP)
-			&& !(mo->type == MT_PROJ_RECTFIRE)) {
+			&& !(mo->type == MT_PROJ_RECTFIRE || mo->type == MT_PROJ_BRUISERDEMON2)) {
 			mo->mobjfunc = P_ExplodeMissile;
 			return;
 		}
@@ -394,7 +395,7 @@ void P_NightmareRespawn(mobj_t* mobj) {
 		return;
 	}
 
-	if (P_Random() > 4) {
+	if (P_Random(pr_respawn) > 4) {
 		return;
 	}
 
@@ -978,6 +979,7 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 	fixed_t             x;
 	fixed_t             y;
 	fixed_t             z;
+	int randomizernum;  // Immorpher randomizer number
 
 	// count deathmatch start positions
 
@@ -1028,6 +1030,336 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 		I_Error("P_SpawnMapThing: Unknown type %i at (%i, %i)",
 			mthing->type,
 			mthing->x, mthing->y);
+
+// Game Mode Complex DOOM 64 by Styd051 and Immorpher
+  if (m_complexdoom64.value == 1)
+  {
+
+	  // randomizer ammo clip
+	  if (i == MT_AMMO_CLIP) {
+		  randomizernum = P_Random(pr_randomizer) % 4; // Immorpher randomizer number
+		  if (randomizernum == 3) {
+			  i = MT_AMMO_CLIP;
+		  }
+		  else if (randomizernum == 2) {
+			  i = MT_AMMO_NAILSMALLBOX;
+		  }
+		  else if (randomizernum == 1) {
+			  i = MT_AMMO_CLIPBOX;
+		  }
+		  else if (randomizernum == 0) {
+			  i = MT_AMMO_NAILBOX;
+		  }
+
+	  }
+
+	  // randomizer box of ammo 
+	  if (i == MT_AMMO_CLIPBOX) {
+		  randomizernum = P_Random(pr_randomizer) % 2; // Immorpher randomizer number
+		  if (randomizernum == 1) {
+			  i = MT_AMMO_CLIPBOX;
+		  }
+		  else if (randomizernum == 0) {
+			  i = MT_AMMO_NAILBOX;
+		  }
+
+	  }
+
+	  // randomizer ammo shell
+	  if (i == MT_AMMO_SHELL) {
+		  randomizernum = P_Random(pr_randomizer) % 2; // Immorpher randomizer number
+		  if (randomizernum == 1) {
+			  i = MT_AMMO_SHELL;
+		  }
+		  else if (randomizernum == 0) {
+			  i = MT_AMMO_SHELLBOX;
+		  }
+
+	  }
+
+	  // randomizer ammo rocket
+	  if (i == MT_AMMO_ROCKET) {
+		  randomizernum = P_Random(pr_randomizer) % 2; // Immorpher randomizer number
+		  if (randomizernum == 1) {
+			  i = MT_AMMO_ROCKET;
+		  }
+		  else if (randomizernum == 0) {
+			  i = MT_AMMO_ROCKETBOX;
+		  }
+
+	  }
+
+	  // randomizer ammo cell
+	  if (i == MT_AMMO_CELL) {
+		  randomizernum = P_Random(pr_randomizer) % 2; // Immorpher randomizer number
+		  if (randomizernum == 1) {
+			  i = MT_AMMO_CELL;
+		  }
+		  else if (randomizernum == 0) {
+			  i = MT_AMMO_CELLPACK;
+		  }
+
+	  }
+
+	  // randomizer Quad Damage
+	  if (i == MT_ITEM_INVISSPHERE) {
+		  randomizernum = P_Random(pr_randomizer); // Immorpher randomizer number
+		  if (randomizernum < 236) {
+			  i = MT_ITEM_INVISSPHERE;
+		  }
+		  else if (randomizernum < 256) {
+			  i = MT_ITEM_QUADDAMAGE;
+		  }
+
+	  }
+
+	  // randomizer weapon Chaingun
+	  if (i == MT_WEAP_CHAINGUN) {
+		  randomizernum = P_Random(pr_randomizer) % 2; // Immorpher randomizer number
+		  if (randomizernum == 1) {
+			  i = MT_WEAP_CHAINGUN;
+		  }
+		  else if (randomizernum == 0) {
+			  i = MT_WEAP_NAILGUN;
+		  }
+		  
+	  }
+
+	  // randomizer health bonus
+	  if (i == MT_ITEM_BONUSHEALTH) {
+		  randomizernum = P_Random(pr_randomizer) % 2; // Immorpher randomizer number
+		  if (randomizernum == 1) {
+			  i = MT_ITEM_BONUSHEALTH;
+		  }
+		  else if (randomizernum == 0) {
+			  i = MT_ITEM_HELLPOTION;
+		  }
+
+	  }
+
+	  // randomizer armor bonus
+	  if (i == MT_ITEM_BONUSARMOR) {
+		  randomizernum = P_Random(pr_randomizer) % 2; // Immorpher randomizer number
+		  if (randomizernum == 1) {
+			  i = MT_ITEM_BONUSARMOR;
+		  }
+		  else if (randomizernum == 0) {
+			  i = MT_ITEM_MAXARMORBONUS;
+		  }
+
+	  }
+
+	  // randomizer blue armor
+	  if (i == MT_ITEM_ARMOR2) {
+		  randomizernum = P_Random(pr_randomizer) % 2; // Immorpher randomizer number
+		  if (randomizernum == 1) {
+			  i = MT_ITEM_ARMOR2;
+		  }
+		  else if (randomizernum == 0) {
+			  i = MT_ITEM_ARMOR3;
+		  }
+
+	  }
+
+	// randomizer zombie man and zombie shotgun
+	if (i == MT_POSSESSED1 || i == MT_POSSESSED2) {
+		randomizernum = P_Random(pr_randomizer); // Immorpher randomizer number
+		if (randomizernum < 40) {
+			i = MT_MELEEZOMBIE;
+		}
+		else if (randomizernum < 81) {
+			i = MT_POSSESSED1;
+		}
+		else if (randomizernum < 122) {
+			i = MT_POSSESSED2;
+		}
+		else if (randomizernum < 163) {
+			i = MT_CHAINGUY;
+		}
+		else if (randomizernum < 204) {
+			i = MT_PlASMAZOMBIE;
+		}
+		else if (randomizernum < 245) {
+			i = MT_SSGZOMBIE;
+		}
+		else if (randomizernum < 256) {
+			i = MT_BFGCOMMANDO;
+		}
+	}
+
+	// randomizer pinky and specter
+	if (i == MT_DEMON1 || i == MT_DEMON2) {
+		randomizernum = P_Random(pr_randomizer) % 5; // Immorpher randomizer number
+		if (randomizernum == 4) {
+			i = MT_DEMON1;
+		}
+		else if (randomizernum == 3) {
+			i = MT_DEMON2;
+		}
+		else if (randomizernum == 2) {
+			i = MT_BLOODDEMON;
+		}
+		else if (randomizernum == 1) {
+			i = MT_NIGHTMARE_SPECTRE;
+		}
+		else if (randomizernum == 0) {
+			i = MT_HELLHOUND;
+		}
+	}
+
+	// randomizer imp and imp nightmare
+	if (i == MT_IMP1 || i == MT_IMP2) {
+		randomizernum = P_Random(pr_randomizer) % 4; // Immorpher randomizer number
+		if (randomizernum == 3) {
+			i = MT_IMP1;
+		}
+		else if (randomizernum == 2) {
+			i = MT_IMP2;
+		}
+		else if (randomizernum == 1) {
+			i = MT_DARKIMP;
+		}
+		else if (randomizernum == 0) {
+			i = MT_HARDCORE_IMP;
+		}
+	}
+
+	// randomizer baron of hell
+	if (i == MT_BRUISER1) {
+		randomizernum = P_Random(pr_randomizer); // Immorpher randomizer number
+		if (randomizernum < 57) {
+			i = MT_BRUISER1;
+		}
+		else if (randomizernum < 115) {
+			i = MT_BELPHEGOR;
+		}
+		else if (randomizernum < 172) {
+			i = MT_BRUISERDEMON;
+		}
+		else if (randomizernum < 230) {
+			i = MT_HELLCENTAUR;
+		}
+		else if (randomizernum < 256) {
+			i = MT_VILE;
+		}
+	}
+
+	// randomizer hell knight
+	if (i == MT_BRUISER2) {
+		randomizernum = P_Random(pr_randomizer) % 3; // Immorpher randomizer number
+		if (randomizernum == 2) {
+			i = MT_BRUISER2;
+		}
+		else if (randomizernum == 1) {
+			i = MT_UNDEAD;
+		}
+		else if (randomizernum == 0) {
+			i = MT_NIGHTMARE_REVENANT;
+		}
+	}
+
+	// randomizer cacodemon
+	if (i == MT_CACODEMON) {
+		randomizernum = P_Random(pr_randomizer) % 4; // Immorpher randomizer number
+		if (randomizernum == 3) {
+			i = MT_CACODEMON;
+		}
+		else if (randomizernum == 2) {
+			i = MT_NIGHTMARE_CACODEMON;
+		}
+		else if (randomizernum == 1) {
+			i = MT_CACOLANTERN;
+		}
+		else if (randomizernum == 0) {
+			i = MT_ABADDON;
+		}
+	}
+
+	// randomizer pain elemental
+	if (i == MT_PAIN) {
+		randomizernum = P_Random(pr_randomizer) % 3; // Immorpher randomizer number
+		if (randomizernum == 2) {
+			i = MT_PAIN;
+		}
+		else if (randomizernum == 1) {
+			i = MT_PAIN_ELEMENTAL_STALKER;
+		}
+		else if (randomizernum == 0) {
+			i = MT_PAIN_ELEMENTAL_NIGHTMARE;
+		}
+	}
+
+	// randomizer lost soul
+	if (i == MT_SKULL) {
+		randomizernum = P_Random(pr_randomizer) % 3; // Immorpher randomizer number
+		if (randomizernum == 2) {
+			i = MT_SKULL;
+		}
+		else if (randomizernum == 1) {
+			i = MT_STALKER;
+		}
+		else if (randomizernum == 0) {
+			i = MT_NIGHTMARE_LOSTSOUL;
+		}
+	}
+
+	// randomizer mancubus
+	if (i == MT_MANCUBUS) {
+		randomizernum = P_Random(pr_randomizer) % 4; // Immorpher randomizer number
+		if (randomizernum == 3) {
+			i = MT_MANCUBUS;
+		}
+		else if (randomizernum == 2) {
+			i = MT_DUKEOFHELL;
+		}
+		else if (randomizernum == 1) {
+			i = MT_HECTEBUS;
+		}
+		else if (randomizernum == 0) {
+			i = MT_NIGHTMARE_MANCUBUS;
+		}
+	}
+
+	// randomizer arachnotron
+	if (i == MT_BABY) {
+		randomizernum = P_Random(pr_randomizer) % 3; // Immorpher randomizer number
+		if (randomizernum == 2) {
+			i = MT_BABY;
+		}
+		else if (randomizernum == 1) {
+			i = MT_NIGHTCRAWLER;
+		}
+		else if (randomizernum == 0) {
+			i = MT_ARTHRONAILER;
+		}
+	}
+
+	// randomizer cyberdemon
+	if (i == MT_CYBORG) {
+		randomizernum = P_Random(pr_randomizer) % 3; // Immorpher randomizer number
+		if (randomizernum == 2) {
+			i = MT_CYBORG;
+		}
+		else if (randomizernum == 1) {
+			i = MT_ANNIHILATOR;
+		}
+		else if (randomizernum == 0) {
+			i = MT_BFGCYBERDEMON;
+		}
+	}
+
+	// randomizer mother demon
+	if (i == MT_RESURRECTOR) {
+		randomizernum = P_Random(pr_randomizer) % 2; // Immorpher randomizer number
+		if (randomizernum == 1) {
+			i = MT_RESURRECTOR;
+		}
+		else if (randomizernum == 0) {
+			i = MT_RESURRECTOR2;
+		}
+	}
+
+  }
 
 	// don't spawn keycards and players in deathmatch
 
@@ -1084,7 +1416,7 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 	}
 
 	if (mobj->tics > 0) {
-		mobj->tics = 1 + (P_Random() % mobj->tics);
+		mobj->tics = 1 + (P_Random(pr_spawnthing) % mobj->tics);
 	}
 
 	mobj->angle = ANG45 * (mthing->angle / 45);
@@ -1120,7 +1452,7 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 	if (mobj->flags == 0) {
 		mobj->blockflag |= BF_MIDPOINTONLY;
 	}
-
+	
 	return mobj;
 }
 
@@ -1135,15 +1467,14 @@ extern fixed_t attackrange;
 
 void P_SpawnPuff(fixed_t x, fixed_t y, fixed_t z) {
 	mobj_t* th;
-	int rnd1, rnd2;
+	
 
-	rnd1 = P_Random();
-	rnd2 = P_Random();
+	
 
-	z += ((rnd2 - rnd1) << 10);
+	z += P_RandomShift(pr_spawnpuff, 10);
 	th = P_SpawnMobj(x, y, z, MT_SMOKE_SMALL);
 	th->momz = FRACUNIT;
-	th->tics -= P_Random() & 1;
+	th->tics -= P_Random(pr_spawnpuff) & 1;
 
 	if (th->tics < 1) {
 		th->tics = 1;
@@ -1163,13 +1494,13 @@ void P_SpawnBlood(fixed_t x, fixed_t y, fixed_t z, int damage) {
 	int i = 0;
 
 	for (i = 0; i < 3; i++) {
-		x += ((P_Random() - P_Random()) << 12);
-		y += ((P_Random() - P_Random()) << 12);
-		z += ((P_Random() - P_Random()) << 11);
+		z += P_RandomShift(pr_spawnblood, 11);
+		x += P_RandomShift(pr_spawnblood, 12);
+		y += P_RandomShift(pr_spawnblood, 12);
 
 		th = P_SpawnMobj(x, y, z, MT_BLOOD);
 		th->momz = FRACUNIT * 2;
-		th->tics -= (P_Random() & 1);
+		th->tics -= (P_Random(pr_spawnblood) & 1);
 
 		if (th->tics < 1) {
 			th->tics = 1;
@@ -1216,6 +1547,26 @@ void P_SpawnPlayerMissile(mobj_t* source, mobjtype_t type) {
 	else if (type == MT_PROJ_BFG) {
 		missileheight = (32 * FRACUNIT);
 		offset = 30;
+	}
+	else if (type == MT_PROJ_NAIL) {
+		missileheight = (32 * FRACUNIT);
+		offset = 40;
+	}
+	else if (type == MT_PROJ_ROCKETQUADDAMAGE) {
+		missileheight = (42 * FRACUNIT);
+		offset = 30;
+	}
+	else if (type == MT_PROJ_PLASMAQUADDAMAGE) {
+		missileheight = (32 * FRACUNIT);
+		offset = 40;
+	}
+	else if (type == MT_PROJ_BFGQUADDAMAGE) {
+		missileheight = (32 * FRACUNIT);
+		offset = 30;
+	}
+	else if (type == MT_PROJ_NAILQUADDAMAGE) {
+		missileheight = (32 * FRACUNIT);
+		offset = 40;
 	}
 	else {
 		missileheight = (32 * FRACUNIT);
@@ -1289,7 +1640,7 @@ mobj_t* P_SpawnMissile(mobj_t* source, mobj_t* dest, mobjtype_t type,
 	fixed_t x;
 	fixed_t y;
 	fixed_t z;
-	int rnd1, rnd2;
+	
 
 	x = source->x + xoffs;
 	y = source->y + yoffs;
@@ -1311,9 +1662,8 @@ mobj_t* P_SpawnMissile(mobj_t* source, mobj_t* dest, mobjtype_t type,
 
 	if (dest && (dest->flags & MF_SHADOW))
 	{
-		rnd1 = P_Random();
-		rnd2 = P_Random();
-		an += ((rnd2 - rnd1) << 20);
+		
+		an += P_RandomShift(pr_shadow, 20);
 	}
 
 	speed = th->info->speed;

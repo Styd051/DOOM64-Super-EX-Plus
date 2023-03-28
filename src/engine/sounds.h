@@ -59,6 +59,7 @@ typedef enum {
 	sfx_sht2fire,   //shot2fire
 	sfx_sht2load1,  //shot2load1
 	sfx_sht2load2,  //shot2load2
+	sfx_sht2load3,  //shot2load2
 	sfx_plrpain,    //playerpain
 	sfx_plrdie,     //playerdie
 	sfx_slop,       //slop
@@ -126,13 +127,43 @@ typedef enum {
 	sfx_skeldth,
 	sfx_spisit,
 	sfx_spidth,
-	sfx_flamst,
-	sfx_flame,
+	sfx_spistomp,  //spistomp
+	sfx_annsit,     //annsit
+	sfx_anndth,     //anndeath
+	sfx_annhoof,    //annhoof
+	sfx_gechsit,    //gechsit
+	sfx_gechatk,    //gechatk
+	sfx_gechdie,    //gechdie
+	sfx_dkhlatk,    //dkhlatk
+	sfx_dkhlsit,    //dkhlsit
+	sfx_dkhlhit,    //dkhlhit
+	sfx_dkhldie,    //dkhldie
+	sfx_br64sit,    //br64sit
+	sfx_br64die,    //br64die
+	sfx_vilatk,
 	sfx_vilsit,
-	sfx_vilpain,
+	sfx_vipain,
 	sfx_vildth,
 	sfx_vilact,
-	sfx_vilatk,
+	sfx_flamst,
+	sfx_flame,
+	sfx_quaddamageact,
+	sfx_quaddamageatt,
+	sfx_nailgun,
+	sfx_nailtink,
+	sfx_bossit,
+	sfx_bospn,
+	sfx_bosdth,
+	sfx_keenpn,
+	sfx_keendt,
+	sfx_sssit,
+	sfx_ssdth,
+	sfx_belsit,
+	sfx_belpain,
+	sfx_beldie,
+	sfx_belact,
+	sfx_stlksit,
+	sfx_stlkpain,
 	mus_amb01,
 	mus_amb02,
 	mus_amb03,

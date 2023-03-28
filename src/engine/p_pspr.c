@@ -65,9 +65,10 @@ weaponinfo_t    weaponinfo[NUMWEAPONS] = {
 	{ am_shell,     S_SSGUP, S_SSGDOWN, S_SSG, S_SSG1, S_SSGFLASH },    // super shotgun
 	{ am_clip,      S_CHAINGUP, S_CHAINGDOWN, S_CHAING, S_CHAING1, S_CHAINGLIGHT1 },    // chaingun
 	{ am_misl,      S_ROCKETLUP, S_ROCKETLDOWN, S_ROCKETL, S_ROCKETL1, S_ROCKETLLIGHT1 },    // rocket launcher
-	{ am_cell,      S_PLASMAGUP1, S_PLASMAGDOWN, S_PLASMAG, S_PLASMAG1, S_NULL },    // plasma gun
+	{ am_cell,      S_PLASMAGUP1, S_PLASMAGDOWN, S_PLASMAG, S_PLASMAG1, S_PLASMAFLASH1 },    // plasma gun
 	{ am_cell,      S_BFGUP, S_BFGDOWN, S_BFG, S_BFG1, S_BFGLIGHT1 },    // bfg
-	{ am_cell,      S_LASERGUP, S_LASERGDOWN, S_LASERG, S_LASERG1, S_LASERGLIGHT }    // laser rifle
+	{ am_cell,      S_LASERGUP, S_LASERGDOWN, S_LASERG, S_LASERG1, S_LASERGLIGHT },    // laser rifle
+	{ am_nails,      S_NAILGUP, S_NAILGDOWN, S_NAILG, S_NAILG1, S_NULL }    // nailgun
 };
 
 static int laserCells = 1;
@@ -245,6 +246,10 @@ boolean P_CheckAmmo(player_t* player) {
 		else if (player->weaponowned[wp_laser]
 			&& player->ammo[am_cell] > laserCells) {
 			player->pendingweapon = wp_laser;
+		}
+		else if (player->weaponowned[wp_nailgun]
+			&& player->ammo[am_nails]) {
+			player->pendingweapon = wp_nailgun;
 		}
 		else {
 			// If everything fails.
@@ -442,14 +447,19 @@ void A_Punch(player_t* player, pspdef_t* psp) {
 	int         damage;
 	int         slope = 0;
 
-	damage = ((P_Random() & 7) + 1) * 3;
+	damage = ((P_Random(pr_punch) & 7) + 1) * 3;
 
 	if (player->powers[pw_strength]) {
 		damage *= 10;
 	}
 
+	if (player->powers[pw_quaddamage]) {
+		damage *= 20;
+		S_StartSound(player->mo, sfx_quaddamageatt);
+	}
+
 	angle = player->mo->angle;
-	angle += (angle_t)(P_Random() - P_Random()) << 18;
+	angle += P_RandomShift(pr_punchangle, 18);
 
 	slope = P_AimLineAttack(player->mo, angle, 0, MELEERANGE);
 
@@ -471,14 +481,17 @@ void A_Saw (player_t *player, pspdef_t *psp) // 8001BC1C
 {
 	angle_t	angle;
 	int		damage;
-	int     rnd1, rnd2;
+	
 	int     slope = 0;
 
-	damage = ((P_Random()&7)+1)*3;
+	damage = ((P_Random(pr_saw)&7)+1)*3;
+	if (player->powers[pw_quaddamage]) {
+		damage *= 10;
+		S_StartSound(player->mo, sfx_quaddamageatt);
+	}
 	angle = player->mo->angle;
-	rnd1 = P_Random();
-	rnd2 = P_Random();
-	angle += (angle_t)(rnd2-rnd1)<<18;
+	
+	angle += P_RandomShift(pr_saw, 18);
 
 	/* use meleerange + 1 se the puff doesn't skip the flash */
 	slope = P_AimLineAttack(player->mo, angle, 0, MELEERANGE + 1);
@@ -525,7 +538,19 @@ void A_ChainSawReady(player_t* player, pspdef_t* psp) {
 
 void A_FireMissile(player_t* player, pspdef_t* psp) {
 	player->ammo[weaponinfo[player->readyweapon].ammo]--;
-	P_SpawnPlayerMissile(player->mo, MT_PROJ_ROCKET);
+
+	if (player->powers[pw_quaddamage]) {
+
+			P_SpawnPlayerMissile(player->mo, MT_PROJ_ROCKETQUADDAMAGE);
+			S_StartSound(player->mo, sfx_quaddamageatt);
+
+	}
+	else 
+	{
+
+		P_SpawnPlayerMissile(player->mo, MT_PROJ_ROCKET);
+
+	}
 
 	player->recoilpitch = RECOILPITCH;
 
@@ -539,7 +564,20 @@ void A_FireMissile(player_t* player, pspdef_t* psp) {
 //
 void A_FireBFG(player_t* player, pspdef_t* psp) {
 	player->ammo[weaponinfo[player->readyweapon].ammo] -= BFGCELLS;
-	P_SpawnPlayerMissile(player->mo, MT_PROJ_BFG);
+
+	if (player->powers[pw_quaddamage]) {
+
+		P_SpawnPlayerMissile(player->mo, MT_PROJ_BFGQUADDAMAGE);
+		S_StartSound(player->mo, sfx_quaddamageatt);
+
+	}
+	else
+	{
+
+		P_SpawnPlayerMissile(player->mo, MT_PROJ_BFG);
+
+	}
+
 }
 
 //
@@ -562,8 +600,20 @@ void A_PlasmaAnimate(player_t* player, pspdef_t* psp) {
 void A_FirePlasma(player_t* player, pspdef_t* psp) {
 	player->ammo[weaponinfo[player->readyweapon].ammo]--;
 
-	P_SetPsprite(player, ps_flash, S_NULL);
-	P_SpawnPlayerMissile(player->mo, MT_PROJ_PLASMA);
+	P_SetPsprite(player, ps_flash, weaponinfo[player->readyweapon].flashstate + (P_Random(pr_plasma) & 1));
+
+	if (player->powers[pw_quaddamage]) {
+
+		P_SpawnPlayerMissile(player->mo, MT_PROJ_PLASMAQUADDAMAGE);
+		S_StartSound(player->mo, sfx_quaddamageatt);
+
+	}
+	else
+	{
+
+		P_SpawnPlayerMissile(player->mo, MT_PROJ_PLASMA);
+
+	}
 }
 
 //
@@ -597,17 +647,20 @@ void P_BulletSlope(mobj_t* mo) {
 // P_GunShot
 //
 void P_GunShot(mobj_t* mo, boolean accurate) {
+	player_t* p = &players[consoleplayer];
 	angle_t     angle;
 	int         damage;
-	int         rnd1, rnd2;
+	
 
-	damage = ((P_Random() & 3) * 4) + 4;
+	damage = ((P_Random(pr_gunshot) & 3) * 4) + 4;
+	if (p->powers[pw_quaddamage]) {
+		damage *= 4;
+	}
 	angle = mo->angle;
 
 	if (!accurate) {
-		rnd1 = P_Random();
-		rnd2 = P_Random();
-		angle += (rnd2 - rnd1) << 18;
+		
+		angle += P_RandomShift(pr_misfire, 18);
 	}
 
 	P_LineAttack(mo, angle, MISSILERANGE, bulletslope, damage);
@@ -619,6 +672,9 @@ void P_GunShot(mobj_t* mo, boolean accurate) {
 void A_FirePistol(player_t* player, pspdef_t* psp)
 {
 	S_StartSound(player->mo, sfx_pistol);
+	if (player->powers[pw_quaddamage]) {
+		S_StartSound(player->mo, sfx_quaddamageatt);
+	}
 
 	player->ammo[weaponinfo[player->readyweapon].ammo]--;
 
@@ -635,6 +691,9 @@ void A_FireShotgun(player_t* player, pspdef_t* psp) {
 	int i;
 
 	S_StartSound(player->mo, sfx_shotgun);
+	if (player->powers[pw_quaddamage]) {
+		S_StartSound(player->mo, sfx_quaddamageatt);
+	}
 	P_SetMobjState(player->mo, S_PLAY_ATK2);
 
 	player->ammo[weaponinfo[player->readyweapon].ammo]--;
@@ -658,6 +717,9 @@ void A_FireShotgun2(player_t* player, pspdef_t* psp) {
 	int         damage;
 
 	S_StartSound(player->mo, sfx_sht2fire);
+	if (player->powers[pw_quaddamage]) {
+		S_StartSound(player->mo, sfx_quaddamageatt);
+	}
 	P_SetMobjState(player->mo, S_PLAY_ATK2);
 	player->ammo[weaponinfo[player->readyweapon].ammo] -= 2;
 
@@ -671,11 +733,14 @@ void A_FireShotgun2(player_t* player, pspdef_t* psp) {
 	}
 
 	for (i = 0; i < 20; i++) {
-		damage = 5 * (P_Random() % 3 + 1);
+		damage = 5 * (P_Random(pr_shotgun) % 3 + 1);
+		if (player->powers[pw_quaddamage]) {
+			damage *= 3;
+		}
 		angle = player->mo->angle;
-		angle += (P_Random() - P_Random()) << 19;
+		angle += P_RandomShift(pr_shotgun, 19);
 		P_LineAttack(player->mo, angle, MISSILERANGE, bulletslope +
-			((P_Random() - P_Random()) << 5), damage);
+			P_RandomShift(pr_shotgun, 5), damage);
 	}
 }
 
@@ -692,12 +757,15 @@ void A_FireCGun(player_t* player, pspdef_t* psp) {
 	}
 
 	S_StartSound(player->mo, sfx_pistol);
+	if (player->powers[pw_quaddamage]) {
+		S_StartSound(player->mo, sfx_quaddamageatt);
+	}
 
 	P_SetMobjState(player->mo, S_PLAY_ATK2);
 	player->ammo[weaponinfo[player->readyweapon].ammo]--;
 
 	// randomize sx
-	rand = (((P_Random() & 1) << 1) - 1);
+	rand = (((P_Random(pr_chaingun) & 1) << 1) - 1);
 	psp->sx = (rand * FRACUNIT);
 
 	// randomize sy
@@ -765,7 +833,7 @@ void A_BFGSpray(mobj_t* mo) {
 
 		damage = 0;
 		for (j = 0; j < 15; j++) {
-			damage += (P_Random() & 7) + 1;
+			damage += (P_Random(pr_bfg) & 7) + 1;
 		}
 
 		P_DamageMobj(linetarget, mo->target, mo->target, damage);
@@ -783,11 +851,19 @@ void A_BFGsound(player_t* player, pspdef_t* psp) {
 }
 
 //
+// A_OpenShotgun2
+//
+
+void A_OpenShotgun2(player_t* player, pspdef_t* psp) {
+	S_StartSound(player->mo, sfx_sht2load1);
+}
+
+//
 // A_LoadShotgun2
 //
 
 void A_LoadShotgun2(player_t* player, pspdef_t* psp) {
-	S_StartSound(player->mo, sfx_sht2load1);
+	S_StartSound(player->mo, sfx_sht2load3);
 }
 
 //
@@ -1022,8 +1098,12 @@ void A_FireLaser(player_t* player, pspdef_t* psp) {
 
 		player->ammo[weaponinfo[player->readyweapon].ammo]--;
 
-		hitdice = (P_Random() & 7);
+		hitdice = (P_Random(pr_laser) & 7);
 		damage = (((hitdice << 2) + hitdice) << 1) + 10;
+		if (player->powers[pw_quaddamage]) {
+			damage *= 2;
+			S_StartSound(player->mo, sfx_quaddamageatt);
+		}
 
 		P_LineAttack(mobj, angleoffs, LASERRANGE, slope, damage);
 
@@ -1130,4 +1210,48 @@ void P_MovePsprites(player_t* player) {
 
 	player->psprites[ps_flash].sx = player->psprites[ps_weapon].sx;
 	player->psprites[ps_flash].sy = player->psprites[ps_weapon].sy;
+}
+
+//
+// A_FireNailgun
+//
+
+void A_FireNailgun(player_t* player, pspdef_t* psp) {
+	int ammo = player->ammo[weaponinfo[player->readyweapon].ammo];
+	int rand;
+
+	if (!ammo) {
+		return;
+	}
+
+	S_StartSound(player->mo, sfx_nailgun);
+	if (player->powers[pw_quaddamage]) {
+
+		P_SpawnPlayerMissile(player->mo, MT_PROJ_NAILQUADDAMAGE);
+		S_StartSound(player->mo, sfx_quaddamageatt);
+
+	}
+	else
+	{
+
+		P_SpawnPlayerMissile(player->mo, MT_PROJ_NAIL);
+
+	}
+
+	P_SetMobjState(player->mo, S_PLAY_ATK2);
+	player->ammo[weaponinfo[player->readyweapon].ammo]--;
+
+	// randomize sx
+	rand = (((P_Random(pr_nailgun) & 1) << 1) - 1);
+	psp->sx = (rand * FRACUNIT);
+
+	// randomize sy
+	rand = ((((ammo - 1) & 1) << 1) - 1);
+	psp->sy = WEAPONTOP - (rand * (2 * FRACUNIT));
+	if (v_accessibility.value < 1)
+	{
+		player->recoilpitch = RECOILPITCH;
+	}
+
+	P_BulletSlope(player->mo);
 }

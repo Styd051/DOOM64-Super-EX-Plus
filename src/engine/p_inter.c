@@ -64,8 +64,8 @@ CVAR_EXTERNAL(m_brutal);
 
 // a weapon is found with two clip loads,
 // a big item has five clip loads
-int     maxammo[NUMAMMO] = { 200, 50, 300, 50 };
-int     clipammo[NUMAMMO] = { 10, 4, 20, 1 };
+int     maxammo[NUMAMMO] = { 200, 50, 300, 50, 100 };
+int     clipammo[NUMAMMO] = { 10, 4, 20, 1, 10 };
 
 int infraredFactor = 0;
 
@@ -169,6 +169,14 @@ boolean P_GiveAmmo(player_t* player, ammotype_t ammo, int num) {
 		}
 	default:
 		break;
+
+	case am_nails:
+		if (player->readyweapon == wp_fist) {
+			if (player->weaponowned[wp_nailgun]) {
+				player->pendingweapon = wp_nailgun;
+			}
+		}
+		break;
 	}
 
 	return true;
@@ -178,7 +186,7 @@ boolean P_GiveAmmo(player_t* player, ammotype_t ammo, int num) {
 // P_GiveWeapon
 // The weapon name may have a MF_DROPPED flag ored in.
 //
-boolean P_GiveWeapon(player_t* player, mobj_t* item, weapontype_t weapon, int dropped) {
+boolean P_GiveWeapon(player_t* player, mobj_t* item, weapontype_t weapon, boolean dropped) {
 	boolean gaveammo, gaveweapon;
 
 	if (netgame && (deathmatch != 2) && !dropped) {
@@ -207,25 +215,28 @@ boolean P_GiveWeapon(player_t* player, mobj_t* item, weapontype_t weapon, int dr
 	}
 
 	if (weaponinfo[weapon].ammo != am_noammo)
-	{	/* give one clip with a dropped weapon, two clips with a found weapon */
+	{
+		// give one clip with a dropped weapon,
+		// two clips with a found weapon
 		if (dropped)
 			gaveammo = P_GiveAmmo(player, weaponinfo[weapon].ammo, 1);
 		else
 			gaveammo = P_GiveAmmo(player, weaponinfo[weapon].ammo, 2);
 	}
-	else
+	else {
 		gaveammo = false;
+	}
 
-	if (player->weaponowned[weapon])
+	if (player->weaponowned[weapon]) {
 		gaveweapon = false;
-	else
-	{
+	}
+	else {
 		gaveweapon = true;
 		player->weaponowned[weapon] = true;
 		player->pendingweapon = weapon;
 	}
 
-	return gaveweapon || gaveammo;
+	return (gaveweapon || gaveammo);
 }
 
 //
@@ -352,6 +363,11 @@ boolean P_GivePower(player_t* player, int power) {
 		return true;
 	}
 
+	if (power == pw_quaddamage) {
+		player->powers[power] = QUADDAMAGETICS;
+		return true;
+	}
+
 	if (player->powers[power]) {
 		return false;    // already got it
 	}
@@ -364,10 +380,10 @@ boolean P_GivePower(player_t* player, int power) {
 // P_TouchSpecialThing
 //
 void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
-	player_t*	player;
+	player_t* player;
 	fixed_t     delta;
 	int         sound;
-	int         i = 0;
+	int            i = 0;
 
 	delta = special->z - toucher->z;
 
@@ -404,9 +420,17 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 		player->messagepic = 24;
 		break;
 
+	case SPR_ARM3:
+		if (!P_GiveArmor(player, deh_red_armor_class))
+			return;
+
+		player->message = GOTREDARMOR;
+		player->messagepic = 48;
+		break;
+
 		// bonus items
 	case SPR_BON1:
-		player->health+=2;		// can go over 100%
+		player->health += 2;		// can go over 100%
 		if (player->health > deh_max_health)
 			player->health = deh_max_health;
 		player->mo->health = player->health;
@@ -415,7 +439,7 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 		break;
 
 	case SPR_BON2:
-		player->armorpoints+=2;		// can go over 100%
+		player->armorpoints += 2;		// can go over 100%
 		if (player->armorpoints > deh_max_armor)
 			player->armorpoints = deh_max_armor;
 		if (!player->armortype) {
@@ -423,6 +447,32 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 		}
 		player->message = GOTARMBONUS;
 		player->messagepic = 4;
+		break;
+
+	case SPR_BON3:
+		player->health += 2;		// can go over 100%
+		player->armorpoints += 2;
+		if (player->health > deh_max_health)
+			player->health = deh_max_health;
+		if (player->armorpoints > deh_max_armor)
+			player->armorpoints = deh_max_armor;
+		player->mo->health = player->health;
+		if (!player->armortype) {
+			player->armortype = 1;
+		}
+		player->message = GOTHELLPOTION;
+		player->messagepic = 47;
+		break;
+
+	case SPR_BON4:
+		player->armorpoints += 4;		// can go over 100%
+		if (player->armorpoints > deh_max_armor)
+			player->armorpoints = deh_max_armor;
+		if (!player->armortype) {
+			player->armortype = 1;
+		}
+		player->message = GOTMAXARMORBONUS;
+		player->messagepic = 49;
 		break;
 
 	case SPR_SOUL:
@@ -564,6 +614,15 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 		sound = sfx_powerup;
 		break;
 
+	case SPR_QDMG:
+		if (!P_GivePower(player, pw_quaddamage)) {
+			return;
+		}
+		player->message = GOTQUADDAMAGE;
+		player->messagepic = 46;
+		sound = sfx_quaddamageact;
+		break;
+
 		// ammo
 	case SPR_CLIP:
 		if (special->flags & MF_DROPPED) {
@@ -652,6 +711,22 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 		player->messagepic = 15;
 		break;
 
+	case SPR_NLBX:
+		if (!P_GiveAmmo(player, am_nails, 1)) {
+			return;
+		}
+		player->message = GOTNAILSAMMOSMALLBOX;
+		player->messagepic = 45;
+		break;
+
+	case SPR_NLB2:
+		if (!P_GiveAmmo(player, am_nails, 5)) {
+			return;
+		}
+		player->message = GOTNAILSAMMOBOX;
+		player->messagepic = 50;
+		break;
+
 		// weapons
 	case SPR_BFUG:
 		if (!P_GiveWeapon(player, special, wp_bfg, false)) {
@@ -721,6 +796,15 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 			return;
 		}
 		player->message = GOTLASER;
+		sound = sfx_sgcock;
+		break;
+
+	case SPR_NLGP:
+		if (!P_GiveWeapon(player, special, wp_nailgun, false)) {
+			return;
+		}
+		player->message = GOTNAILGUN;
+		player->messagepic = 44;
 		sound = sfx_sgcock;
 		break;
 
@@ -859,6 +943,9 @@ static void P_Obituary(mobj_t* source, mobj_t* target) {
 		case MT_RESURRECTOR:
 			sprintf(omsg, "you were destroyed\nby the Resurrector.");
 			break;
+		case MT_RESURRECTOR2:
+			sprintf(omsg, "you were destroyed\nby the Resurrector.");
+			break;
 		case MT_PLAYERBOT1:
 		case MT_PLAYERBOT2:
 		case MT_PLAYERBOT3:
@@ -875,6 +962,93 @@ static void P_Obituary(mobj_t* source, mobj_t* target) {
 			break;
 		case MT_VILE:
 			sprintf(omsg, "you were incinerated\nby an Arch-Vile.");
+			break;
+		case MT_ANNIHILATOR:
+			sprintf(omsg, "you were splattered\nby a Annihilator.");
+			break;
+		case MT_HELLHOUND:
+			sprintf(omsg, "you were killed\nby a Hell Hound.");
+			break;
+		case MT_DUKEOFHELL:
+			sprintf(omsg, "you were killed\nby a Duke Of Hell.");
+			break;
+		case MT_BRUISERDEMON:
+			sprintf(omsg, "you were killed\nby a Bruiser Demon.");
+			break;
+		case MT_MELEEZOMBIE:
+			sprintf(omsg, "you were killed\nby a Melee Zombie.");
+			break;
+		case MT_SSGZOMBIE:
+			sprintf(omsg, "you jacked\nby a super shotgun guy.");
+			break;
+		case MT_WOLFSS:
+			sprintf(omsg, "you were killed\nby a WolfensteinSS.");
+			break;
+		case MT_BELPHEGOR:
+			sprintf(omsg, "you was slain\nby a Belphegor.");
+			break;
+		case MT_HECTEBUS:
+			sprintf(omsg, "you was cremated\nby a Hectebus.");
+			break;
+		case MT_BLOODDEMON:
+			sprintf(omsg, "you was chomped on\nby a Blood Demon.");
+			break;
+		case MT_DARKIMP:
+			sprintf(omsg, "you was burned\nby a Dark IMP.");
+			break;
+		case MT_CACOLANTERN:
+			sprintf(omsg, "you was smitten\nby a Cacolantern.");
+			break;
+		case MT_ABADDON:
+			sprintf(omsg, "you was smitten\nby an Abaddon.");
+			break;
+		case MT_NIGHTMARE_SPECTRE:
+			sprintf(omsg, "you was eaten\nby a Nightmare Spectre.");
+			break;
+		case MT_NIGHTMARE_CACODEMON:
+			sprintf(omsg, "you was scorched\nby a Nightmare Cacodemon.");
+			break;
+		case MT_PAIN_ELEMENTAL_NIGHTMARE:
+			sprintf(omsg, "you was overwhelmed\nby a Nightmare Elemental.");
+			break;
+		case MT_NIGHTMARE_MANCUBUS:
+			sprintf(omsg, "you was cremated\nby a nightmare mancubus.");
+			break;
+		case MT_HELLCENTAUR:
+			sprintf(omsg, "you was Obliterated\nby a Hell Centaur.");
+			break;
+		case MT_NIGHTCRAWLER:
+			sprintf(omsg, "you was blown up\nby a nightcrawler.");
+			break;
+		case MT_HARDCORE_IMP:
+			sprintf(omsg, "you were killed\nby a Hardcore Imp.");
+			break;
+		case MT_PlASMAZOMBIE:
+			sprintf(omsg, "you was burned\nby plasma zombie.");
+			break;
+		case MT_BFGCOMMANDO:
+			sprintf(omsg, "you was burned\nby bfg commando.");
+			break;
+		case MT_BFGCYBERDEMON:
+			sprintf(omsg, "you were splattered\nby a BFG Cyberdemon.");
+			break;
+		case MT_STALKER:
+			sprintf(omsg, "you didn't see\nthe stalker coming.");
+			break;
+		case MT_NIGHTMARE_REVENANT:
+			sprintf(omsg, "you couldn't evade\na nightmare revenant's fireball.");
+			break;
+		case MT_NIGHTMARE_LOSTSOUL:
+			sprintf(omsg, "A Nightmare Lost Soul slammed\ninto you.");
+			break;
+		case MT_ARTHRONAILER:
+			sprintf(omsg, "you have been nailed\nby an Arthronailer.");
+			break;
+		case MT_CYBERBARON:
+			sprintf(omsg, "you were killed\nby a CyberBaron.");
+			break;
+		case MT_CYBERDEMONSHOTGUN:
+			sprintf(omsg, "you were splattered\nby a Cyberdemon Shotgun.");
 			break;
 		default:
 			sprintf(omsg, "you died.");
@@ -964,7 +1138,7 @@ void P_KillMobj(mobj_t* source, mobj_t* target) {
 	{
 		P_SetMobjState(target, target->info->deathstate);
 	}
-	target->tics -= P_Random() & 1;
+	target->tics -= P_Random(pr_killtics) & 1;
 
 	if (target->tics < 1) {
 		target->tics = 1;
@@ -974,6 +1148,7 @@ void P_KillMobj(mobj_t* source, mobj_t* target) {
 	// This determines the kind of object spawned
 	// during the death frame of a thing.
 	switch (target->type) {
+	case MT_WOLFSS:
 	case MT_POSSESSED1:
 		item = MT_AMMO_CLIP;
 		break;
@@ -985,6 +1160,19 @@ void P_KillMobj(mobj_t* source, mobj_t* target) {
 	case MT_CHAINGUY:
 		item = MT_WEAP_CHAINGUN;
 		break;
+
+	case MT_SSGZOMBIE:
+		item = MT_WEAP_SSHOTGUN;
+		break;
+
+	case MT_PlASMAZOMBIE:
+		item = MT_WEAP_PLASMA;
+		break;
+
+	case MT_BFGCOMMANDO:
+		item = MT_WEAP_BFG;
+		break;
+
 
 	default:
 		return;
@@ -1058,7 +1246,7 @@ void P_DamageMobj(mobj_t* target, mobj_t* inflictor, mobj_t* source, int damage)
 
 		// make fall forwards sometimes
 		if (damage < 40 && damage > target->health &&
-			target->z - inflictor->z > 64 * FRACUNIT && (P_Random() & 1))
+			target->z - inflictor->z > 64 * FRACUNIT && (P_Random(pr_damagemobj) & 1))
 		{
 			ang += ANG180;
 			thrust *= 4;
@@ -1137,7 +1325,7 @@ void P_DamageMobj(mobj_t* target, mobj_t* inflictor, mobj_t* source, int damage)
 		}
 	}
 
-	if ((P_Random() < target->info->painchance) && !(target->flags & MF_SKULLFLY))
+	if ((P_Random(pr_painchance) < target->info->painchance) && !(target->flags & MF_SKULLFLY))
 	{
 		target->flags |= MF_JUSTHIT;    // fight back!
 		if (target->info->painstate)
@@ -1145,9 +1333,14 @@ void P_DamageMobj(mobj_t* target, mobj_t* inflictor, mobj_t* source, int damage)
 	}
 
 	target->reactiontime = 0;           // we're awake now...
-	if ((!target->threshold || target->type == MT_VILE)
+	// Fixed a bug with the Cacodemon attacking itself when taking explosion damage from Barrel.
+	if ((!target->threshold || target->type == MT_VILE || target->type == MT_CACODEMON || target->type == MT_NIGHTMARE_CACODEMON || target->type == MT_CACOLANTERN || target->type == MT_ABADDON)
 		&& source && (source->flags & MF_SHOOTABLE)
-		&& source->type != MT_VILE
+		&& source->type != MT_VILE 
+		&& source->type != MT_CACODEMON
+		&& source->type != MT_NIGHTMARE_CACODEMON
+		&& source->type != MT_CACOLANTERN
+		&& source->type != MT_ABADDON
 		&& !(target->flags & MF_NOINFIGHTING))
 	{
 		// if not intent on another player,
