@@ -434,6 +434,12 @@ static mobj_t* P_MissileAttack(mobj_t* actor, int direction) {
 		type = MT_PROJ_ARTHRONAILER;
 		aim = false;
 		break;
+	case MT_CYBERBARON:
+		offs = 30;
+		deltaz = 48;
+		type = MT_PROJ_ROCKET;
+		aim = true;
+		break;
 	}
 
 	deltax = FixedMul(offs * FRACUNIT, finecosine[angle]);
@@ -821,15 +827,7 @@ void A_Look(mobj_t* actor) {
 			break;
 		}
 
-		if (actor->type == MT_RESURRECTOR || actor->type == MT_CYBORG || actor->type == MT_RESURRECTOR2) {
-			// full volume
-			S_StartSound(NULL, sound);
-		}
-		else {
-			S_StartSound(actor, sound);
-		}
-
-		if (actor->type == MT_ANNIHILATOR) {
+		if (actor->type == MT_RESURRECTOR || actor->type == MT_CYBORG || actor->type == MT_RESURRECTOR2 || actor->type == MT_ANNIHILATOR || actor->type == MT_BFGCYBERDEMON || actor->type == MT_CYBERDEMONSHOTGUN) {
 			// full volume
 			S_StartSound(NULL, sound);
 		}
@@ -3712,4 +3710,107 @@ void A_ArthronailerAttack(mobj_t* actor) {
 	P_MissileAttack(actor, DP_LEFT);
 	P_MissileAttack(actor, DP_RIGHT);
 	S_StartSound(actor, sfx_nailgun);
+}
+
+//
+// A_CyberBaronDecide
+//
+
+void A_CyberBaronDecide(mobj_t* actor)
+{
+	if (P_Random(pr_cyberbarondecide) < 128)
+	{
+		P_SetMobjState(actor, S_BACY_ATK1_1);
+	}
+	else if (P_Random(pr_cyberbarondecide) < 256)
+	{
+		P_SetMobjState(actor, S_BACY_ATK2_1);
+	}
+
+}
+
+//
+// A_CyberBaronAttack1
+//
+
+void A_CyberBaronAttack1(mobj_t* actor) {
+	if (!actor->target) {
+		return;
+	}
+
+	A_FaceTarget(actor);
+	P_MissileAttack(actor, DP_LEFT);
+}
+
+//
+// A_CyberBaronAttack2
+//
+
+void A_CyberBaronAttack2(mobj_t* actor) {
+	int    damage;
+	int    hitdice;
+
+	if (!actor->target)
+	{
+		return;
+	}
+
+	if (P_CheckMeleeRange(actor))
+	{
+		S_StartSound(actor, sfx_scratch);
+		hitdice = (P_Random(pr_cyberbaronattack) & 7);
+		damage = ((hitdice * 11) + 11);
+		P_DamageMobj(actor->target, actor, actor, damage);
+		return;
+	}
+
+	// launch a missile
+	P_SpawnMissile(actor, actor->target, MT_PROJ_BRUISER2, 0, 0, 48, true);
+}
+
+//
+// A_CyberDemonShotgunAttack
+//
+
+void A_CyberDemonShotgunAttack(mobj_t* actor) {
+	int     i;
+	int     angle;
+	int     bangle;
+	int     damage;
+	int     slope;
+
+	if (!actor->target) {
+		return;
+	}
+
+	S_StartSound(actor, sfx_shotgun);
+	A_FaceTarget(actor);
+	bangle = actor->angle;
+	slope = P_AimLineAttack(actor, bangle, 0, MISSILERANGE);
+
+	for (i = 0; i < 3; i++) {
+		angle = bangle + P_RandomShift(pr_cyberdemonshotgunattack, 20);
+		damage = ((P_Random(pr_cyberdemonshotgunattack) % 5) * 3) + 3;
+		P_LineAttack(actor, angle, MISSILERANGE, slope, damage);
+	}
+}
+
+//
+// A_CyberDemonShotgunRefire
+//
+
+void A_CyberDemonShotgunRefire(mobj_t* actor)
+{
+	// keep firing unless target got out of sight
+	A_FaceTarget(actor);
+
+	if (P_Random(pr_cyberdemonshotgunrefire) < 40)
+		return;
+
+	if (!actor->target
+		|| actor->target->health <= 0
+		|| !P_CheckSight(actor, actor->target))
+	{
+		P_SetMobjState(actor, actor->info->seestate);
+	}
 }

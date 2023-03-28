@@ -152,6 +152,8 @@ char* sprnames[NUMSPRITES + 1] = {  //0x5FA30
 	"BON3",
 	"ARM3",
 	"BON4",
+	"BACY",
+	"CYBG",
 	NULL
 };
 
@@ -290,6 +292,11 @@ void A_PainElementalStalkerDie();
 void A_RevenantNightmareAttack();
 void A_NightmareLostSoulChase();
 void A_ArthronailerAttack();
+void A_CyberBaronDecide();
+void A_CyberBaronAttack1();
+void A_CyberBaronAttack2();
+void A_CyberDemonShotgunAttack();
+void A_CyberDemonShotgunRefire();
 
 
 #pragma warning(push)
@@ -2766,6 +2773,65 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_BONUS4D*/{ SPR_BON4, 3, 3, {NULL}, S_BONUS4E },
 	/*S_BONUS4E*/{ SPR_BON4, 2, 3, {NULL}, S_BONUS4F },
 	/*S_BONUS4F*/{ SPR_BON4, 1, 3, {NULL}, S_BONUS4A },
+
+	/*S_BACY_STND*/{ SPR_BACY, 0, 10, {A_Look}, S_BACY_STND2 },
+	/*S_BACY_STND2*/{ SPR_BACY, 1, 10, {A_Look}, S_BACY_STND },
+	/*S_BACY_RUN1*/{ SPR_BACY, 0, 3, {A_Hoof}, S_BACY_RUN2 },
+	/*S_BACY_RUN2*/{ SPR_BACY, 0, 3, {A_Chase}, S_BACY_RUN3 },
+	/*S_BACY_RUN3*/{ SPR_BACY, 1, 3, {A_Chase}, S_BACY_RUN4 },
+	/*S_BACY_RUN4*/{ SPR_BACY, 1, 3, {A_Chase}, S_BACY_RUN5 },
+	/*S_BACY_RUN5*/{ SPR_BACY, 2, 3, {A_Chase}, S_BACY_RUN6 },
+	/*S_BACY_RUN6*/{ SPR_BACY, 2, 3, {A_Chase}, S_BACY_RUN7 },
+	/*S_BACY_RUN7*/{ SPR_BACY, 3, 3, {A_Metal}, S_BACY_RUN8 },
+	/*S_BACY_RUN8*/{ SPR_BACY, 3, 3, {A_Chase}, S_BACY_RUN1 },
+	/*S_BACY_DECIDE*/{ SPR_BACY, 0, 3, {A_CyberBaronDecide}, S_BACY_DECIDE },
+	/*S_BACY_ATK1_1*/{ SPR_BACY, 4, 10, {A_FaceTarget}, S_BACY_ATK1_2 },
+	/*S_BACY_ATK1_2*/{ SPR_BACY, 32773, 10, {A_CyberBaronAttack1}, S_BACY_ATK1_3 },
+	/*S_BACY_ATK1_3*/{ SPR_BACY, 4, 10, {A_FaceTarget}, S_BACY_RUN1 },
+	/*S_BACY_ATK2_1*/{ SPR_BACY, 6, 8, {A_FaceTarget}, S_BACY_ATK2_2 },
+	/*S_BACY_ATK2_2*/{ SPR_BACY, 7, 8, {A_FaceTarget}, S_BACY_ATK2_3 },
+	/*S_BACY_ATK2_3*/{ SPR_BACY, 8, 8, {A_CyberBaronAttack2}, S_BACY_RUN1 },
+	/*S_BACY_PAIN*/{ SPR_BACY, 9, 2, {NULL}, S_BACY_PAIN2 },
+	/*S_BACY_PAIN2*/{ SPR_BACY, 9, 2, {A_Pain}, S_BACY_RUN1 },
+	/*S_BACY_DIE1*/{ SPR_BACY, 10, 8, {NULL}, S_BACY_DIE2 },
+	/*S_BACY_DIE2*/{ SPR_BACY, 11, 8, {A_Scream}, S_BACY_DIE3 },
+	/*S_BACY_DIE3*/{ SPR_BACY, 12, 8, {NULL}, S_BACY_DIE4 },
+	/*S_BACY_DIE4*/{ SPR_BACY, 13, 8, {A_Fall}, S_BACY_DIE5 },
+	/*S_BACY_DIE5*/{ SPR_BACY, 14, 8, {A_OnDeathTrigger}, S_BACY_DIE6 },
+	/*S_BACY_DIE6*/{ SPR_BACY, 15, -1, {NULL}, S_NULL },
+	/*S_BACY_RAISE1*/{ SPR_BACY, 15, 8, {NULL}, S_BACY_RAISE2 },
+	/*S_BACY_RAISE2*/{ SPR_BACY, 14, 8, {NULL}, S_BACY_RAISE3 },
+	/*S_BACY_RAISE3*/{ SPR_BACY, 13, 8, {NULL}, S_BACY_RAISE4 },
+	/*S_BACY_RAISE4*/{ SPR_BACY, 12, 8, {NULL}, S_BACY_RAISE5 },
+	/*S_BACY_RAISE5*/{ SPR_BACY, 11, 8, {NULL}, S_BACY_RAISE6 },
+	/*S_BACY_RAISE6*/{ SPR_BACY, 10, 8, {NULL}, S_BACY_RUN1 },
+
+	/*S_CYBG_STND*/{ SPR_CYBG, 5, 10, {A_Look}, S_CYBG_STND },
+	/*S_CYBG_RUN1*/{ SPR_CYBG, 0, 4, {A_Hoof}, S_CYBG_RUN2 },
+	/*S_CYBG_RUN2*/{ SPR_CYBG, 0, 4, {A_Chase}, S_CYBG_RUN3 },
+	/*S_CYBG_RUN3*/{ SPR_CYBG, 1, 4, {A_Chase}, S_CYBG_RUN4 },
+	/*S_CYBG_RUN4*/{ SPR_CYBG, 1, 4, {A_Chase}, S_CYBG_RUN5 },
+	/*S_CYBG_RUN5*/{ SPR_CYBG, 2, 4, {A_Chase}, S_CYBG_RUN6 },
+	/*S_CYBG_RUN6*/{ SPR_CYBG, 2, 4, {A_Chase}, S_CYBG_RUN7 },
+	/*S_CYBG_RUN7*/{ SPR_CYBG, 3, 4, {A_Metal}, S_CYBG_RUN8 },
+	/*S_CYBG_RUN8*/{ SPR_CYBG, 3, 4, {A_Chase}, S_CYBG_RUN1 },
+	/*S_CYBG_ATK1*/{ SPR_CYBG, 5, 20, {A_FaceTarget}, S_CYBG_ATK2 },
+	/*S_CYBG_ATK2*/{ SPR_CYBG, 32772, 2, {A_CyberDemonShotgunAttack}, S_CYBG_ATK3 },
+	/*S_CYBG_ATK3*/{ SPR_CYBG, 5, 2, {A_FaceTarget}, S_CYBG_ATK4 },
+	/*S_CYBG_ATK4*/{ SPR_CYBG, 32772, 2, {A_CyberDemonShotgunAttack}, S_CYBG_ATK5 },
+	/*S_CYBG_ATK5*/{ SPR_CYBG, 5, 2, {A_FaceTarget}, S_CYBG_ATK6 },
+	/*S_CYBG_ATK6*/{ SPR_CYBG, 5, 1, {A_CyberDemonShotgunRefire}, S_CYBG_ATK2 },
+	/*S_CYBG_PAIN*/{ SPR_CYBG, 5, 10, {A_Pain}, S_CYBG_RUN1 },
+	/*S_CYBG_DIE1*/{ SPR_CYBG, 6, 30, {A_CyberDeathEvent}, S_CYBG_DIE2 },
+	/*S_CYBG_DIE2*/{ SPR_CYBG, 7, 8, {NULL}, S_CYBG_DIE3 },
+	/*S_CYBG_DIE3*/{ SPR_CYBG, 8, 7, {NULL}, S_CYBG_DIE4 },
+	/*S_CYBG_DIE4*/{ SPR_CYBG, 9, 6, {NULL}, S_CYBG_DIE5 },
+	/*S_CYBG_DIE5*/{ SPR_CYBG, 10, 5, {NULL}, S_CYBG_DIE6 },
+	/*S_CYBG_DIE6*/{ SPR_CYBG, 11, 4, {A_Fall}, S_CYBG_DIE7 },
+	/*S_CYBG_DIE7*/{ SPR_CYBG, 12, 4, {NULL}, S_CYBG_DIE8 },
+	/*S_CYBG_DIE8*/{ SPR_CYBG, 13, 4, {A_OnDeathTrigger}, S_CYBG_DIE9 },
+	/*S_CYBG_DIE9*/{ SPR_CYBG, 14, -1, {NULL}, S_NULL },
+	
 };
 
 #pragma warning(pop)
@@ -11097,6 +11163,64 @@ S_NULL	   //raisestate
 	0,        //damage
 	sfx_None/*sfx_000*/,        //activesound
 	MF_SPECIAL | MF_COUNTITEM,        //flags
+	0,        //palette
+	255,        //alpha
+	S_NULL	   //raisestate
+},
+
+{
+	/*MT_CYBERBARON*/
+	9035,        //doomednum
+	S_BACY_STND,        //spawnstate
+	1200,        //spawnhealth
+	S_BACY_RUN1,        //seestate
+	sfx_bos1sit,        //seesound
+	8,        //reactiontime
+	sfx_None/*sfx_000*/,        //attacksound
+	S_BACY_PAIN,        //painstate
+	40,        //painchance
+	sfx_dbpain2,        //painsound
+	S_BACY_ATK2_1,        //meleestate
+	S_BACY_DECIDE,        //missilestate
+	S_BACY_DIE1,        //deathstate
+	S_NULL,        //xdeathstate
+	sfx_bos1die,        //deathsound
+	8,        //speed
+	24 * FRACUNIT,        //radius
+	100 * FRACUNIT,        //height
+	1000,        //mass
+	0,        //damage
+	sfx_dbact,        //activesound
+	MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
+	0,        //palette
+	255,        //alpha
+	S_BACY_RAISE1	   //raisestate
+},
+
+{
+	/*MT_CYBERDEMONSHOTGUN*/
+	9036,        //doomednum
+	S_CYBG_STND,        //spawnstate
+	4000,        //spawnhealth
+	S_CYBG_RUN1,        //seestate
+	sfx_cybsit,        //seesound
+	8,        //reactiontime
+	sfx_None/*sfx_000*/,        //attacksound
+	S_CYBG_PAIN,        //painstate
+	20,        //painchance
+	sfx_dbpain2,        //painsound
+	S_NULL,        //meleestate
+	S_CYBG_ATK1,        //missilestate
+	S_CYBG_DIE1,        //deathstate
+	S_NULL,        //xdeathstate
+	sfx_cybdth,        //deathsound
+	16,        //speed
+	70 * FRACUNIT,        //radius
+	170 * FRACUNIT,        //height
+	1000,        //mass
+	0,        //damage
+	sfx_dbact,        //activesound
+	MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
 	0,        //palette
 	255,        //alpha
 	S_NULL	   //raisestate

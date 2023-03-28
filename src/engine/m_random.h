@@ -95,7 +95,11 @@ enum {
     pr_painelementalnightmaredecide,   // #62
     pr_stalkerdecide,           // #63
     pr_nailgun,                 // #64
-    pr_randomizer,              // #65
+    pr_cyberbarondecide,        // #65
+    pr_cyberbaronattack,        // #66
+    pr_cyberdemonshotgunattack, // #67
+    pr_cyberdemonshotgunrefire, // #68
+    pr_randomizer,              // #69
 
     // End of new entries
     NUMPRCLASS               // MUST be last item in list
