@@ -55,9 +55,11 @@ char* spritename;
 static visspritelist_t visspritelist[MAX_SPRITES];
 static visspritelist_t* vissprite = NULL;
 
+CVAR_EXTERNAL(r_texturecombiner);
 CVAR_EXTERNAL(st_flashoverlay);
 CVAR_EXTERNAL(i_interpolateframes);
 CVAR_EXTERNAL(v_accessibility);
+CVAR_EXTERNAL(r_rendersprites);
 
 static void AddSpriteDrawlist(drawlist_t* dl, visspritelist_t* vis, int texid);
 
@@ -66,8 +68,7 @@ static void AddSpriteDrawlist(drawlist_t* dl, visspritelist_t* vis, int texid);
 // Local function for R_InitSprites.
 //
 
-void R_InstallSpriteLump(int lump, unsigned frame, unsigned rotation,
-	boolean flipped)
+static void R_InstallSpriteLump(int lump, unsigned frame, unsigned rotation, int flipped)
 {
 	int r;
 
@@ -171,11 +172,7 @@ void R_InitSprites(char** namelist) {
 		//  filling in the frames for whatever is found
 
 		for (l = start + 1; l < end; l++)
-
-			
-
 			if (!strncasecmp(lumpinfo[l].name, spritename, 4))
-
 			{
 				frame = lumpinfo[l].name[4] - 'A';
 				rotation = lumpinfo[l].name[5] - '0';
@@ -646,16 +643,39 @@ void R_DrawPSprite(pspdef_t* psp, sector_t* sector, player_t* player) {
 	//
 	// setup texture environment for effects
 	//
-	int l = (sector->lightlevel >> 1);
+	if (r_texturecombiner.value) {
+		float f[4];
 
-	GL_SetTextureUnit(1, true);
-	GL_SetTextureMode(GL_ADD);
-	GL_UpdateEnvTexture(D_RGBA(l, l, l, 0xff));
-	GL_SetTextureUnit(0, true);
+		f[0] = f[1] = f[2] = ((float)sector->lightlevel / 255.0f);
 
-	if (nolights)
-	{
-		GL_SetTextureMode(GL_REPLACE);
+		dglTexCombColorf(GL_TEXTURE0_ARB, f, GL_ADD);
+
+		if (!nolights) {
+			GL_UpdateEnvTexture(WHITE);
+			GL_SetTextureUnit(1, true);
+			dglTexCombModulate(GL_PREVIOUS, GL_PRIMARY_COLOR);
+		}
+
+		if (st_flashoverlay.value <= 0) {
+			GL_SetTextureUnit(2, true);
+			dglTexCombColor(GL_PREVIOUS, flashcolor, GL_ADD);
+		}
+
+		dglTexCombReplaceAlpha(GL_TEXTURE0_ARB);
+
+		GL_SetTextureUnit(0, true);
+	}
+	else {
+		int l = (sector->lightlevel >> 1);
+
+		GL_SetTextureUnit(1, true);
+		GL_SetTextureMode(GL_ADD);
+		GL_UpdateEnvTexture(D_RGBA(l, l, l, 0xff));
+		GL_SetTextureUnit(0, true);
+
+		if (nolights) {
+			GL_SetTextureMode(GL_REPLACE);
+		}
 	}
 
 	// render

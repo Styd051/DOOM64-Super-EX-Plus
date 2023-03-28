@@ -32,8 +32,10 @@
 #include "r_sky.h"
 #include "r_drawlist.h"
 
+CVAR_EXTERNAL(r_texturecombiner);
 CVAR_EXTERNAL(i_interpolateframes);
 CVAR_EXTERNAL(r_fog);
+CVAR_EXTERNAL(r_rendersprites);
 CVAR_EXTERNAL(st_flashoverlay);
 
 //
@@ -208,6 +210,11 @@ static boolean ProcessSprites(vtxlist_t* vl, int* drawcount) {
 static void SetupFog(void) {
 	dglFogi(GL_FOG_MODE, GL_LINEAR);
 
+	// don't render fog in wireframe mode
+	if (r_fillmode.value <= 0) {
+		return;
+	}
+
 	if (!skyflatnum) {
 		dglDisable(GL_FOG);
 	}
@@ -290,17 +297,33 @@ void R_RenderWorld(void) {
 
 	dglEnable(GL_DEPTH_TEST);
 
-	DL_BeginDrawList(1);
+	DL_BeginDrawList(r_fillmode.value >= 1, r_texturecombiner.value >= 1);
 
 	// setup texture environment for effects
+	if (r_texturecombiner.value) {
+		if (!nolights) {
+			GL_UpdateEnvTexture(WHITE);
+			GL_SetTextureUnit(1, true);
+			dglTexCombModulate(GL_PREVIOUS, GL_PRIMARY_COLOR);
+		}
 
-	GL_SetTextureUnit(1, true);
-	GL_SetTextureMode(GL_ADD);
-	GL_SetTextureUnit(0, true);
+		if (st_flashoverlay.value <= 0) {
+			GL_SetTextureUnit(2, true);
+			dglTexCombColor(GL_PREVIOUS, flashcolor, GL_ADD);
+		}
 
-	if (nolights)
-	{
-		GL_SetTextureMode(GL_REPLACE);
+		dglTexCombReplaceAlpha(GL_TEXTURE0_ARB);
+
+		GL_SetTextureUnit(0, true);
+	}
+	else {
+		GL_SetTextureUnit(1, true);
+		GL_SetTextureMode(GL_ADD);
+		GL_SetTextureUnit(0, true);
+
+		if (nolights) {
+			GL_SetTextureMode(GL_REPLACE);
+		}
 	}
 
 	dglEnable(GL_ALPHA_TEST);
@@ -322,7 +345,9 @@ void R_RenderWorld(void) {
 		spriteRenderTic = I_GetTimeMS();
 	}
 
-	R_SetupSprites();
+	if (r_rendersprites.value) {
+		R_SetupSprites();
+	}
 
 	dglDepthMask(GL_FALSE);
 	DL_ProcessDrawList(DLT_SPRITE, ProcessSprites);
