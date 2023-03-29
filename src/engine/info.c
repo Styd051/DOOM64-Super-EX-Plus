@@ -2941,7 +2941,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_PLAY_XDIE1,        //deathstate
 		S_PLAY_XDIE1,        //xdeathstate
 		sfx_plrdie,        //deathsound
-		0,        //speed
+		16,        //speed
 		32 * FRACUNIT,        //radius
 		87 * FRACUNIT,        //height
 		100,        //mass
