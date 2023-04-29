@@ -1184,7 +1184,7 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_ROCKETL*/           { SPR_ROCK, 0, 1, {A_WeaponReady}, S_ROCKETL },
 	/*S_ROCKETLDOWN*/       { SPR_ROCK, 0, 1, {A_Lower}, S_ROCKETLDOWN },
 	/*S_ROCKETLUP*/         { SPR_ROCK, 0, 1, {A_Raise}, S_ROCKETLUP },
-	/*S_ROCKETL1*/          { SPR_ROCK, 1, 8, {A_GunFlash}, S_ROCKETL2 },
+	/*S_ROCKETL1*/          { SPR_ROCK, 0, 8, {A_GunFlash}, S_ROCKETL2 },
 	/*S_ROCKETL2*/          { SPR_ROCK, 1, 10, {A_FireMissile}, S_ROCKETL3 },
 	/*S_ROCKETL3*/          { SPR_ROCK, 1, 0, {A_ReFire}, S_ROCKETL },
 	/*S_ROCKETLLIGHT1*/     { SPR_ROCK, 32770, 3, {NULL}, S_ROCKETLLIGHT2 },
