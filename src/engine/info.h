@@ -287,6 +287,7 @@ typedef enum {
 	SPR_BON4,
 	SPR_BACY,
 	SPR_CYBG,
+	SPR_SPO2,
 	NUMSPRITES
 } spritenum_t;
 
