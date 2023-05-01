@@ -99,7 +99,9 @@ enum {
     pr_cyberbaronattack,        // #66
     pr_cyberdemonshotgunattack, // #67
     pr_cyberdemonshotgunrefire, // #68
-    pr_randomizer,              // #69
+    pr_arachnobaronattack,      // #69
+    pr_arachnobaronrefire,      // #70
+    pr_randomizer,              // #71
 
     // End of new entries
     NUMPRCLASS               // MUST be last item in list

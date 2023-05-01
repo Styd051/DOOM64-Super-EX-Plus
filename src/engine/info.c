@@ -155,6 +155,7 @@ char* sprnames[NUMSPRITES + 1] = {  //0x5FA30
 	"BACY",
 	"CYBG",
 	"SPO2",
+	"ARNO",
 	NULL
 };
 
@@ -298,6 +299,8 @@ void A_CyberBaronAttack1();
 void A_CyberBaronAttack2();
 void A_CyberDemonShotgunAttack();
 void A_CyberDemonShotgunRefire();
+void A_ArachnobaronAttack();
+void A_ArachnobaronRefire();
 
 
 #pragma warning(push)
@@ -2833,6 +2836,38 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_CYBG_DIE8*/{ SPR_CYBG, 13, 4, {A_OnDeathTrigger}, S_CYBG_DIE9 },
 	/*S_CYBG_DIE9*/{ SPR_CYBG, 14, -1, {NULL}, S_NULL },
 	
+	/*S_ARNO_STND*/{ SPR_ARNO, 0, 10, {A_Look}, S_ARNO_STND2 },
+	/*S_ARNO_STND2*/{ SPR_ARNO, 1, 10, {A_Look}, S_ARNO_STND },
+	/*S_ARNO_RUN1*/{ SPR_ARNO, 0, 20, {NULL}, S_ARNO_RUN2 },
+	/*S_ARNO_RUN2*/{ SPR_ARNO, 0, 3, {A_BabyMetal}, S_ARNO_RUN3 },
+	/*S_ARNO_RUN3*/{ SPR_ARNO, 0, 3, {A_Chase}, S_ARNO_RUN4 },
+	/*S_ARNO_RUN4*/{ SPR_ARNO, 1, 3, {A_Chase}, S_ARNO_RUN5 },
+	/*S_ARNO_RUN5*/{ SPR_ARNO, 1, 3, {A_Chase}, S_ARNO_RUN6 },
+	/*S_ARNO_RUN6*/{ SPR_ARNO, 2, 3, {A_Chase}, S_ARNO_RUN7 },
+	/*S_ARNO_RUN7*/{ SPR_ARNO, 2, 3, {A_Chase}, S_ARNO_RUN8 },
+	/*S_ARNO_RUN8*/{ SPR_ARNO, 3, 3, {A_BabyMetal}, S_ARNO_RUN9 },
+	/*S_ARNO_RUN9*/{ SPR_ARNO, 3, 3, {A_Chase}, S_ARNO_RUN10 },
+	/*S_ARNO_RUN10*/{ SPR_ARNO, 4, 3, {A_Chase}, S_ARNO_RUN11 },
+	/*S_ARNO_RUN11*/{ SPR_ARNO, 4, 3, {A_Chase}, S_ARNO_RUN2 },
+	/*S_ARNO_ATK1*/{ SPR_ARNO, 5, 10, {A_FaceTarget}, S_ARNO_ATK2 },
+	/*S_ARNO_ATK2*/{ SPR_ARNO, 32774, 4, {A_ArachnobaronAttack}, S_ARNO_ATK3 },
+	/*S_ARNO_ATK3*/{ SPR_ARNO, 32773, 4, {A_ArachnobaronAttack}, S_ARNO_ATK4 },
+	/*S_ARNO_ATK4*/{ SPR_ARNO, 6, 1, {A_ArachnobaronRefire}, S_ARNO_ATK2 },
+	/*S_ARNO_PAIN*/{ SPR_ARNO, 1, 3, {NULL}, S_ARNO_PAIN2 },
+	/*S_ARNO_PAIN2*/{ SPR_ARNO, 1, 3, {A_Pain}, S_ARNO_RUN2 },
+	/*S_ARNO_DIE1*/{ SPR_ARNO, 7, 20, {A_Scream}, S_ARNO_DIE2 },
+	/*S_ARNO_DIE2*/{ SPR_ARNO, 8, 7, {A_Fall}, S_ARNO_DIE3 },
+	/*S_ARNO_DIE3*/{ SPR_ARNO, 9, 7, {NULL}, S_ARNO_DIE4 },
+	/*S_ARNO_DIE4*/{ SPR_ARNO, 10, 7, {NULL}, S_ARNO_DIE5 },
+	/*S_ARNO_DIE5*/{ SPR_ARNO, 11, 7, {A_OnDeathTrigger}, S_ARNO_DIE6 },
+	/*S_ARNO_DIE6*/{ SPR_ARNO, 12, -1, {NULL}, S_NULL },
+	/*S_ARNO_RAISE1*/{ SPR_ARNO, 12, 5, {NULL}, S_ARNO_RAISE2 },
+	/*S_ARNO_RAISE2*/{ SPR_ARNO, 11, 5, {NULL}, S_ARNO_RAISE3 },
+	/*S_ARNO_RAISE3*/{ SPR_ARNO, 10, 5, {NULL}, S_ARNO_RAISE4 },
+	/*S_ARNO_RAISE4*/{ SPR_ARNO, 9, 5, {NULL}, S_ARNO_RAISE5 },
+	/*S_ARNO_RAISE5*/{ SPR_ARNO, 8, 5, {NULL}, S_ARNO_RAISE6 },
+	/*S_ARNO_RAISE6*/{ SPR_ARNO, 7, 5, {NULL}, S_ARNO_RUN2 },
+
 };
 
 #pragma warning(pop)
@@ -11225,5 +11260,34 @@ S_NULL	   //raisestate
 	0,        //palette
 	255,        //alpha
 	S_NULL	   //raisestate
+},
+
+{
+	/*MT_ARACHNOBARON*/
+	9037,        //doomednum
+	S_ARNO_STND,        //spawnstate
+	1320,        //spawnhealth
+	S_ARNO_RUN1,        //seestate
+	sfx_bos1sit,        //seesound
+	8,        //reactiontime
+	sfx_None/*sfx_000*/,        //attacksound
+	S_ARNO_PAIN,        //painstate
+	50,        //painchance
+	sfx_dbpain2,        //painsound
+	S_NULL,        //meleestate
+	S_ARNO_ATK1,        //missilestate
+	S_ARNO_DIE1,        //deathstate
+	S_NULL,        //xdeathstate
+	sfx_bos1die,        //deathsound
+	12,        //speed
+	64 * FRACUNIT,        //radius
+	80 * FRACUNIT,        //height
+	600,        //mass
+	0,        //damage
+	sfx_dbact,        //activesound
+	MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
+	0,        //palette
+	255,        //alpha
+	S_ARNO_RAISE1	   //raisestate
 },
 };

@@ -3814,3 +3814,47 @@ void A_CyberDemonShotgunRefire(mobj_t* actor)
 		P_SetMobjState(actor, actor->info->seestate);
 	}
 }
+
+//
+// A_ArachnobaronAttack
+//
+
+void A_ArachnobaronAttack(mobj_t* actor)
+{
+	int		angle;
+
+	int		damage;
+	int		slope;
+
+	if (!actor->target)
+		return;
+
+	S_StartSound(actor, sfx_pistol);
+	A_FaceTarget(actor);
+	angle = actor->angle;
+	slope = P_AimLineAttack(actor, angle, 0, MISSILERANGE);
+
+	angle += P_RandomShift(pr_arachnobaronattack, 20);
+	damage = ((P_Random(pr_arachnobaronattack) % 5) * 3) + 3;
+	P_LineAttack(actor, angle, MISSILERANGE, slope, damage);
+}
+
+//
+// A_ArachnobaronRefire
+//
+
+void A_ArachnobaronRefire(mobj_t* actor)
+{
+	// keep firing unless target got out of sight
+	A_FaceTarget(actor);
+
+	if (P_Random(pr_arachnobaronrefire) < 40)
+		return;
+
+	if (!actor->target
+		|| actor->target->health <= 0
+		|| !P_CheckSight(actor, actor->target))
+	{
+		P_SetMobjState(actor, actor->info->seestate);
+	}
+}
