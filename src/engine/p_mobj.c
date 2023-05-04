@@ -1325,15 +1325,18 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	// randomizer arachnotron
 	if (i == MT_BABY) {
-		randomizernum = P_Random(pr_randomizer) % 3; // Immorpher randomizer number
-		if (randomizernum == 2) {
+		randomizernum = P_Random(pr_randomizer) % 4; // Immorpher randomizer number
+		if (randomizernum == 3) {
 			i = MT_BABY;
 		}
-		else if (randomizernum == 1) {
+		else if (randomizernum == 2) {
 			i = MT_NIGHTCRAWLER;
 		}
-		else if (randomizernum == 0) {
+		else if (randomizernum == 1) {
 			i = MT_ARTHRONAILER;
+		}
+		else if (randomizernum == 0) {
+			i = MT_ARACHNOBARON;
 		}
 	}
 
