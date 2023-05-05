@@ -263,7 +263,7 @@ wad_file_t* W_AddFile(char* filename) {
 
 void W_Init(void) {
 	char* iwad;
-	char* doom64expluswad;
+	char* doom64superexpluswad;
 	wadinfo_t       header;
 	lumpinfo_t* lump_p;
 	int             i;
@@ -329,12 +329,12 @@ void W_Init(void) {
 
 	Z_Free(fileinfo);
 
-	if ((doom64expluswad = I_FindDataFile("doom64ex-plus.wad"))) {
-		W_MergeFile(doom64expluswad);
-		free(doom64expluswad);
+	if ((doom64superexpluswad = I_FindDataFile("doom64superex-plus.wad"))) {
+		W_MergeFile(doom64superexpluswad);
+		free(doom64superexpluswad);
 	}
 	else {
-		I_Error("W_Init: doom64ex-plus.wad not found");
+		I_Error("W_Init: doom64superex-plus.wad not found");
 	}
 
 	p = M_CheckParm("-file");
