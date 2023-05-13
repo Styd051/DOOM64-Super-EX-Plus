@@ -115,8 +115,11 @@ currently 1 new power have been added
 new weapon animations were added
 
 -Shotgun reload animation
+
 -Super Shotgun reload animation
+
 -plasmagun reload animation
+
 -vanilla rocket launcher animation rework (it's a bonus from me)
 
 # New game mode Complex DOOM 64 
