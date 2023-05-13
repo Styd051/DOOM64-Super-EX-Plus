@@ -2,7 +2,7 @@
 Super EX+ and a custom fork of  EX+ of Gibbon, designed for mappers to use custom content on their map, with a modified DOOM Builder 64 configuration to show custom content, like custom monsters, custom decorations, etc... in the map editor
 
 # Custom Content Added
-currently 36 new monsters have been added
+currently 40 new monsters have been added
 
 -Archvile
 
@@ -76,6 +76,14 @@ currently 36 new monsters have been added
 
 -Arthronailer 
 
+-Cyberbaron
+
+-Cyberdemon Shotgun
+
+-Arachnobaron
+
+-Knightmare
+
 currently there are 5 items has been added
 
 -Small Box of Nail
@@ -104,6 +112,13 @@ currently 1 new power have been added
 
 -the Quad Damage
 
+new weapon animations were added
+
+-Shotgun reload animation
+-Super Shotgun reload animation
+-plasmagun reload animation
+-vanilla rocket launcher animation rework (it's a bonus from me)
+
 # New game mode Complex DOOM 64 
 
 What is the game mode Complex DOOM 64 ?
@@ -111,11 +126,7 @@ What is the game mode Complex DOOM 64 ?
 this is a game mode that will completely change the playing experience of DOOM 64 all monsters on the map will be randomized to a much more powerful version of a monster also some items and ammo are randomized so the player is not out of ammo, to avoid making the map unplayable
 
 a new option has been added called Complex D64 to enable or disable game mode Complex DOOM 64 
-
-# Known Problem
-
--the MAP40 Panic is currently unplayable because when you trigger the lindefs which allows the tracers to appear, it crashes the port
-
+ 
 # The Credits
 -Gibbon for the port EX+
 
