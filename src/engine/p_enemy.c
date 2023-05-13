@@ -456,6 +456,45 @@ static mobj_t* P_MissileAttack(mobj_t* actor, int direction) {
 	return mo;
 }
 
+static mobj_t* P_MissileAttack2(mobj_t* actor, int direction) {
+	angle_t angle = 0;
+	fixed_t deltax = 0;
+	fixed_t deltay = 0;
+	fixed_t deltaz = 0;
+	fixed_t offs = 0;
+	int type = 0;
+	boolean aim = false;
+	mobj_t* mo;
+
+	if (direction == DP_LEFT) {
+		angle = actor->angle + ANG45;
+	}
+	else if (direction == DP_RIGHT) {
+		angle = actor->angle - ANG45;
+	}
+	else {
+		angle = actor->angle;
+	}
+
+	angle >>= ANGLETOFINESHIFT;
+
+	switch (actor->type) {
+	case MT_CYBERBARON:
+		offs = 0;
+		deltaz = 48;
+		type = MT_PROJ_BRUISER2;
+		aim = true;
+		break;
+	}
+
+	deltax = FixedMul(offs * FRACUNIT, finecosine[angle]);
+	deltay = FixedMul(offs * FRACUNIT, finesine[angle]);
+
+	mo = P_SpawnMissile(actor, actor->target, type, deltax, deltay, deltaz, aim);
+
+	return mo;
+}
+
 //
 // T_MobjExplode
 //
@@ -3771,7 +3810,7 @@ void A_CyberBaronAttack2(mobj_t* actor) {
 	}
 
 	// launch a missile
-	P_SpawnMissile(actor, actor->target, MT_PROJ_BRUISER2, 0, 0, 48, true);
+	P_MissileAttack2(actor, DP_RIGHT);
 }
 
 //
