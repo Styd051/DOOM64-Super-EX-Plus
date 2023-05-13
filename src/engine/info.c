@@ -156,6 +156,8 @@ char* sprnames[NUMSPRITES + 1] = {  //0x5FA30
 	"CYBG",
 	"SPO2",
 	"ARNO",
+	"BOZ3",
+	"BA10",
 	NULL
 };
 
@@ -301,6 +303,7 @@ void A_CyberDemonShotgunAttack();
 void A_CyberDemonShotgunRefire();
 void A_ArachnobaronAttack();
 void A_ArachnobaronRefire();
+void A_KnightmareAttack();
 
 
 #pragma warning(push)
@@ -2867,6 +2870,43 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_ARNO_RAISE4*/{ SPR_ARNO, 9, 5, {NULL}, S_ARNO_RAISE5 },
 	/*S_ARNO_RAISE5*/{ SPR_ARNO, 8, 5, {NULL}, S_ARNO_RAISE6 },
 	/*S_ARNO_RAISE6*/{ SPR_ARNO, 7, 5, {NULL}, S_ARNO_RUN2 },
+
+	/*S_BOZ3_STND*/{ SPR_BOZ3, 0, 10, {A_Look}, S_BOZ3_STND2 },
+	/*S_BOZ3_STND2*/{ SPR_BOZ3, 1, 10, {A_Look}, S_BOZ3_STND },
+	/*S_BOZ3_RUN1*/{ SPR_BOZ3, 0, 3, {A_Chase}, S_BOZ3_RUN2 },
+	/*S_BOZ3_RUN2*/{ SPR_BOZ3, 0, 3, {A_Chase}, S_BOZ3_RUN3 },
+	/*S_BOZ3_RUN3*/{ SPR_BOZ3, 1, 3, {A_Chase}, S_BOZ3_RUN4 },
+	/*S_BOZ3_RUN4*/{ SPR_BOZ3, 1, 3, {A_Chase}, S_BOZ3_RUN5 },
+	/*S_BOZ3_RUN5*/{ SPR_BOZ3, 2, 3, {A_Chase}, S_BOZ3_RUN6 },
+	/*S_BOZ3_RUN6*/{ SPR_BOZ3, 2, 3, {A_Chase}, S_BOZ3_RUN7 },
+	/*S_BOZ3_RUN7*/{ SPR_BOZ3, 3, 3, {A_Chase}, S_BOZ3_RUN8 },
+	/*S_BOZ3_RUN8*/{ SPR_BOZ3, 3, 3, {A_Chase}, S_BOZ3_RUN1 },
+	/*S_BOZ3_ATK1*/{ SPR_BOZ3, 4, 6, {A_FaceTarget}, S_BOZ3_ATK2 },
+	/*S_BOZ3_ATK2*/{ SPR_BOZ3, 5, 6, {A_FaceTarget}, S_BOZ3_ATK3 },
+	/*S_BOZ3_ATK3*/{ SPR_BOZ3, 6, 6, {A_KnightmareAttack}, S_BOZ3_RUN1 },
+	/*S_BOZ3_PAIN*/{ SPR_BOZ3, 7, 2, {NULL}, S_BOZ3_PAIN2 },
+	/*S_BOZ3_PAIN2*/{ SPR_BOZ3, 7, 2, {A_Pain}, S_BOZ3_RUN1 },
+	/*S_BOZ3_DIE1*/{ SPR_BOZ3, 8, 8, {NULL}, S_BOZ3_DIE2 },
+	/*S_BOZ3_DIE2*/{ SPR_BOZ3, 9, 8, {A_Scream}, S_BOZ3_DIE3 },
+	/*S_BOZ3_DIE3*/{ SPR_BOZ3, 10, 8, {NULL}, S_BOZ3_DIE4 },
+	/*S_BOZ3_DIE4*/{ SPR_BOZ3, 11, 8, {A_Fall}, S_BOZ3_DIE5 },
+	/*S_BOZ3_DIE5*/{ SPR_BOZ3, 12, 8, {A_OnDeathTrigger}, S_BOZ3_DIE6 },
+	/*S_BOZ3_DIE6*/{ SPR_BOZ3, 13, -1, {NULL}, S_NULL },
+	/*S_BOZ3_RAISE1*/{ SPR_BOZ3, 13, 8, {NULL}, S_BOZ3_RAISE2 },
+	/*S_BOZ3_RAISE2*/{ SPR_BOZ3, 12, 8, {NULL}, S_BOZ3_RAISE3 },
+	/*S_BOZ3_RAISE3*/{ SPR_BOZ3, 11, 8, {NULL}, S_BOZ3_RAISE4 },
+	/*S_BOZ3_RAISE4*/{ SPR_BOZ3, 10, 8, {NULL}, S_BOZ3_RAISE5 },
+	/*S_BOZ3_RAISE5*/{ SPR_BOZ3, 9, 8, {NULL}, S_BOZ3_RAISE6 },
+	/*S_BOZ3_RAISE6*/{ SPR_BOZ3, 8, 8, {NULL}, S_BOZ3_RUN1 },
+
+	/*S_BA101*/{ SPR_BA10, 32768, 4, {NULL}, S_BA102 },
+	/*S_BA102*/{ SPR_BA10, 32769, 4, {NULL}, S_BA101 },
+	/*S_BA10_DIE1*/{ SPR_BA10, 32770, 3, {NULL}, S_BA10_DIE2 },
+	/*S_BA10_DIE2*/{ SPR_BA10, 32771, 3, {A_FadeAlpha}, S_BA10_DIE3 },
+	/*S_BA10_DIE3*/{ SPR_BA10, 32772, 3, {A_FadeAlpha}, S_BA10_DIE4 },
+	/*S_BA10_DIE4*/{ SPR_BA10, 32773, 2, {NULL}, S_BA10_DIE5 },
+	/*S_BA10_DIE5*/{ SPR_BA10, 32774, 2, {NULL}, S_BA10_DIE6 },
+	/*S_BA10_DIE6*/{ SPR_BA10, 32775, 2, {NULL}, S_NULL },
 
 };
 
@@ -11289,5 +11329,63 @@ S_NULL	   //raisestate
 	0,        //palette
 	255,        //alpha
 	S_ARNO_RAISE1	   //raisestate
+},
+
+{
+	/*MT_KNIGHTMARE*/
+	9038,        //doomednum
+	S_BOZ3_STND,        //spawnstate
+	500,        //spawnhealth
+	S_BOZ3_RUN1,        //seestate
+	sfx_bos2sit,        //seesound
+	8,        //reactiontime
+	sfx_None/*sfx_000*/,        //attacksound
+	S_BOZ3_PAIN,        //painstate
+	75,        //painchance
+	sfx_dbpain2,        //painsound
+	S_BOZ3_ATK1,        //meleestate
+	S_BOZ3_ATK1,        //missilestate
+	S_BOZ3_DIE1,        //deathstate
+	S_NULL,        //xdeathstate
+	sfx_bos2die,        //deathsound
+	14,        //speed
+	24 * FRACUNIT,        //radius
+	100 * FRACUNIT,        //height
+	1000,        //mass
+	0,        //damage
+	sfx_dbact,        //activesound
+	MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
+	0,        //palette
+	255,        //alpha
+	S_BOZ3_RAISE1	   //raisestate
+},
+
+{
+	/*MT_PROJ_KNIGHTMARE*/
+	-1,        //doomednum
+	S_BA101,        //spawnstate
+	1000,        //spawnhealth
+	S_NULL,        //seestate
+	sfx_bdmissile,        //seesound
+	8,        //reactiontime
+	sfx_None/*sfx_000*/,        //attacksound
+	S_NULL,        //painstate
+	0,        //painchance
+	sfx_None/*sfx_000*/,        //painsound
+	S_NULL,        //meleestate
+	S_NULL,        //missilestate
+	S_BA10_DIE1,        //deathstate
+	S_NULL,        //xdeathstate
+	sfx_implod,        //deathsound
+	20 * FRACUNIT,        //speed
+	6 * FRACUNIT,        //radius
+	8 * FRACUNIT,        //height
+	100,        //mass
+	12,        //damage
+	sfx_None/*sfx_000*/,        //activesound
+	MF_NOBLOCKMAP | MF_DROPOFF | MF_MISSILE,        //flags
+	0,        //palette
+	255,        //alpha
+	S_NULL	   //raisestate
 },
 };

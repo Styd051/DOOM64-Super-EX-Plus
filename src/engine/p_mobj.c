@@ -1249,15 +1249,18 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	// randomizer hell knight
 	if (i == MT_BRUISER2) {
-		randomizernum = P_Random(pr_randomizer) % 3; // Immorpher randomizer number
-		if (randomizernum == 2) {
+		randomizernum = P_Random(pr_randomizer) % 4; // Immorpher randomizer number
+		if (randomizernum == 3) {
 			i = MT_BRUISER2;
 		}
-		else if (randomizernum == 1) {
+		else if (randomizernum == 2) {
 			i = MT_UNDEAD;
 		}
-		else if (randomizernum == 0) {
+		else if (randomizernum == 1) {
 			i = MT_NIGHTMARE_REVENANT;
+		}
+		else if (randomizernum == 0) {
+			i = MT_KNIGHTMARE;
 		}
 	}
 

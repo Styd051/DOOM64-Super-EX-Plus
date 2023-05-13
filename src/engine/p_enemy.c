@@ -440,6 +440,12 @@ static mobj_t* P_MissileAttack(mobj_t* actor, int direction) {
 		type = MT_PROJ_ROCKET;
 		aim = true;
 		break;
+	case MT_KNIGHTMARE:
+		offs = 0;
+		deltaz = 48;
+		type = MT_PROJ_KNIGHTMARE;
+		aim = true;
+		break;
 	}
 
 	deltax = FixedMul(offs * FRACUNIT, finecosine[angle]);
@@ -3857,4 +3863,30 @@ void A_ArachnobaronRefire(mobj_t* actor)
 	{
 		P_SetMobjState(actor, actor->info->seestate);
 	}
+}
+
+//
+// A_KnightmareAttack
+//
+
+void A_KnightmareAttack(mobj_t* actor) {
+	int    damage;
+	int    hitdice;
+
+	if (!actor->target)
+	{
+		return;
+	}
+
+	if (P_CheckMeleeRange(actor))
+	{
+		S_StartSound(actor, sfx_scratch);
+		hitdice = (P_Random(pr_knightmareattack) & 7);
+		damage = ((hitdice * 11) + 11);
+		P_DamageMobj(actor->target, actor, actor, damage);
+		return;
+	}
+
+	// launch a missile
+	P_MissileAttack(actor, DP_STRAIGHT);
 }
