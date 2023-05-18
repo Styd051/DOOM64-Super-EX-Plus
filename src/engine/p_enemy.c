@@ -217,6 +217,12 @@ boolean P_CheckMissileRange(mobj_t* actor) {
 			return false;	// too far away
 	}
 
+	if (actor->type == MT_RESURRECTOR3)
+	{
+		if (dist > 14 * 64)
+			return false;	// too far away
+	}
+
 	if (actor->type == MT_SKULL) {
 		dist >>= 1;
 	}
@@ -2482,6 +2488,7 @@ boolean PIT_VileCheck(mobj_t* thing)
 	maxdist = thing->info->radius + mobjinfo[MT_VILE].radius;
 	maxdist = thing->info->radius + mobjinfo[MT_RESURRECTOR2].radius;
 	maxdist = thing->info->radius + mobjinfo[MT_NIGHTMARE_LOSTSOUL].radius;
+	maxdist = thing->info->radius + mobjinfo[MT_RESURRECTOR3].radius;
 
 	if (abs(thing->x - viletryx) > maxdist
 		|| abs(thing->y - viletryy) > maxdist)
@@ -3928,4 +3935,149 @@ void A_KnightmareAttack(mobj_t* actor) {
 
 	// launch a missile
 	P_MissileAttack(actor, DP_STRAIGHT);
+}
+
+//
+// A_ResurrectorChase
+// Check for ressurecting a body
+//
+void A_ResurrectorChase(mobj_t* actor)
+{
+	int			xl;
+	int			xh;
+	int			yl;
+	int			yh;
+
+	int			bx;
+	int			by;
+
+	mobjinfo_t* info;
+	mobj_t* temp;
+
+	if (actor->movedir != DI_NODIR)
+	{
+		// check for corpses to raise
+		viletryx =
+			actor->x + actor->info->speed * xspeed[actor->movedir];
+		viletryy =
+			actor->y + actor->info->speed * yspeed[actor->movedir];
+
+		xl = (viletryx - bmaporgx - MAXRADIUS * 2) >> MAPBLOCKSHIFT;
+		xh = (viletryx - bmaporgx + MAXRADIUS * 2) >> MAPBLOCKSHIFT;
+		yl = (viletryy - bmaporgy - MAXRADIUS * 2) >> MAPBLOCKSHIFT;
+		yh = (viletryy - bmaporgy + MAXRADIUS * 2) >> MAPBLOCKSHIFT;
+
+		vileobj = actor;
+		for (bx = xl; bx <= xh; bx++)
+		{
+			for (by = yl; by <= yh; by++)
+			{
+				// Call PIT_VileCheck to check
+				// whether object is a corpse
+				// that canbe raised.
+				if (!P_BlockThingsIterator(bx, by, PIT_VileCheck))
+				{
+					// got one!
+					temp = actor->target;
+					actor->target = corpsehit;
+					A_FaceTarget(actor);
+					actor->target = temp;
+
+					P_SetMobjState(actor, S_AV64_HEAL1);
+					S_StartSound(corpsehit, sfx_slop);
+					info = corpsehit->info;
+
+					P_SetMobjState(corpsehit, info->raisestate);
+					corpsehit->height <<= 2;
+					corpsehit->flags = info->flags;
+					corpsehit->health = info->spawnhealth;
+					corpsehit->target = NULL;
+
+					return;
+				}
+			}
+		}
+	}
+
+	// Return to normal attack.
+	A_Chase(actor);
+}
+
+//
+// A_ResurrectorDecide
+//
+
+void A_ResurrectorDecide(mobj_t* actor)
+{
+	if (P_Random(pr_resurrectordecide) < 128)
+	{
+		P_SetMobjState(actor, S_AV64_ATK1_1);
+	}
+	else if (P_Random(pr_resurrectordecide) < 256)
+	{
+		P_SetMobjState(actor, S_AV64_ATK2_1);
+	}
+
+}
+
+//
+// A_ResurrectorMissile
+//
+
+void A_ResurrectorMissile(mobj_t* actor) {
+	mobj_t* mo;
+	int count = 0;
+	angle_t an = 0;
+	fixed_t x = 0;
+	fixed_t y = 0;
+
+	if (!actor->target) {
+		return;
+	}
+
+	S_StartSound(actor, sfx_tracer);
+	A_FaceTarget(actor);
+	for (mo = mobjhead.next; mo != &mobjhead; mo = mo->next) {
+		// not a rect projectile
+		if (mo->type != MT_PROJ_RECT) {
+			continue;
+		}
+
+		count++;
+	}
+
+	if (!(count < 9)) {
+		return;
+	}
+
+	// Arm 1
+
+	an = (actor->angle - ANG90) >> ANGLETOFINESHIFT;
+	x = FixedMul(68 * FRACUNIT, finecosine[an]);
+	y = FixedMul(68 * FRACUNIT, finesine[an]);
+	mo = P_SpawnMobj(actor->x + x, actor->y + y, actor->z + 68 * FRACUNIT, MT_PROJ_RECT);
+	P_SetTarget(&mo->target, actor);
+	P_SetTarget(&mo->tracer, actor->target);
+	mo->threshold = 0;
+	an = (actor->angle + ANG270);
+	mo->angle = an;
+	an >>= ANGLETOFINESHIFT;
+	mo->momx = FixedMul(mo->info->speed, finecosine[an]);
+	mo->momy = FixedMul(mo->info->speed, finesine[an]);
+
+	// Arm2
+
+	an = (actor->angle + ANG90) >> ANGLETOFINESHIFT;
+	x = FixedMul(68 * FRACUNIT, finecosine[an]);
+	y = FixedMul(68 * FRACUNIT, finesine[an]);
+	mo = P_SpawnMobj(actor->x + x, actor->y + y, actor->z + 68 * FRACUNIT, MT_PROJ_RECT);
+	P_SetTarget(&mo->target, actor);
+	P_SetTarget(&mo->tracer, actor->target);
+	mo->threshold = 0;
+	an = (actor->angle - ANG270);
+	mo->angle = an;
+	an >>= ANGLETOFINESHIFT;
+	mo->momx = FixedMul(mo->info->speed, finecosine[an]);
+	mo->momy = FixedMul(mo->info->speed, finesine[an]);
+
 }

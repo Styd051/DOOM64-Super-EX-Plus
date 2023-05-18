@@ -102,7 +102,8 @@ enum {
     pr_arachnobaronattack,      // #69
     pr_arachnobaronrefire,      // #70
     pr_knightmareattack,        // #71
-    pr_randomizer,              // #72
+    pr_resurrectordecide,       // #72
+    pr_randomizer,              // #73
 
     // End of new entries
     NUMPRCLASS               // MUST be last item in list

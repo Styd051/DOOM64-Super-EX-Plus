@@ -158,6 +158,7 @@ char* sprnames[NUMSPRITES + 1] = {  //0x5FA30
 	"ARNO",
 	"BOZ3",
 	"BA10",
+	"AV64",
 	NULL
 };
 
@@ -304,6 +305,9 @@ void A_CyberDemonShotgunRefire();
 void A_ArachnobaronAttack();
 void A_ArachnobaronRefire();
 void A_KnightmareAttack();
+void A_ResurrectorChase();
+void A_ResurrectorDecide();
+void A_ResurrectorMissile();
 
 
 #pragma warning(push)
@@ -2908,6 +2912,44 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_BA10_DIE5*/{ SPR_BA10, 32774, 2, {NULL}, S_BA10_DIE6 },
 	/*S_BA10_DIE6*/{ SPR_BA10, 32775, 2, {NULL}, S_NULL },
 
+	/*S_AV64_STND*/{ SPR_AV64, 0, 10, {A_Look}, S_AV64_STND2 },
+	/*S_AV64_STND2*/{ SPR_AV64, 1, 10, {A_Look}, S_AV64_STND },
+	/*S_AV64_RUN1*/{ SPR_AV64, 0, 3, {A_ResurrectorChase}, S_AV64_RUN2 },
+	/*S_AV64_RUN2*/{ SPR_AV64, 0, 3, {A_ResurrectorChase}, S_AV64_RUN3 },
+	/*S_AV64_RUN3*/{ SPR_AV64, 1, 3, {A_ResurrectorChase}, S_AV64_RUN4 },
+	/*S_AV64_RUN4*/{ SPR_AV64, 1, 3, {A_ResurrectorChase}, S_AV64_RUN5 },
+	/*S_AV64_RUN5*/{ SPR_AV64, 2, 3, {A_ResurrectorChase}, S_AV64_RUN6 },
+	/*S_AV64_RUN6*/{ SPR_AV64, 2, 3, {A_ResurrectorChase}, S_AV64_RUN7 },
+	/*S_AV64_RUN7*/{ SPR_AV64, 3, 3, {A_ResurrectorChase}, S_AV64_RUN8 },
+	/*S_AV64_RUN8*/{ SPR_AV64, 3, 3, {A_ResurrectorChase}, S_AV64_RUN1 },
+	/*S_AV64_DECIDE*/{ SPR_AV64, 0, 1, {A_ResurrectorDecide}, S_AV64_DECIDE },
+	/*S_AV64_ATK1_1*/{ SPR_AV64, 32772, 0, {A_VileStart}, S_AV64_ATK1_2 },
+	/*S_AV64_ATK1_2*/{ SPR_AV64, 32772, 10, {A_FaceTarget}, S_AV64_ATK1_3 },
+	/*S_AV64_ATK1_3*/{ SPR_AV64, 32772, 8, {A_VileTarget}, S_AV64_ATK1_4 },
+	/*S_AV64_ATK1_4*/{ SPR_AV64, 32773, 8, {A_FaceTarget}, S_AV64_ATK1_5 },
+	/*S_AV64_ATK1_5*/{ SPR_AV64, 32773, 8, {A_FaceTarget}, S_AV64_ATK1_6 },
+	/*S_AV64_ATK1_6*/{ SPR_AV64, 32773, 8, {A_FaceTarget}, S_AV64_ATK1_7 },
+	/*S_AV64_ATK1_7*/{ SPR_AV64, 32774, 8, {A_FaceTarget}, S_AV64_ATK1_8 },
+	/*S_AV64_ATK1_8*/{ SPR_AV64, 32774, 8, {A_FaceTarget}, S_AV64_ATK1_9 },
+	/*S_AV64_ATK1_9*/{ SPR_AV64, 32774, 8, {A_FaceTarget}, S_AV64_ATK1_10 },
+	/*S_AV64_ATK1_10*/{ SPR_AV64, 32774, 8, {A_VileAttack}, S_AV64_ATK1_11 },
+	/*S_AV64_ATK1_11*/{ SPR_AV64, 32773, 8, {NULL}, S_AV64_ATK1_12 },
+	/*S_AV64_ATK1_12*/{ SPR_AV64, 32772, 12, {NULL}, S_AV64_RUN1 },
+	/*S_AV64_ATK2_1*/{ SPR_AV64, 4, 12, {A_FaceTarget}, S_AV64_ATK2_2 },
+	/*S_AV64_ATK2_2*/{ SPR_AV64, 8, 12, {A_FaceTarget}, S_AV64_ATK2_3 },
+	/*S_AV64_ATK2_3*/{ SPR_AV64, 9, 12, {A_ResurrectorMissile}, S_AV64_RUN1 },
+	/*S_AV64_HEAL1*/{ SPR_AV64, 32772, 10, {NULL}, S_AV64_HEAL2 },
+	/*S_AV64_HEAL2*/{ SPR_AV64, 32773, 10, {NULL}, S_AV64_HEAL3 },
+	/*S_AV64_HEAL3*/{ SPR_AV64, 32775, 10, {NULL}, S_AV64_RUN1 },
+	/*S_AV64_PAIN*/{ SPR_AV64, 10, 5, {NULL}, S_AV64_PAIN2 },
+	/*S_AV64_PAIN2*/{ SPR_AV64, 10, 5, {A_Pain}, S_AV64_RUN1 },
+	/*S_AV64_DIE1*/{ SPR_AV64, 11, 7, {NULL}, S_AV64_DIE2 },
+	/*S_AV64_DIE2*/{ SPR_AV64, 12, 7, {A_Scream}, S_AV64_DIE3 },
+	/*S_AV64_DIE3*/{ SPR_AV64, 13, 7, {A_Fall}, S_AV64_DIE4 },
+	/*S_AV64_DIE4*/{ SPR_AV64, 14, 7, {NULL}, S_AV64_DIE5 },
+	/*S_AV64_DIE5*/{ SPR_AV64, 15, 7, {NULL}, S_AV64_DIE6 },
+	/*S_AV64_DIE6*/{ SPR_AV64, 16, 7, {A_OnDeathTrigger}, S_AV64_DIE7 },
+	/*S_AV64_DIE7*/{ SPR_AV64, 17, 7, {NULL}, S_NULL },
 };
 
 #pragma warning(pop)
@@ -11384,6 +11426,35 @@ S_NULL	   //raisestate
 	12,        //damage
 	sfx_None/*sfx_000*/,        //activesound
 	MF_NOBLOCKMAP | MF_DROPOFF | MF_MISSILE,        //flags
+	0,        //palette
+	255,        //alpha
+	S_NULL	   //raisestate
+},
+
+{
+	/*MT_RESURRECTOR3*/
+	9039,		// doomednum
+	S_AV64_STND,		// spawnstate
+	700,		// spawnhealth
+	S_AV64_RUN1,		// seestate
+	sfx_vilsit,		// seesound
+	8,		// reactiontime
+	0,		// attacksound
+	S_AV64_PAIN,		// painstate
+	10,		// painchance
+	sfx_vipain,		// painsound
+	0,		// meleestate
+	S_AV64_DECIDE,		// missilestate
+	S_AV64_DIE1,		// deathstate
+	S_NULL,		// xdeathstate
+	sfx_vildth,		// deathsound
+	15,		// speed
+	32 * FRACUNIT,		// radius
+	120 * FRACUNIT,		// height
+	500,		// mass
+	0,		// damage
+	sfx_vilact,		// activesound
+	MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,		// flags
 	0,        //palette
 	255,        //alpha
 	S_NULL	   //raisestate

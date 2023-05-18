@@ -1242,6 +1242,9 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 		else if (randomizernum < 230) {
 			i = MT_HELLCENTAUR;
 		}
+		else if (randomizernum < 243) {
+			i = MT_RESURRECTOR3;
+		}
 		else if (randomizernum < 256) {
 			i = MT_VILE;
 		}

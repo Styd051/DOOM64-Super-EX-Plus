@@ -1056,6 +1056,9 @@ static void P_Obituary(mobj_t* source, mobj_t* target) {
 		case MT_KNIGHTMARE:
 			sprintf(omsg, "you were charred\nby a Knightmare.");
 			break;
+		case MT_RESURRECTOR3:
+			sprintf(omsg, "you were incinerated\nby an Resurrector.");
+			break;
 		default:
 			sprintf(omsg, "you died.");
 			break;
@@ -1340,13 +1343,14 @@ void P_DamageMobj(mobj_t* target, mobj_t* inflictor, mobj_t* source, int damage)
 
 	target->reactiontime = 0;           // we're awake now...
 	// Fixed a bug with the Cacodemon attacking itself when taking explosion damage from Barrel.
-	if ((!target->threshold || target->type == MT_VILE || target->type == MT_CACODEMON || target->type == MT_NIGHTMARE_CACODEMON || target->type == MT_CACOLANTERN || target->type == MT_ABADDON)
+	if ((!target->threshold || target->type == MT_VILE || target->type == MT_CACODEMON || target->type == MT_NIGHTMARE_CACODEMON || target->type == MT_CACOLANTERN || target->type == MT_ABADDON || target->type == MT_RESURRECTOR3)
 		&& source && (source->flags & MF_SHOOTABLE)
 		&& source->type != MT_VILE 
 		&& source->type != MT_CACODEMON
 		&& source->type != MT_NIGHTMARE_CACODEMON
 		&& source->type != MT_CACOLANTERN
 		&& source->type != MT_ABADDON
+		&& source->type != MT_RESURRECTOR3
 		&& !(target->flags & MF_NOINFIGHTING))
 	{
 		// if not intent on another player,
