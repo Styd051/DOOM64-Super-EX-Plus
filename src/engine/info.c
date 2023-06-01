@@ -3118,7 +3118,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		S_NULL,        //xdeathstate
 		sfx_sargdie,        //deathsound
 		12,        //speed
-		50 * FRACUNIT,        //radius
+		44 * FRACUNIT,        //radius
 		100 * FRACUNIT,        //height
 		400,        //mass
 		0,        //damage
@@ -10521,7 +10521,7 @@ S_NULL	   //raisestate
 	S_NULL,        //xdeathstate
 	sfx_sargdie,        //deathsound
 	20,        //speed
-	50 * FRACUNIT,        //radius
+	44 * FRACUNIT,        //radius
 	100 * FRACUNIT,        //height
 	400,        //mass
 	0,        //damage
