@@ -178,6 +178,13 @@ void P_MissileHit(mobj_t* mo) {
 		}
 	}
 
+	if (mo->type == MT_PROJ_NAIL) {
+		if (missilething && !(missilething->flags & MF_NOBLOOD)) {
+			P_SpawnBlood(mo->x, mo->y, mo->z, damage);
+		}
+		
+	}
+
 	P_ExplodeMissile(mo);
 }
 
