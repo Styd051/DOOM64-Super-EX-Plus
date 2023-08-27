@@ -1034,7 +1034,7 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 	}
 
 	if (i >= NUMMOBJTYPES)
-		I_Error("P_SpawnMapThing: Unknown type %i at (%i, %i)",
+		I_Printf("P_SpawnMapThing: Unknown type %i at (%i, %i)\n",
 			mthing->type,
 			mthing->x, mthing->y);
 

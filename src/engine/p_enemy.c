@@ -452,6 +452,12 @@ static mobj_t* P_MissileAttack(mobj_t* actor, int direction) {
 		type = MT_PROJ_KNIGHTMARE;
 		aim = true;
 		break;
+	case MT_THAMUZ:
+		offs = 45;
+		deltaz = 88;
+		type = MT_PROJ_BFG;
+		aim = true;
+		break;
 	}
 
 	deltax = FixedMul(offs * FRACUNIT, finecosine[angle]);
@@ -4079,5 +4085,35 @@ void A_ResurrectorMissile(mobj_t* actor) {
 	an >>= ANGLETOFINESHIFT;
 	mo->momx = FixedMul(mo->info->speed, finecosine[an]);
 	mo->momy = FixedMul(mo->info->speed, finesine[an]);
+
+}
+
+//
+// A_ThamuzAttack1
+//
+
+void A_ThamuzAttack1(mobj_t* actor) {
+	if (!actor->target) {
+		return;
+	}
+
+	A_FaceTarget(actor);
+	P_MissileAttack(actor, DP_LEFT);
+}
+
+//
+// A_ThamuzDecide
+//
+
+void A_ThamuzDecide(mobj_t* actor)
+{
+	if (P_Random(pr_thamuzdecide) < 128)
+	{
+		P_SetMobjState(actor, S_TCYBR_ATK1_1);
+	}
+	else if (P_Random(pr_thamuzdecide) < 256)
+	{
+		P_SetMobjState(actor, S_TCYBR_ATK2_1);
+	}
 
 }

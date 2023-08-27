@@ -159,6 +159,7 @@ char* sprnames[NUMSPRITES + 1] = {  //0x5FA30
 	"BOZ3",
 	"BA10",
 	"AV64",
+	"TCYB",
 	NULL
 };
 
@@ -308,6 +309,8 @@ void A_KnightmareAttack();
 void A_ResurrectorChase();
 void A_ResurrectorDecide();
 void A_ResurrectorMissile();
+void A_ThamuzAttack1();
+void A_ThamuzDecide();
 
 
 #pragma warning(push)
@@ -2950,6 +2953,32 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_AV64_DIE5*/{ SPR_AV64, 15, 7, {NULL}, S_AV64_DIE6 },
 	/*S_AV64_DIE6*/{ SPR_AV64, 16, 7, {A_OnDeathTrigger}, S_AV64_DIE7 },
 	/*S_AV64_DIE7*/{ SPR_AV64, 17, 7, {NULL}, S_NULL },
+
+	/*S_TCYBR_STND*/{ SPR_TCYB, 5, 10, {A_Look}, S_TCYBR_STND },
+	/*S_TCYBR_RUN1*/{ SPR_TCYB, 0, 4, {A_Hoof}, S_TCYBR_RUN2 },
+	/*S_TCYBR_RUN2*/{ SPR_TCYB, 0, 4, {A_Chase}, S_TCYBR_RUN3 },
+	/*S_TCYBR_RUN3*/{ SPR_TCYB, 1, 4, {A_Chase}, S_TCYBR_RUN4 },
+	/*S_TCYBR_RUN4*/{ SPR_TCYB, 1, 4, {A_Chase}, S_TCYBR_RUN5 },
+	/*S_TCYBR_RUN5*/{ SPR_TCYB, 2, 4, {A_Chase}, S_TCYBR_RUN6 },
+	/*S_TCYBR_RUN6*/{ SPR_TCYB, 2, 4, {A_Chase}, S_TCYBR_RUN7 },
+	/*S_TCYBR_RUN7*/{ SPR_TCYB, 3, 4, {A_Metal}, S_TCYBR_RUN8 },
+	/*S_TCYBR_RUN8*/{ SPR_TCYB, 3, 4, {A_Chase}, S_TCYBR_RUN1 },
+	/*S_TCYBR_DECIDE*/{ SPR_TCYB, 0, 1, {A_ThamuzDecide}, S_TCYBR_DECIDE },
+	/*S_TCYBR_ATK1_1*/{ SPR_TCYB, 32772, 5, {A_FaceTarget}, S_TCYBR_ATK1_2 },
+	/*S_TCYBR_ATK1_2*/{ SPR_TCYB, 5, 10, {A_ThamuzAttack1}, S_TCYBR_RUN1 },
+	/*S_TCYBR_ATK2_1*/{ SPR_TCYB, 6, 20, {NULL}, S_TCYBR_ATK2_2 },
+	/*S_TCYBR_ATK2_2*/{ SPR_TCYB, 6, 10, {A_RectGroundFire}, S_TCYBR_ATK2_3 },
+	/*S_TCYBR_ATK2_3*/{ SPR_TCYB, 6, 10, {NULL}, S_TCYBR_RUN1 },
+	/*S_TCYBR_PAIN*/{ SPR_TCYB, 5, 10, {A_Pain}, S_TCYBR_RUN1 },
+	/*S_TCYBR_DIE1*/{ SPR_TCYB, 6, 30, {A_CyberDeathEvent}, S_TCYBR_DIE2 },
+	/*S_TCYBR_DIE2*/{ SPR_TCYB, 7, 8, {NULL}, S_TCYBR_DIE3 },
+	/*S_TCYBR_DIE3*/{ SPR_TCYB, 8, 7, {NULL}, S_TCYBR_DIE4 },
+	/*S_TCYBR_DIE4*/{ SPR_TCYB, 9, 6, {NULL}, S_TCYBR_DIE5 },
+	/*S_TCYBR_DIE5*/{ SPR_TCYB, 10, 5, {NULL}, S_TCYBR_DIE6 },
+	/*S_TCYBR_DIE6*/{ SPR_TCYB, 11, 4, {A_Fall}, S_TCYBR_DIE7 },
+	/*S_TCYBR_DIE7*/{ SPR_TCYB, 12, 4, {NULL}, S_TCYBR_DIE8 },
+	/*S_TCYBR_DIE8*/{ SPR_TCYB, 13, 4, {A_OnDeathTrigger}, S_TCYBR_DIE9 },
+	/*S_TCYBR_DIE9*/{ SPR_TCYB, 14, -1, {NULL}, S_NULL },
 };
 
 #pragma warning(pop)
@@ -11455,6 +11484,35 @@ S_NULL	   //raisestate
 	0,		// damage
 	sfx_vilact,		// activesound
 	MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,		// flags
+	0,        //palette
+	255,        //alpha
+	S_NULL	   //raisestate
+},
+
+{
+	/*MT_THAMUZ*/
+	9040,        //doomednum
+	S_TCYBR_STND,        //spawnstate
+	4600,        //spawnhealth
+	S_TCYBR_RUN1,        //seestate
+	sfx_cybsit,        //seesound
+	8,        //reactiontime
+	sfx_None/*sfx_000*/,        //attacksound
+	S_TCYBR_PAIN,        //painstate
+	20,        //painchance
+	sfx_dbpain2,        //painsound
+	S_NULL,        //meleestate
+	S_TCYBR_DECIDE,        //missilestate
+	S_TCYBR_DIE1,        //deathstate
+	S_NULL,        //xdeathstate
+	sfx_cybdth,        //deathsound
+	16,        //speed
+	70 * FRACUNIT,        //radius
+	170 * FRACUNIT,        //height
+	1000,        //mass
+	0,        //damage
+	sfx_dbact,        //activesound
+	MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
 	0,        //palette
 	255,        //alpha
 	S_NULL	   //raisestate

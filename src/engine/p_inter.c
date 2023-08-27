@@ -1059,6 +1059,9 @@ static void P_Obituary(mobj_t* source, mobj_t* target) {
 		case MT_RESURRECTOR3:
 			sprintf(omsg, "you were incinerated\nby an Resurrector.");
 			break;
+		case MT_THAMUZ:
+			sprintf(omsg, "you were fell before\nThamuz.");
+			break;
 		default:
 			sprintf(omsg, "you died.");
 			break;
