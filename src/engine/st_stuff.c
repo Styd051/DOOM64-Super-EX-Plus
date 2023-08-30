@@ -1044,7 +1044,7 @@ void ST_UpdateFlash(void) {
 	}
 	// quad damage flash (purple)
 	else if (p->powers[pw_quaddamage] > 61 || (p->powers[pw_quaddamage] & 8)) {
-		flashcolor = D_RGBA(128, 128, 128, 0xff);
+		flashcolor = D_RGBA(128, 0, 255, 0xff);
 		st_flash_r = 128;
 		st_flash_g = 0;
 		st_flash_b = 255;
