@@ -41,7 +41,7 @@
 #include "p_mobj.h"
 
 char* sprnames[NUMSPRITES + 1] = {  //0x5FA30
-	"SPOT", "PLAY", "SARG", "FATT", "POSS", "TROO", "HEAD", "BOSS",
+	"SPOT", "PLAY", "SARG", "FATT", "POSS", "TROO", "HEAD", "BOSS", "BOS2",
 	"SKUL", "BSPI", "CYBR", "PAIN", "RECT", "MISL", "PLSS", "BFS1",
 	"LASS", "BAL1", "BAL3", "BAL2", "BAL7", "BAL8", "APLS", "MANF",
 	"TRCR", "DART", "FIRE", "RBAL", "PUF2", "PUF3", "PUFF", "BLUD",
@@ -598,33 +598,33 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_BOSS1_RAISE5*/        { SPR_BOSS, 9, 8, {NULL}, S_BOSS1_RAISE6 },
 	/*S_BOSS1_RAISE6*/        { SPR_BOSS, 8, 8, {NULL}, S_BOSS1_RUN1 },
 
-	/*S_BOSS2_STND*/        { SPR_BOSS, 0, 10, {A_Look}, S_BOSS2_STND2 },
-	/*S_BOSS2_STND2*/       { SPR_BOSS, 1, 10, {A_Look}, S_BOSS2_STND },
-	/*S_BOSS2_RUN1*/        { SPR_BOSS, 0, 3, {A_Chase}, S_BOSS2_RUN2 },
-	/*S_BOSS2_RUN2*/        { SPR_BOSS, 0, 3, {A_Chase}, S_BOSS2_RUN3 },
-	/*S_BOSS2_RUN3*/        { SPR_BOSS, 1, 3, {A_Chase}, S_BOSS2_RUN4 },
-	/*S_BOSS2_RUN4*/        { SPR_BOSS, 1, 3, {A_Chase}, S_BOSS2_RUN5 },
-	/*S_BOSS2_RUN5*/        { SPR_BOSS, 2, 3, {A_Chase}, S_BOSS2_RUN6 },
-	/*S_BOSS2_RUN6*/        { SPR_BOSS, 2, 3, {A_Chase}, S_BOSS2_RUN7 },
-	/*S_BOSS2_RUN7*/        { SPR_BOSS, 3, 3, {A_Chase}, S_BOSS2_RUN8 },
-	/*S_BOSS2_RUN8*/        { SPR_BOSS, 3, 3, {A_Chase}, S_BOSS2_RUN1 },
-	/*S_BOSS2_ATK1*/        { SPR_BOSS, 4, 8, {A_FaceTarget}, S_BOSS2_ATK2 },
-	/*S_BOSS2_ATK2*/        { SPR_BOSS, 5, 8, {A_FaceTarget}, S_BOSS2_ATK3 },
-	/*S_BOSS2_ATK3*/        { SPR_BOSS, 6, 8, {A_BruisAttack}, S_BOSS2_RUN1 },
-	/*S_BOSS2_PAIN*/        { SPR_BOSS, 7, 2, {NULL}, S_BOSS2_PAIN2 },
-	/*S_BOSS2_PAIN2*/       { SPR_BOSS, 7, 2, {A_Pain}, S_BOSS2_RUN1 },
-	/*S_BOSS2_DIE1*/        { SPR_BOSS, 8, 8, {NULL}, S_BOSS2_DIE2 },
-	/*S_BOSS2_DIE2*/        { SPR_BOSS, 9, 8, {A_Scream}, S_BOSS2_DIE3 },
-	/*S_BOSS2_DIE3*/        { SPR_BOSS, 10, 8, {NULL}, S_BOSS2_DIE4 },
-	/*S_BOSS2_DIE4*/        { SPR_BOSS, 11, 8, {A_Fall}, S_BOSS2_DIE5 },
-	/*S_BOSS2_DIE5*/        { SPR_BOSS, 12, 8, {A_OnDeathTrigger}, S_BOSS2_DIE6 },
-	/*S_BOSS2_DIE6*/        { SPR_BOSS, 13, -1, {NULL}, S_NULL },
-	/*S_BOSS2_RAISE1*/        { SPR_BOSS, 13, 8, {NULL}, S_BOSS2_RAISE2 },
-	/*S_BOSS2_RAISE2*/        { SPR_BOSS, 12, 8, {NULL}, S_BOSS2_RAISE3 },
-	/*S_BOSS2_RAISE3*/        { SPR_BOSS, 11, 8, {NULL}, S_BOSS2_RAISE4 },
-	/*S_BOSS2_RAISE4*/        { SPR_BOSS, 10, 8, {NULL}, S_BOSS2_RAISE5 },
-	/*S_BOSS2_RAISE5*/        { SPR_BOSS, 9, 8, {NULL}, S_BOSS2_RAISE6 },
-	/*S_BOSS2_RAISE6*/        { SPR_BOSS, 8, 8, {NULL}, S_BOSS2_RUN1 },
+	/*S_BOSS2_STND*/        { SPR_BOS2, 0, 10, {A_Look}, S_BOSS2_STND2 },
+	/*S_BOSS2_STND2*/       { SPR_BOS2, 1, 10, {A_Look}, S_BOSS2_STND },
+	/*S_BOSS2_RUN1*/        { SPR_BOS2, 0, 3, {A_Chase}, S_BOSS2_RUN2 },
+	/*S_BOSS2_RUN2*/        { SPR_BOS2, 0, 3, {A_Chase}, S_BOSS2_RUN3 },
+	/*S_BOSS2_RUN3*/        { SPR_BOS2, 1, 3, {A_Chase}, S_BOSS2_RUN4 },
+	/*S_BOSS2_RUN4*/        { SPR_BOS2, 1, 3, {A_Chase}, S_BOSS2_RUN5 },
+	/*S_BOSS2_RUN5*/        { SPR_BOS2, 2, 3, {A_Chase}, S_BOSS2_RUN6 },
+	/*S_BOSS2_RUN6*/        { SPR_BOS2, 2, 3, {A_Chase}, S_BOSS2_RUN7 },
+	/*S_BOSS2_RUN7*/        { SPR_BOS2, 3, 3, {A_Chase}, S_BOSS2_RUN8 },
+	/*S_BOSS2_RUN8*/        { SPR_BOS2, 3, 3, {A_Chase}, S_BOSS2_RUN1 },
+	/*S_BOSS2_ATK1*/        { SPR_BOS2, 4, 8, {A_FaceTarget}, S_BOSS2_ATK2 },
+	/*S_BOSS2_ATK2*/        { SPR_BOS2, 5, 8, {A_FaceTarget}, S_BOSS2_ATK3 },
+	/*S_BOSS2_ATK3*/        { SPR_BOS2, 6, 8, {A_BruisAttack}, S_BOSS2_RUN1 },
+	/*S_BOSS2_PAIN*/        { SPR_BOS2, 7, 2, {NULL}, S_BOSS2_PAIN2 },
+	/*S_BOSS2_PAIN2*/       { SPR_BOS2, 7, 2, {A_Pain}, S_BOSS2_RUN1 },
+	/*S_BOSS2_DIE1*/        { SPR_BOS2, 8, 8, {NULL}, S_BOSS2_DIE2 },
+	/*S_BOSS2_DIE2*/        { SPR_BOS2, 9, 8, {A_Scream}, S_BOSS2_DIE3 },
+	/*S_BOSS2_DIE3*/        { SPR_BOS2, 10, 8, {NULL}, S_BOSS2_DIE4 },
+	/*S_BOSS2_DIE4*/        { SPR_BOS2, 11, 8, {A_Fall}, S_BOSS2_DIE5 },
+	/*S_BOSS2_DIE5*/        { SPR_BOS2, 12, 8, {A_OnDeathTrigger}, S_BOSS2_DIE6 },
+	/*S_BOSS2_DIE6*/        { SPR_BOS2, 13, -1, {NULL}, S_NULL },
+	/*S_BOSS2_RAISE1*/        { SPR_BOS2, 13, 8, {NULL}, S_BOSS2_RAISE2 },
+	/*S_BOSS2_RAISE2*/        { SPR_BOS2, 12, 8, {NULL}, S_BOSS2_RAISE3 },
+	/*S_BOSS2_RAISE3*/        { SPR_BOS2, 11, 8, {NULL}, S_BOSS2_RAISE4 },
+	/*S_BOSS2_RAISE4*/        { SPR_BOS2, 10, 8, {NULL}, S_BOSS2_RAISE5 },
+	/*S_BOSS2_RAISE5*/        { SPR_BOS2, 9, 8, {NULL}, S_BOSS2_RAISE6 },
+	/*S_BOSS2_RAISE6*/        { SPR_BOS2, 8, 8, {NULL}, S_BOSS2_RUN1 },
 
 	/*S_SKUL_STND*/         { SPR_SKUL, 0, 5, {A_Look}, S_SKUL_STND2 },
 	/*S_SKUL_STND2*/        { SPR_SKUL, 1, 5, {A_Look}, S_SKUL_STND3 },
@@ -3356,7 +3356,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		0,        //damage
 		sfx_dbact,        //activesound
 		MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
-		1,        //palette
+		0,        //palette
 		255,        //alpha
 		S_BOSS1_RAISE1	   //raisestate
 	},

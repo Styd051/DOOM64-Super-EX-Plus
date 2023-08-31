@@ -39,6 +39,7 @@ typedef enum {
 	SPR_TROO,
 	SPR_HEAD,
 	SPR_BOSS,
+	SPR_BOS2,
 	SPR_SKUL,
 	SPR_BSPI,
 	SPR_CYBR,
