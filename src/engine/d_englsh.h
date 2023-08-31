@@ -237,6 +237,7 @@
 #define CC_PAIN     "Pain Elemental"
 #define CC_MANCU    "Mancubus"
 #define CC_CYBER    "The Cyberdemon"
+#define CC_MOTHERDEMON    "Mother Demon"
 #define CC_HERO     "Our Hero"
 
 #endif

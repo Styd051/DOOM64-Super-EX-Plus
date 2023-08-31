@@ -74,6 +74,7 @@ castinfo_t castorder[] = {
 	{   CC_PAIN,    MT_PAIN         },
 	{   CC_MANCU,   MT_MANCUBUS     },
 	{   CC_CYBER,   MT_CYBORG       },
+	{   CC_MOTHERDEMON,   MT_RESURRECTOR       },
 	{   CC_HERO,    MT_PLAYER       },
 	{   NULL,       0               }
 };
@@ -229,6 +230,9 @@ int F_Ticker(void) {
 			case S_CYBR_ATK4:
 			case S_CYBR_ATK6:
 				sound = sfx_missile;
+				break;
+			case S_RECT_ATK2:                           // mother demon
+				sound = sfx_rectatk;
 				break;
 			default:
 				sound = 0;
