@@ -1008,6 +1008,7 @@ CVAR_EXTERNAL(p_autorun);
 CVAR_EXTERNAL(p_usecontext);
 CVAR_EXTERNAL(m_complexdoom64);
 CVAR_EXTERNAL(m_keepartifacts);
+CVAR_EXTERNAL(m_cacodemonalternative);
 CVAR_EXTERNAL(compat_limitpain);
 CVAR_EXTERNAL(compat_mobjpass);
 CVAR_EXTERNAL(r_wipe);
@@ -1031,6 +1032,7 @@ enum {
 	misc_context,
 	misc_complexdoom64,
 	misc_keepartifacts,
+	misc_cacodemonalternative,
 	misc_header3,
 	misc_wipe,
 	misc_skybox,
@@ -1064,6 +1066,7 @@ menuitem_t MiscMenu[] = {
 	{2,"Use Context:",M_MiscChoice, 'u'},
 	{2,"Complex D64:",M_MiscChoice, 'c' },
 	{2,"Keep Artifacts:",M_MiscChoice, 'k' },
+	{2,"Caco Classic:",M_MiscChoice, 'c' },
 	{-1,"Misc",0 },
 	{2,"Screen Melt:",M_MiscChoice, 's' },
 	{2,"Skybox:",M_MiscChoice,'k'},
@@ -1096,6 +1099,7 @@ char* MiscHints[misc_end] = {
 	"if enabled interactive objects will highlight when near",
 	"enable randomizer for all monsters to make your game harder",
 	"enable to keep your artifacts when you die",
+	"change sprite cacodemon to style classic DOOM",
 	NULL,
 	"enable the melt effect when completing a level",
 	"toggle skies to render either normally or as skyboxes",
@@ -1124,6 +1128,7 @@ menudefault_t MiscDefault[] = {
 	{ &p_usecontext, 0 },
 	{ &m_complexdoom64, 0 },
 	{ &m_keepartifacts, 0 },
+	{ &m_cacodemonalternative, 0 },
 	{ &r_wipe, 1 },
 	{ &r_skybox, 0 },
 	{ &hud_disablesecretmessages, 0 },
@@ -1227,6 +1232,10 @@ void M_MiscChoice(int choice) {
 		M_SetOptionValue(choice, 0, 1, 1, &m_keepartifacts);
 		break;
 
+	case misc_cacodemonalternative:
+		M_SetOptionValue(choice, 0, 1, 1, &m_cacodemonalternative);
+		break;
+
 	case misc_wipe:
 		M_SetOptionValue(choice, 0, 1, 1, &r_wipe);
 		break;
@@ -1314,6 +1323,7 @@ void M_DrawMisc(void) {
 	DRAWMISCITEM(misc_context, p_usecontext.value, mapdisplaytype);
 	DRAWMISCITEM(misc_complexdoom64, m_complexdoom64.value, autoruntype);
 	DRAWMISCITEM(misc_keepartifacts, m_keepartifacts.value, autoruntype);
+	DRAWMISCITEM(misc_cacodemonalternative, m_cacodemonalternative.value, autoruntype);
 	DRAWMISCITEM(misc_wipe, r_wipe.value, msgNames);
 	DRAWMISCITEM(misc_autorun, p_autorun.value, autoruntype);
 	DRAWMISCITEM(misc_skybox, r_skybox.value, msgNames);

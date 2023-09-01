@@ -458,6 +458,12 @@ static mobj_t* P_MissileAttack(mobj_t* actor, int direction) {
 		type = MT_PROJ_BFG;
 		aim = true;
 		break;
+	case MT_CACODEMON_CLASSIC:
+		offs = 0;
+		deltaz = 46;
+		type = MT_PROJ_HEAD_CLASSIC;
+		aim = true;
+		break;
 	}
 
 	deltax = FixedMul(offs * FRACUNIT, finecosine[angle]);

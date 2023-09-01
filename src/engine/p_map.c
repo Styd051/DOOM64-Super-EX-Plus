@@ -1279,6 +1279,12 @@ boolean PTR_ShootTraverse(intercept_t* in) {
     else if (in->d.thing->flags & MF_NOBLOOD) {
         P_SpawnPuff(x, y, z);
     }
+    else if (th->type == MT_BRUISER1 || th->type == MT_BRUISER2) {
+        P_SpawnGreenBlood(x, y, z, la_damage);
+    }
+    else if (th->type == MT_CACODEMON_CLASSIC) {
+        P_SpawnBlueBlood(x, y, z, la_damage);
+    }
     else {
         P_SpawnBlood(x, y, z, la_damage);
     }

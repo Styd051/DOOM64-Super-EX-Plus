@@ -261,6 +261,7 @@ enum {
 };
 
 extern boolean windowpause;
+extern boolean CacodemonAlternative;
 
 //
 // DOOM keyboard definition.

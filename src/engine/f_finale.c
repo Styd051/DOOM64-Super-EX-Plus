@@ -186,6 +186,14 @@ int F_Ticker(void) {
 			goto stopattack;
 		}
 
+		if (caststate == &states[S_HEAD_ATK3]) { // gross hack.. to fix the animation of the attack of the cacodemon
+			goto stopattack;
+		}
+
+		if (caststate == &states[S_PAIN_ATK3]) { // gross hack.. to fix the animation of the attack of the pain elemental
+			goto stopattack;
+		}
+
 		st = caststate->nextstate;
 		caststate = &states[st];
 		castframes++;
@@ -220,7 +228,7 @@ int F_Ticker(void) {
 				sound = sfx_shotgun;
 				break;
 			case S_SKUL_ATK2:                           // skull
-			case S_PAIN_ATK4:                           // pain
+			case S_PAIN_ATK3:                           // pain
 				sound = sfx_skullatk;
 				break;
 			case S_BSPI_ATK2:                           // arachnotron

@@ -103,8 +103,10 @@ enum {
     pr_arachnobaronrefire,      // #70
     pr_knightmareattack,        // #71
     pr_resurrectordecide,       // #72
-    pr_thamuzdecide,       // #73
-    pr_randomizer,              // #74
+    pr_thamuzdecide,            // #73
+    pr_spawngreenblood,         // #74
+    pr_spawnblueblood,          // #75
+    pr_randomizer,              // #76
 
     // End of new entries
     NUMPRCLASS               // MUST be last item in list

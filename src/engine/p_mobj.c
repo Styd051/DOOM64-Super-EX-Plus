@@ -56,6 +56,7 @@ void P_CreateFadeOutThinker(mobj_t* mobj, line_t* line);
 CVAR(m_nospawnsound, 0);
 CVAR(m_brutal, 0);
 CVAR(m_complexdoom64, 0);
+CVAR(m_cacodemonalternative, 0);
 
 //
 // P_SetMobjState
@@ -1038,6 +1039,14 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 			mthing->type,
 			mthing->x, mthing->y);
 
+	// an option that allows you to replace the vanilla Cacodemon D64 with a Cacodemon D64 of style Classic DOOM
+	if (m_cacodemonalternative.value == 1)
+	{
+		if (i == MT_CACODEMON) {
+			i = MT_CACODEMON_CLASSIC;
+		}
+	}
+
 // Game Mode Complex DOOM 64 by Styd051 and Immorpher
   if (m_complexdoom64.value == 1)
   {
@@ -1533,6 +1542,64 @@ void P_SpawnBlood(fixed_t x, fixed_t y, fixed_t z, int damage) {
 		}
 		else if (damage < 9) {
 			P_SetMobjState(th, S_BLOOD3);
+		}
+	}
+}
+
+//
+// P_SpawnGreenBlood
+//
+void P_SpawnGreenBlood(fixed_t x, fixed_t y, fixed_t z, int damage) {
+	mobj_t* th;
+	int i = 0;
+
+	for (i = 0; i < 3; i++) {
+		z += P_RandomShift(pr_spawngreenblood, 11);
+		x += P_RandomShift(pr_spawngreenblood, 12);
+		y += P_RandomShift(pr_spawngreenblood, 12);
+
+		th = P_SpawnMobj(x, y, z, MT_GREENBLOOD);
+		th->momz = FRACUNIT * 2;
+		th->tics -= (P_Random(pr_spawngreenblood) & 1);
+
+		if (th->tics < 1) {
+			th->tics = 1;
+		}
+
+		if (damage <= 12 && (damage >= 9)) {
+			P_SetMobjState(th, S_GREENBLOOD2);
+		}
+		else if (damage < 9) {
+			P_SetMobjState(th, S_GREENBLOOD3);
+		}
+	}
+}
+
+//
+// P_SpawnBlueBlood
+//
+void P_SpawnBlueBlood(fixed_t x, fixed_t y, fixed_t z, int damage) {
+	mobj_t* th;
+	int i = 0;
+
+	for (i = 0; i < 3; i++) {
+		z += P_RandomShift(pr_spawnblueblood, 11);
+		x += P_RandomShift(pr_spawnblueblood, 12);
+		y += P_RandomShift(pr_spawnblueblood, 12);
+
+		th = P_SpawnMobj(x, y, z, MT_BLUEBLOOD);
+		th->momz = FRACUNIT * 2;
+		th->tics -= (P_Random(pr_spawnblueblood) & 1);
+
+		if (th->tics < 1) {
+			th->tics = 1;
+		}
+
+		if (damage <= 12 && (damage >= 9)) {
+			P_SetMobjState(th, S_BLUEBLOOD2);
+		}
+		else if (damage < 9) {
+			P_SetMobjState(th, S_BLUEBLOOD3);
 		}
 	}
 }
