@@ -2054,8 +2054,7 @@ void M_Video(int choice) {
 void M_DrawVideo(void) {
 	static const char* filterType[2] = { "Linear", "Nearest" };
 	static const char* ratioName[5] = { "4 : 3", "16 : 9", "16 : 10", "5 : 4", "21 : 09"};
-	static const char* frametype[2] = { "Off", "On" };
-	static const char* vsynctype[2] = { "Off", "Adaptive" };
+	static const char* vsynctype[2] = { "Off", "On" };
 	static const char* multisampletype[2] = { "4", "Off" };
 	char res[16];
 	int y;
@@ -2090,9 +2089,9 @@ void M_DrawVideo(void) {
 
 	sprintf(res, "%ix%i", (int)v_width.value, (int)v_height.value);
 	DRAWVIDEOITEM(resolution, res);
-	DRAWVIDEOITEM2(interpolate_frames, i_interpolateframes.value, frametype);
+	DRAWVIDEOITEM2(interpolate_frames, i_interpolateframes.value, vsynctype);
 	DRAWVIDEOITEM2(vsync, v_vsync.value, vsynctype);
-	DRAWVIDEOITEM2(accessibility, v_accessibility.value, frametype);
+	DRAWVIDEOITEM2(accessibility, v_accessibility.value, vsynctype);
 
 #undef DRAWVIDEOITEM
 #undef DRAWVIDEOITEM2
@@ -4153,8 +4152,8 @@ void M_DrawXInputButton(int x, int y, int button) {
 		color
 	);
 
-	RB_AddTriangle(0, 1, 2);
-	RB_AddTriangle(3, 2, 1);
+	dglTriangle(0, 1, 2);
+	dglTriangle(3, 2, 1);
 	dglDrawGeometry(4, vtx);
 
 	GL_ResetViewport();
