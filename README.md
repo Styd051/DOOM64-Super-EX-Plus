@@ -2,7 +2,7 @@
 Super EX+ and a custom fork of  EX+ of Gibbon, designed for mappers to use custom content on their map, with a modified DOOM Builder 64 configuration to show custom content, like custom monsters, custom decorations, etc... in the map editor
 
 # Custom Content Added
-currently 40 new monsters have been added
+currently 41 new monsters have been added
 
 -Archvile
 
@@ -83,6 +83,10 @@ currently 40 new monsters have been added
 -Arachnobaron
 
 -Knightmare
+
+-Archvile Mother Demon Rework (by Immorpher)
+
+-Thamuz future monster  add my unfinished ones for the moment
 
 currently there are 5 items has been added
 
