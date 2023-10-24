@@ -246,7 +246,7 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_PLAY_DIE2*/         { SPR_PLAY, 8, 10, {A_Scream}, S_PLAY_DIE3 },
 	/*S_PLAY_DIE3*/         { SPR_PLAY, 9, 10, {A_Fall}, S_PLAY_DIE4 },
 	/*S_PLAY_DIE4*/         { SPR_PLAY, 10, 10, {NULL}, S_PLAY_DIE5 },
-	/*S_PLAY_DIE5*/         { SPR_PLAY, 11, 10, {NULL}, S_PLAY_DIE6 },
+	/*S_PLAY_DIE5*/         { SPR_PLAY, 11, 10, {A_OnDeathTrigger}, S_PLAY_DIE6 },
 	/*S_PLAY_DIE6*/         { SPR_PLAY, 12, -1, {NULL}, S_NULL },
 	/*S_PLAY_XDIE1*/        { SPR_PLAY, 13, 5, {NULL}, S_PLAY_XDIE2 },
 	/*S_PLAY_XDIE2*/        { SPR_PLAY, 14, 5, {A_XScream}, S_PLAY_XDIE3 },
@@ -255,7 +255,7 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_PLAY_XDIE5*/        { SPR_PLAY, 17, 5, {NULL}, S_PLAY_XDIE6 },
 	/*S_PLAY_XDIE6*/        { SPR_PLAY, 18, 5, {NULL}, S_PLAY_XDIE7 },
 	/*S_PLAY_XDIE7*/        { SPR_PLAY, 19, 5, {NULL}, S_PLAY_XDIE8 },
-	/*S_PLAY_XDIE8*/        { SPR_PLAY, 20, 5, {NULL}, S_PLAY_XDIE9 },
+	/*S_PLAY_XDIE8*/        { SPR_PLAY, 20, 5, {A_OnDeathTrigger}, S_PLAY_XDIE9 },
 	/*S_PLAY_XDIE9*/        { SPR_PLAY, 21, -1, {NULL}, S_NULL },
 
 	/*S_PBOT_STND*/         { SPR_PLAY, 4, 10, {A_Look}, S_PBOT_STND },
@@ -2973,7 +2973,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		100,        //mass
 		0,        //damage
 		sfx_None/*sfx_000*/,        //activesound
-		MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_DROPOFF | MF_PICKUP | MF_NOTDMATCH,        //flags
+		MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_DROPOFF | MF_PICKUP | MF_NOTDMATCH | MF_TRIGDEATH,        //flags
 		0,        //palette
 		255,        //alpha
 		S_NULL	   //raisestate
