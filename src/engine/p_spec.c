@@ -2046,8 +2046,24 @@ void P_AddSectorSpecial(sector_t* sector) {
 		P_SpawnGlowingLight(sector, PULSERANDOM);
 		break;
 
+	case 12:	/* SYNC STROBE SLOW Exclusive Psx Doom */
+		P_SpawnStrobeFlash(sector, SLOWDARK, 1);
+		break;
+
+	case 13:	/* SYNC STROBE FAST Exclusive Psx Doom */
+		P_SpawnStrobeFlash(sector, FASTDARK, 1);
+		break;
+
 	case 17:
 		P_SpawnFireFlicker(sector);
+		break;
+
+	case 200:   /* GLOW TO DARK Exclusive Psx Doom */
+		P_SpawnGlowingLight(sector, glowto10);
+		break;
+
+	case 201:   /* GLOW TO BRIGHT Exclusive Psx Doom */
+		P_SpawnGlowingLight(sector, glowto255);
 		break;
 
 	case 202:

@@ -328,6 +328,20 @@ void P_SpawnGlowingLight(sector_t* sector, byte type) {
 		{
 			g->maxlight = 48;
 		}
+
+		switch (type)
+		{
+		case glowto10:		//special == 200
+			g->minlight = 10;
+			g->maxlight = sector->lightlevel;
+			g->direction = -1;
+			break;
+		case glowto255:		//special == 201
+			g->minlight = sector->lightlevel;
+			g->maxlight = 255;
+			g->direction = 1;
+			break;
+		}
 	}
 }
 

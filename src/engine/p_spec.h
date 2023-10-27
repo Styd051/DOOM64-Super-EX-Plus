@@ -107,7 +107,9 @@ typedef enum
 {
 	PULSENORMAL,
 	PULSESLOW,
-	PULSERANDOM
+	PULSERANDOM,
+	glowto10,
+	glowto255
 } glowtype_e;
 
 typedef struct {
