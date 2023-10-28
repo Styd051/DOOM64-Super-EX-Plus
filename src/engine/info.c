@@ -74,7 +74,8 @@ char* sprnames[NUMSPRITES + 1] = {  //0x5FA30
 	"BSGI", "GREN", "TRO2", "BAL9", "ZMAY", "64BZ", "DCYB", "STLK",
 	"PAI2", "SKE2", "SHTF", "PLSF", "SKUG", "BSP2", "BON3", "ARM3",
 	"BON4", "BACY", "CYBG", "SPO2", "ARNO", "BOZ3", "BA10", "AV64",
-	"TCYB", "HEAC", "BALC",
+	"TCYB", "HEAC", "BALC", "QSGP", "QSGI", "QSGF", "QSGO", "QSGR",
+	"QS2R", "QSGC",
 	NULL
 };
 
@@ -226,6 +227,10 @@ void A_ResurrectorDecide();
 void A_ResurrectorMissile();
 void A_ThamuzAttack1();
 void A_ThamuzDecide();
+void A_FireQuadShotgun();
+void A_OpenQuadShotgun();
+void A_LoadQuadShotgun();
+void A_CloseQuadShotgun();
 
 
 #pragma warning(push)
@@ -1178,12 +1183,78 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_NAILG11*/{ SPR_NLGN, 10, 1, {NULL}, S_NAILG12 },
 	/*S_NAILG12*/{ SPR_NLGN, 0, 5, {A_ReFire}, S_NAILG },
 
+	/*S_QSG*/{ SPR_QSGI, 0, 1, {A_WeaponReady}, S_QSG },
+	/*S_QSGDOWN*/{ SPR_QSGI, 0, 1, {A_Lower}, S_QSGDOWN },
+	/*S_QSGUP*/{ SPR_QSGI, 0, 1, {A_Raise}, S_QSGUP },
+	/*S_QSG1*/{ SPR_QSGF, 32768, 1, {NULL}, S_QSG2 },
+	/*S_QSG2*/{ SPR_QSGF, 32769, 1, {A_FireQuadShotgun}, S_QSG3 },
+	/*S_QSG3*/{ SPR_QSGF, 2, 1, {NULL}, S_QSG4 },
+	/*S_QSG4*/{ SPR_QSGF, 3, 1, {NULL}, S_QSG5 },
+	/*S_QSG5*/{ SPR_QSGF, 4, 1, {NULL}, S_QSG6 },
+	/*S_QSG6*/{ SPR_QSGO, 0, 1, {A_CheckReload}, S_QSG7 },
+	/*S_QSG7*/{ SPR_QSGO, 1, 1, {NULL}, S_QSG8 },
+	/*S_QSG8*/{ SPR_QSGO, 2, 1, {NULL}, S_QSG9 },
+	/*S_QSG9*/{ SPR_QSGO, 3, 1, {NULL}, S_QSG10 },
+	/*S_QSG10*/{ SPR_QSGO, 4, 2, {NULL}, S_QSG11 },
+	/*S_QSG11*/{ SPR_QSGO, 5, 2, {NULL}, S_QSG12 },
+	/*S_QSG12*/{ SPR_QSGO, 6, 2, {NULL}, S_QSG13 },
+	/*S_QSG13*/{ SPR_QSGO, 7, 2, {NULL}, S_QSG14 },
+	/*S_QSG14*/{ SPR_QSGO, 8, 4, {NULL}, S_QSG15 },
+	/*S_QSG15*/{ SPR_QSGO, 9, 2, {NULL}, S_QSG16 },
+	/*S_QSG16*/{ SPR_QSGO, 10, 2, {NULL}, S_QSG17 },
+	/*S_QSG17*/{ SPR_QSGO, 11, 2, {NULL}, S_QSG18 },
+	/*S_QSG18*/{ SPR_QSGO, 12, 2, {NULL}, S_QSG19 },
+	/*S_QSG19*/{ SPR_QSGO, 13, 2, {A_OpenQuadShotgun}, S_QSG20 },
+	/*S_QSG20*/{ SPR_QSGO, 14, 2, {NULL}, S_QSG21 },
+	/*S_QSG21*/{ SPR_QSGO, 15, 2, {NULL}, S_QSG22 },
+	/*S_QSG22*/{ SPR_QSGR, 0, 2, {NULL}, S_QSG23 },
+	/*S_QSG23*/{ SPR_QSGR, 1, 2, {NULL}, S_QSG24 },
+	/*S_QSG24*/{ SPR_QSGR, 2, 2, {NULL}, S_QSG25 },
+	/*S_QSG25*/{ SPR_QSGR, 3, 2, {NULL}, S_QSG26 },
+	/*S_QSG26*/{ SPR_QSGR, 4, 2, {NULL}, S_QSG27 },
+	/*S_QSG27*/{ SPR_QSGR, 5, 2, {NULL}, S_QSG28 },
+	/*S_QSG28*/{ SPR_QSGR, 6, 2, {A_LoadQuadShotgun}, S_QSG29 },
+	/*S_QSG29*/{ SPR_QSGR, 7, 2, {NULL}, S_QSG30 },
+	/*S_QSG30*/{ SPR_QSGR, 8, 2, {NULL}, S_QSG31 },
+	/*S_QSG31*/{ SPR_QSGR, 9, 2, {NULL}, S_QSG32 },
+	/*S_QSG32*/{ SPR_QSGR, 10, 2, {NULL}, S_QSG33 },
+	/*S_QSG33*/{ SPR_QSGR, 11, 10, {NULL}, S_QSG34 },
+	/*S_QSG34*/{ SPR_QS2R, 0, 2, {NULL}, S_QSG35 },
+	/*S_QSG35*/{ SPR_QS2R, 1, 2, {NULL}, S_QSG36 },
+	/*S_QSG36*/{ SPR_QS2R, 2, 2, {NULL}, S_QSG37 },
+	/*S_QSG37*/{ SPR_QS2R, 3, 2, {NULL}, S_QSG38 },
+	/*S_QSG38*/{ SPR_QS2R, 4, 2, {NULL}, S_QSG39 },
+	/*S_QSG39*/{ SPR_QS2R, 5, 2, {NULL}, S_QSG40 },
+	/*S_QSG40*/{ SPR_QS2R, 6, 2, {NULL}, S_QSG41 },
+	/*S_QSG41*/{ SPR_QS2R, 7, 2, {A_LoadQuadShotgun}, S_QSG42 },
+	/*S_QSG42*/{ SPR_QS2R, 8, 2, {NULL}, S_QSG43 },
+	/*S_QSG43*/{ SPR_QS2R, 9, 2, {NULL}, S_QSG44 },
+	/*S_QSG44*/{ SPR_QS2R, 10, 2, {NULL}, S_QSG45 },
+	/*S_QSG45*/{ SPR_QS2R, 11, 2, {NULL}, S_QSG46 },
+	/*S_QSG46*/{ SPR_QS2R, 12, 2, {NULL}, S_QSG47 },
+	/*S_QSG47*/{ SPR_QSGC, 0, 2, {A_CloseQuadShotgun}, S_QSG48 },
+	/*S_QSG48*/{ SPR_QSGC, 1, 2, {NULL}, S_QSG49 },
+	/*S_QSG49*/{ SPR_QSGC, 2, 2, {NULL}, S_QSG50 },
+	/*S_QSG50*/{ SPR_QSGC, 3, 2, {NULL}, S_QSG51 },
+	/*S_QSG51*/{ SPR_QSGC, 4, 2, {NULL}, S_QSG52 },
+	/*S_QSG52*/{ SPR_QSGC, 5, 2, {NULL}, S_QSG53 },
+	/*S_QSG53*/{ SPR_QSGC, 6, 2, {NULL}, S_QSG54 },
+	/*S_QSG54*/{ SPR_QSGC, 7, 2, {NULL}, S_QSG55 },
+	/*S_QSG55*/{ SPR_QSGC, 8, 2, {NULL}, S_QSG56 },
+	/*S_QSG56*/{ SPR_QSGC, 9, 2, {NULL}, S_QSG57 },
+	/*S_QSG57*/{ SPR_QSGC, 10, 2, {NULL}, S_QSG58 },
+	/*S_QSG58*/{ SPR_QSGC, 11, 2, {NULL}, S_QSG59 },
+	/*S_QSG59*/{ SPR_QSGC, 12, 2, {NULL}, S_QSG60 },
+	/*S_QSG60*/{ SPR_QSGC, 13, 2, {NULL}, S_QSG61 },
+	/*S_QSG61*/{ SPR_QSGC, 14, 2, {A_ReFire}, S_QSG },
+
 	/*S_NAILSAMMO*/{ SPR_NLBX, 0, -1, {NULL}, S_NULL },
 
 	/*S_NAILSAMMO2*/{ SPR_NLB2, 0, -1, {NULL}, S_NULL },
 
 	/*S_NLGP*/{ SPR_NLGP, 0, -1, {NULL}, S_NULL },
 
+	/*S_QSGP*/{ SPR_QSGP, 0, -1, {NULL}, S_NULL },
 
 	{ SPR_S015,0,-1,NULL,S_NULL },// S_LAMP3
 	{ SPR_S016,0,-1,NULL,S_NULL },// S_LAMP4
@@ -11595,6 +11666,35 @@ S_NULL	   //raisestate
 	5,        //damage
 	sfx_None/*sfx_000*/,        //activesound
 	MF_NOBLOCKMAP | MF_DROPOFF | MF_MISSILE,        //flags
+	0,        //palette
+	255,        //alpha
+	S_NULL	   //raisestate
+},
+
+{
+	/*MT_WEAP_QUADSHOTGUN*/
+	9042,        //doomednum
+	S_QSGP,        //spawnstate
+	1000,        //spawnhealth
+	S_NULL,        //seestate
+	sfx_None/*sfx_000*/,        //seesound
+	8,        //reactiontime
+	sfx_None/*sfx_000*/,        //attacksound
+	S_NULL,        //painstate
+	0,        //painchance
+	sfx_None/*sfx_000*/,        //painsound
+	S_NULL,        //meleestate
+	S_NULL,        //missilestate
+	S_NULL,        //deathstate
+	S_NULL,        //xdeathstate
+	sfx_None/*sfx_000*/,        //deathsound
+	0,        //speed
+	20 * FRACUNIT,        //radius
+	16 * FRACUNIT,        //height
+	100,        //mass
+	0,        //damage
+	sfx_None/*sfx_000*/,        //activesound
+	MF_SPECIAL,        //flags
 	0,        //palette
 	255,        //alpha
 	S_NULL	   //raisestate

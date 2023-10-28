@@ -791,6 +791,15 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 		sound = sfx_sgcock;
 		break;
 
+	case SPR_QSGP:
+		if (!P_GiveWeapon(player, special, wp_quadshotgun, special->flags & MF_DROPPED)) {
+			return;
+		}
+		player->message = GOTQUADSHOTGUN;
+		player->messagepic = 45;
+		sound = sfx_sgcock;
+		break;
+
 	case SPR_LSRG:
 		if (!P_GiveWeapon(player, special, wp_laser, false)) {
 			return;

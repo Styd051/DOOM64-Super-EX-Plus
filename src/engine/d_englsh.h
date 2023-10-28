@@ -131,6 +131,7 @@
 #define GOTSHOTGUN2     "You got the super shotgun!"
 #define GOTLASER        "What the !@#%%* is this!"
 #define GOTNAILGUN     "You got the Nailgun!"
+#define GOTQUADSHOTGUN  "You got the quad shotgun!"
 
 #define FOUNDSECRET     "You found a secret area!"
 #define FOUNDSECRETITEM "You found a secret item!"

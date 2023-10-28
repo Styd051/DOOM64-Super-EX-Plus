@@ -196,6 +196,7 @@ typedef enum {
 	wp_bfg,
 	wp_laser,
 	wp_nailgun,
+	wp_quadshotgun,
 	NUMWEAPONS,
 
 	// No pending weapon change.
