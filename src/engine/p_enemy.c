@@ -503,6 +503,12 @@ static mobj_t* P_MissileAttack2(mobj_t* actor, int direction) {
 		type = MT_PROJ_BRUISER2;
 		aim = true;
 		break;
+	case MT_THAMUZ:
+		offs = 45;
+		deltaz = 88;
+		type = MT_PROJ_THAMUZPLASMA;
+		aim = true;
+		break;
 	}
 
 	deltax = FixedMul(offs * FRACUNIT, finecosine[angle]);
@@ -885,12 +891,17 @@ void A_Look(mobj_t* actor) {
 			sound = sfx_impsit1 + (P_Random(pr_see) & 1);
 			break;
 
+		case sfx_tsit1:
+		case sfx_tsit2:
+			sound = sfx_tsit1 + (P_Random(pr_see) & 1);
+			break;
+
 		default:
 			sound = actor->info->seesound;
 			break;
 		}
 
-		if (actor->type == MT_RESURRECTOR || actor->type == MT_CYBORG || actor->type == MT_RESURRECTOR2 || actor->type == MT_ANNIHILATOR || actor->type == MT_BFGCYBERDEMON || actor->type == MT_CYBERDEMONSHOTGUN) {
+		if (actor->type == MT_RESURRECTOR || actor->type == MT_CYBORG || actor->type == MT_RESURRECTOR2 || actor->type == MT_ANNIHILATOR || actor->type == MT_BFGCYBERDEMON || actor->type == MT_CYBERDEMONSHOTGUN || actor->type == MT_THAMUZ) {
 			// full volume
 			S_StartSound(NULL, sound);
 		}
@@ -4108,18 +4119,185 @@ void A_ThamuzAttack1(mobj_t* actor) {
 }
 
 //
+// A_ThamuzAttack2
+//
+
+void A_ThamuzAttack2(mobj_t* actor) {
+	if (!actor->target) {
+		return;
+	}
+
+	A_FaceTarget(actor);
+	P_MissileAttack2(actor, DP_LEFT);
+}
+
+//
 // A_ThamuzDecide
 //
 
 void A_ThamuzDecide(mobj_t* actor)
 {
-	if (P_Random(pr_thamuzdecide) < 128)
+	if (P_Random(pr_thamuzdecide) < 85)
 	{
 		P_SetMobjState(actor, S_TCYBR_ATK1_1);
 	}
-	else if (P_Random(pr_thamuzdecide) < 256)
+	else if (P_Random(pr_thamuzdecide) < 170)
 	{
 		P_SetMobjState(actor, S_TCYBR_ATK2_1);
 	}
+	else if (P_Random(pr_thamuzdecide) < 256)
+	{
+		P_SetMobjState(actor, S_TCYBR_ATK3_1);
+	}
 
+}
+
+//
+// A_ThamuzGroundFire
+//
+
+void A_ThamuzGroundFire(mobj_t* actor) {
+	mobj_t* mo;
+	angle_t an;
+
+	if (!actor->target) {
+		return;
+	}
+
+	A_FaceTarget(actor);
+
+	mo = P_SpawnMobj(actor->x, actor->y, actor->z, MT_PROJ_THAMUZFIRE);
+	P_SetTarget(&mo->target, actor);
+	an = actor->angle + R_PointToAngle2(actor->x, actor->y, mo->target->x, mo->target->y);
+
+	mo->angle = an;
+	mo->angle >>= ANGLETOFINESHIFT;
+	mo->momx = FixedMul(mo->info->speed, finecosine[mo->angle]);
+	mo->momy = FixedMul(mo->info->speed, finesine[mo->angle]);
+	mo->angle = an;
+
+	mo = P_SpawnMobj(actor->x, actor->y, actor->z, MT_PROJ_THAMUZFIRE);
+	P_SetTarget(&mo->target, actor);
+	mo->angle = an - ANG45;
+	mo->angle >>= ANGLETOFINESHIFT;
+	mo->momx = FixedMul(mo->info->speed, finecosine[mo->angle]);
+	mo->momy = FixedMul(mo->info->speed, finesine[mo->angle]);
+	mo->angle = an - ANG45;
+
+	mo = P_SpawnMobj(actor->x, actor->y, actor->z, MT_PROJ_THAMUZFIRE);
+	P_SetTarget(&mo->target, actor);
+	mo->angle = an + ANG45;
+	mo->angle >>= ANGLETOFINESHIFT;
+	mo->momx = FixedMul(mo->info->speed, finecosine[mo->angle]);
+	mo->momy = FixedMul(mo->info->speed, finesine[mo->angle]);
+	mo->angle = an + ANG45;
+
+	mo = P_SpawnMobj(actor->x, actor->y, actor->z, MT_PROJ_THAMUZFIRE);
+	P_SetTarget(&mo->target, actor);
+	mo->angle = an - ANG90;
+	mo->angle >>= ANGLETOFINESHIFT;
+	mo->momx = FixedMul(mo->info->speed, finecosine[mo->angle]);
+	mo->momy = FixedMul(mo->info->speed, finesine[mo->angle]);
+	mo->angle = an - ANG90;
+
+	mo = P_SpawnMobj(actor->x, actor->y, actor->z, MT_PROJ_THAMUZFIRE);
+	P_SetTarget(&mo->target, actor);
+	mo->angle = an + ANG90;
+	mo->angle >>= ANGLETOFINESHIFT;
+	mo->momx = FixedMul(mo->info->speed, finecosine[mo->angle]);
+	mo->momy = FixedMul(mo->info->speed, finesine[mo->angle]);
+	mo->angle = an + ANG90;
+
+	mo = P_SpawnMobj(actor->x, actor->y, actor->z, MT_PROJ_THAMUZFIRE);
+	P_SetTarget(&mo->target, actor);
+	mo->angle = an - ANG180;
+	mo->angle >>= ANGLETOFINESHIFT;
+	mo->momx = FixedMul(mo->info->speed, finecosine[mo->angle]);
+	mo->momy = FixedMul(mo->info->speed, finesine[mo->angle]);
+	mo->angle = an - ANG180;
+
+	mo = P_SpawnMobj(actor->x, actor->y, actor->z, MT_PROJ_THAMUZFIRE);
+	P_SetTarget(&mo->target, actor);
+	mo->angle = an + ANG180;
+	mo->angle >>= ANGLETOFINESHIFT;
+	mo->momx = FixedMul(mo->info->speed, finecosine[mo->angle]);
+	mo->momy = FixedMul(mo->info->speed, finesine[mo->angle]);
+	mo->angle = an + ANG180;
+
+	mo = P_SpawnMobj(actor->x, actor->y, actor->z, MT_PROJ_THAMUZFIRE);
+	P_SetTarget(&mo->target, actor);
+	mo->angle = an - ANG270;
+	mo->angle >>= ANGLETOFINESHIFT;
+	mo->momx = FixedMul(mo->info->speed, finecosine[mo->angle]);
+	mo->momy = FixedMul(mo->info->speed, finesine[mo->angle]);
+	mo->angle = an - ANG270;
+
+	mo = P_SpawnMobj(actor->x, actor->y, actor->z, MT_PROJ_THAMUZFIRE);
+	P_SetTarget(&mo->target, actor);
+	mo->angle = an + ANG270;
+	mo->angle >>= ANGLETOFINESHIFT;
+	mo->momx = FixedMul(mo->info->speed, finecosine[mo->angle]);
+	mo->momy = FixedMul(mo->info->speed, finesine[mo->angle]);
+	mo->angle = an + ANG270;
+
+	mo = P_SpawnMobj(actor->x, actor->y, actor->z, MT_PROJ_THAMUZFIRE);
+	P_SetTarget(&mo->target, actor);
+	mo->angle = an - ANG225;
+	mo->angle >>= ANGLETOFINESHIFT;
+	mo->momx = FixedMul(mo->info->speed, finecosine[mo->angle]);
+	mo->momy = FixedMul(mo->info->speed, finesine[mo->angle]);
+	mo->angle = an - ANG225;
+
+	mo = P_SpawnMobj(actor->x, actor->y, actor->z, MT_PROJ_THAMUZFIRE);
+	P_SetTarget(&mo->target, actor);
+	mo->angle = an + ANG225;
+	mo->angle >>= ANGLETOFINESHIFT;
+	mo->momx = FixedMul(mo->info->speed, finecosine[mo->angle]);
+	mo->momy = FixedMul(mo->info->speed, finesine[mo->angle]);
+	mo->angle = an + ANG225;
+
+	S_StartSound(mo, mo->info->seesound);
+}
+
+//
+// A_ThamuzMoveGroundFire
+//
+
+void A_ThamuzMoveGroundFire(mobj_t* fire) {
+	mobj_t* mo;
+
+	if (fire->z > fire->floorz && fire->momz > 0) {
+		fire->z = fire->floorz;
+	}
+
+	mo = P_SpawnMobj(fire->x, fire->y, fire->floorz, MT_PROP_THAMUZFIRE);
+	P_FadeMobj(mo, -8, 0, 0);
+}
+
+// 
+// A_ThamuzRaise1
+// 
+
+
+void A_ThamuzRaise1(mobj_t* actor) {
+	if (!actor->target) {
+		return;
+	}
+
+	A_FaceTarget(actor);
+	S_StartSound(actor, sfx_bfg);
+}
+
+// 
+// A_ThamuzRaise2
+// 
+
+
+void A_ThamuzRaise2(mobj_t* actor) {
+	if (!actor->target) {
+		return;
+	}
+
+	A_FaceTarget(actor);
+	S_StartSound(actor, sfx_tapocast);
 }

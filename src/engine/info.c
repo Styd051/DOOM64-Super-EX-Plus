@@ -74,8 +74,8 @@ char* sprnames[NUMSPRITES + 1] = {  //0x5FA30
 	"BSGI", "GREN", "TRO2", "BAL9", "ZMAY", "64BZ", "DCYB", "STLK",
 	"PAI2", "SKE2", "SHTF", "PLSF", "SKUG", "BSP2", "BON3", "ARM3",
 	"BON4", "BACY", "CYBG", "SPO2", "ARNO", "BOZ3", "BA10", "AV64",
-	"TCYB", "HEAC", "BALC", "QSGP", "QSGI", "QSGF", "QSGO", "QSGR",
-	"QS2R", "QSGC",
+	"TCYB", "FIR3", "TLSS", "HEAC", "BALC", "QSGP", "QSGI", "QSGF", 
+	"QSGO", "QSGR", "QS2R", "QSGC",
 	NULL
 };
 
@@ -226,11 +226,17 @@ void A_ResurrectorChase();
 void A_ResurrectorDecide();
 void A_ResurrectorMissile();
 void A_ThamuzAttack1();
+void A_ThamuzAttack2();
 void A_ThamuzDecide();
+void A_ThamuzGroundFire();
+void A_ThamuzMoveGroundFire();
+void A_ThamuzRaise1();
+void A_ThamuzRaise2();
 void A_FireQuadShotgun();
 void A_OpenQuadShotgun();
 void A_LoadQuadShotgun();
 void A_CloseQuadShotgun();
+
 
 
 #pragma warning(push)
@@ -2960,11 +2966,31 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_TCYBR_RUN7*/{ SPR_TCYB, 3, 4, {A_Metal}, S_TCYBR_RUN8 },
 	/*S_TCYBR_RUN8*/{ SPR_TCYB, 3, 4, {A_Chase}, S_TCYBR_RUN1 },
 	/*S_TCYBR_DECIDE*/{ SPR_TCYB, 0, 1, {A_ThamuzDecide}, S_TCYBR_DECIDE },
-	/*S_TCYBR_ATK1_1*/{ SPR_TCYB, 32772, 5, {A_FaceTarget}, S_TCYBR_ATK1_2 },
-	/*S_TCYBR_ATK1_2*/{ SPR_TCYB, 5, 10, {A_ThamuzAttack1}, S_TCYBR_RUN1 },
-	/*S_TCYBR_ATK2_1*/{ SPR_TCYB, 6, 20, {NULL}, S_TCYBR_ATK2_2 },
-	/*S_TCYBR_ATK2_2*/{ SPR_TCYB, 6, 10, {A_RectGroundFire}, S_TCYBR_ATK2_3 },
-	/*S_TCYBR_ATK2_3*/{ SPR_TCYB, 6, 10, {NULL}, S_TCYBR_RUN1 },
+	/*S_TCYBR_ATK1_1*/{ SPR_TCYB, 32772, 20, {A_ThamuzRaise1}, S_TCYBR_ATK1_2 },
+	/*S_TCYBR_ATK1_2*/{ SPR_TCYB, 5, 20, {A_ThamuzAttack1}, S_TCYBR_RUN1 },
+	/*S_TCYBR_ATK2_1*/{ SPR_TCYB, 6, 20, {A_ThamuzRaise2}, S_TCYBR_ATK2_2 },
+	/*S_TCYBR_ATK2_2*/{ SPR_TCYB, 6, 10, {A_ThamuzGroundFire}, S_TCYBR_ATK2_3 },
+	/*S_TCYBR_ATK2_3*/{ SPR_TCYB, 6, 20, {NULL}, S_TCYBR_RUN1 },
+	/*S_TCYBR_ATK3_1*/{ SPR_TCYB, 32772, 4, {A_FaceTarget}, S_TCYBR_ATK3_2 },
+	/*S_TCYBR_ATK3_2*/{ SPR_TCYB, 5, 4, {A_ThamuzAttack2}, S_TCYBR_ATK3_3 },
+	/*S_TCYBR_ATK3_3*/{ SPR_TCYB, 32772, 4, {A_FaceTarget}, S_TCYBR_ATK3_4 },
+	/*S_TCYBR_ATK3_4*/{ SPR_TCYB, 5, 4, {A_ThamuzAttack2}, S_TCYBR_ATK3_5 },
+	/*S_TCYBR_ATK3_5*/{ SPR_TCYB, 32772, 4, {A_FaceTarget}, S_TCYBR_ATK3_6 },
+	/*S_TCYBR_ATK3_6*/{ SPR_TCYB, 5, 4, {A_ThamuzAttack2}, S_TCYBR_ATK3_7 },
+	/*S_TCYBR_ATK3_7*/{ SPR_TCYB, 32772, 4, {A_FaceTarget}, S_TCYBR_ATK3_8 },
+	/*S_TCYBR_ATK3_8*/{ SPR_TCYB, 5, 4, {A_ThamuzAttack2}, S_TCYBR_ATK3_9 },
+	/*S_TCYBR_ATK3_9*/{ SPR_TCYB, 32772, 4, {A_FaceTarget}, S_TCYBR_ATK3_10 },
+	/*S_TCYBR_ATK3_10*/{ SPR_TCYB, 5, 4, {A_ThamuzAttack2}, S_TCYBR_ATK3_11 },
+	/*S_TCYBR_ATK3_11*/{ SPR_TCYB, 32772, 4, {A_FaceTarget}, S_TCYBR_ATK3_12 },
+	/*S_TCYBR_ATK3_12*/{ SPR_TCYB, 5, 4, {A_ThamuzAttack2}, S_TCYBR_ATK3_13 },
+	/*S_TCYBR_ATK3_13*/{ SPR_TCYB, 32772, 4, {A_FaceTarget}, S_TCYBR_ATK3_14 },
+	/*S_TCYBR_ATK3_14*/{ SPR_TCYB, 5, 4, {A_ThamuzAttack2}, S_TCYBR_ATK3_15 },
+	/*S_TCYBR_ATK3_15*/{ SPR_TCYB, 32772, 4, {A_FaceTarget}, S_TCYBR_ATK3_16 },
+	/*S_TCYBR_ATK3_16*/{ SPR_TCYB, 5, 4, {A_ThamuzAttack2}, S_TCYBR_ATK3_17 },
+	/*S_TCYBR_ATK3_17*/{ SPR_TCYB, 32772, 4, {A_FaceTarget}, S_TCYBR_ATK3_18 },
+	/*S_TCYBR_ATK3_18*/{ SPR_TCYB, 5, 4, {A_ThamuzAttack2}, S_TCYBR_ATK3_19 },
+	/*S_TCYBR_ATK3_19*/{ SPR_TCYB, 32772, 4, {A_FaceTarget}, S_TCYBR_ATK3_20 },
+	/*S_TCYBR_ATK3_20*/{ SPR_TCYB, 5, 4, {A_ThamuzAttack2}, S_TCYBR_RUN1 },
 	/*S_TCYBR_PAIN*/{ SPR_TCYB, 5, 10, {A_Pain}, S_TCYBR_RUN1 },
 	/*S_TCYBR_DIE1*/{ SPR_TCYB, 6, 30, {A_CyberDeathEvent}, S_TCYBR_DIE2 },
 	/*S_TCYBR_DIE2*/{ SPR_TCYB, 7, 8, {NULL}, S_TCYBR_DIE3 },
@@ -2975,6 +3001,26 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_TCYBR_DIE7*/{ SPR_TCYB, 12, 4, {NULL}, S_TCYBR_DIE8 },
 	/*S_TCYBR_DIE8*/{ SPR_TCYB, 13, 4, {A_OnDeathTrigger}, S_TCYBR_DIE9 },
 	/*S_TCYBR_DIE9*/{ SPR_TCYB, 14, -1, {NULL}, S_NULL },
+
+	/*S_TLSS1*/{ SPR_TLSS, 32768, 3, {NULL}, S_TLSS2 },
+	/*S_TLSS2*/{ SPR_TLSS, 32769, 3, {NULL}, S_TLSS1 },
+	/*S_TLSS_DIE1*/{ SPR_TLSS, 32770, 2, {A_FadeAlpha}, S_TLSS_DIE2 },
+	/*S_TLSS_DIE2*/{ SPR_TLSS, 32771, 2, {NULL}, S_TLSS_DIE3 },
+	/*S_TLSS_DIE3*/{ SPR_TLSS, 32772, 2, {NULL}, S_TLSS_DIE4 },
+	/*S_TLSS_DIE4*/{ SPR_TLSS, 32773, 2, {NULL}, S_TLSS_DIE5 },
+	/*S_TLSS_DIE5*/{ SPR_TLSS, 32774, 2, {NULL}, S_TLSS_DIE6 },
+	/*S_TLSS_DIE6*/{ SPR_TLSS, 32775, 2, {NULL}, S_NULL },
+
+	/*S_GFIRE1*/{ SPR_FIR3, 32768, 3, {A_ThamuzMoveGroundFire}, S_GFIRE2 },
+	/*S_GFIRE2*/{ SPR_FIR3, 32769, 3, {A_ThamuzMoveGroundFire}, S_GFIRE3 },
+	/*S_GFIRE3*/{ SPR_FIR3, 32770, 3, {A_ThamuzMoveGroundFire}, S_GFIRE4 },
+	/*S_GFIRE4*/{ SPR_FIR3, 32771, 3, {A_ThamuzMoveGroundFire}, S_GFIRE1 },
+
+	/*S_PROP_GFIRE1*/{ SPR_FIR3, 0, 3, {NULL}, S_PROP_GFIRE2 },
+	/*S_PROP_GFIRE2*/{ SPR_FIR3, 1, 3, {NULL}, S_PROP_GFIRE3 },
+	/*S_PROP_GFIRE3*/{ SPR_FIR3, 2, 3, {NULL}, S_PROP_GFIRE4 },
+	/*S_PROP_GFIRE4*/{ SPR_FIR3, 3, 3, {NULL}, S_PROP_GFIRE5 },
+	/*S_PROP_GFIRE5*/{ SPR_FIR3, 4, 3, {NULL}, S_PROP_GFIRE1 },
 
 	/*S_HEAC_STND*/{ SPR_HEAC, 0, 15, {A_Look}, S_HEAC_STND2 },
 	/*S_HEAC_STND2*/{ SPR_HEAC, 1, 15, {A_Look}, S_HEAC_STND3 },
@@ -11588,19 +11634,19 @@ S_NULL	   //raisestate
 	/*MT_THAMUZ*/
 	9040,        //doomednum
 	S_TCYBR_STND,        //spawnstate
-	4600,        //spawnhealth
+	5000,        //spawnhealth
 	S_TCYBR_RUN1,        //seestate
-	sfx_cybsit,        //seesound
+	sfx_tsit1,        //seesound
 	8,        //reactiontime
 	sfx_None/*sfx_000*/,        //attacksound
 	S_TCYBR_PAIN,        //painstate
 	20,        //painchance
-	sfx_dbpain2,        //painsound
+	sfx_tpain,        //painsound
 	S_NULL,        //meleestate
 	S_TCYBR_DECIDE,        //missilestate
 	S_TCYBR_DIE1,        //deathstate
 	S_NULL,        //xdeathstate
-	sfx_cybdth,        //deathsound
+	sfx_tdie,        //deathsound
 	16,        //speed
 	70 * FRACUNIT,        //radius
 	170 * FRACUNIT,        //height
@@ -11610,6 +11656,93 @@ S_NULL	   //raisestate
 	MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
 	0,        //palette
 	255,        //alpha
+	S_NULL	   //raisestate
+},
+
+{
+	/*MT_PROJ_THAMUZFIRE*/
+	-1,        //doomednum
+	S_GFIRE1,        //spawnstate
+	1000,        //spawnhealth
+	S_NULL,        //seestate
+	sfx_tracer,        //seesound
+	8,        //reactiontime
+	sfx_None/*sfx_000*/,        //attacksound
+	S_NULL,        //painstate
+	0,        //painchance
+	sfx_None/*sfx_000*/,        //painsound
+	S_NULL,        //meleestate
+	S_NULL,        //missilestate
+	S_NULL,        //deathstate
+	S_NULL,        //xdeathstate
+	sfx_None/*sfx_000*/,        //deathsound
+	20 * FRACUNIT,        //speed
+	16 * FRACUNIT,        //radius
+	64 * FRACUNIT,        //height
+	100,        //mass
+	5,        //damage
+	sfx_None/*sfx_000*/,        //activesound
+	MF_NOBLOCKMAP | MF_GRAVITY | MF_DROPOFF | MF_MISSILE | MF_SHADOW,        //flags
+	0,        //palette
+	180,        //alpha
+	S_NULL	   //raisestate
+},
+
+{
+	/*MT_PROJ_THAMUZPLASMA*/
+	-1,        //doomednum
+	S_TLSS1,        //spawnstate
+	1000,        //spawnhealth
+	S_NULL,        //seestate
+	sfx_plasma,        //seesound
+	8,        //reactiontime
+	sfx_None/*sfx_000*/,        //attacksound
+	S_NULL,        //painstate
+	0,        //painchance
+	sfx_None/*sfx_000*/,        //painsound
+	S_NULL,        //meleestate
+	S_NULL,        //missilestate
+	S_TLSS_DIE1,        //deathstate
+	S_NULL,        //xdeathstate
+	sfx_implod,        //deathsound
+	40 * FRACUNIT,        //speed
+	13 * FRACUNIT,        //radius
+	8 * FRACUNIT,        //height
+	100,        //mass
+	5,        //damage
+	sfx_None/*sfx_000*/,        //activesound
+	MF_NOBLOCKMAP | MF_DROPOFF | MF_MISSILE,        //flags
+	0,        //palette
+	255,        //alpha
+	S_NULL	   //raisestate
+},
+
+{
+	/*MT_PROP_THAMUZFIRE*/
+	8088,        //doomednum
+	S_PROP_GFIRE1,        //spawnstate
+	1000,        //spawnhealth
+	S_NULL,        //seestate
+	sfx_None/*sfx_000*/,        //seesound
+	8,        //reactiontime
+	sfx_None/*sfx_000*/,        //attacksound
+	S_NULL,        //painstate
+	0,        //painchance
+	sfx_None/*sfx_000*/,        //painsound
+	S_NULL,        //meleestate
+	S_NULL,        //missilestate
+	S_NULL,        //deathstate
+	S_NULL,        //xdeathstate
+	sfx_None/*sfx_000*/,        //deathsound
+	0,        //speed
+	16 * FRACUNIT,        //radius
+	64 * FRACUNIT,        //height
+	100,        //mass
+	0,        //damage
+	sfx_None/*sfx_000*/,        //activesound
+	MF_SHADOW,        //flags
+	0,        //palette
+	140,        //alpha
 	S_NULL	   //raisestate
 },
 

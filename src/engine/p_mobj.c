@@ -162,7 +162,7 @@ void P_MissileHit(mobj_t* mo) {
 		damage = ((P_Random(pr_damage) & 7) + 1) * mo->info->damage;
 		P_DamageMobj(missilething, mo, mo->target, damage);
 
-		if (mo->type == MT_PROJ_RECTFIRE || mo->type == MT_PROJ_BRUISERDEMON2) {
+		if (mo->type == MT_PROJ_RECTFIRE || mo->type == MT_PROJ_BRUISERDEMON2 || mo->type == MT_PROJ_THAMUZFIRE) {
 			if (missilething->player && missilething->info->mass) {
 				missilething->momz += ((1500 / missilething->info->mass) * FRACUNIT);
 			}
@@ -339,7 +339,7 @@ void P_ZMovement(mobj_t* mo) {
 
 		if ((mo->flags & MF_MISSILE)
 			&& !(mo->flags & MF_NOCLIP)
-			&& !(mo->type == MT_PROJ_RECTFIRE || mo->type == MT_PROJ_BRUISERDEMON2)) {
+			&& !(mo->type == MT_PROJ_RECTFIRE || mo->type == MT_PROJ_BRUISERDEMON2 || mo->type == MT_PROJ_THAMUZFIRE)) {
 			mo->mobjfunc = P_ExplodeMissile;
 			return;
 		}
@@ -1141,6 +1141,18 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 		  
 	  }
 
+	  // randomizer weapon Super Shotgun
+	  if (i == MT_WEAP_SSHOTGUN) {
+		  randomizernum = P_Random(pr_randomizer) % 2; // Immorpher randomizer number
+		  if (randomizernum == 1) {
+			  i = MT_WEAP_SSHOTGUN;
+		  }
+		  else if (randomizernum == 0) {
+			  i = MT_WEAP_QUADSHOTGUN;
+		  }
+
+	  }
+
 	  // randomizer health bonus
 	  if (i == MT_ITEM_BONUSHEALTH) {
 		  randomizernum = P_Random(pr_randomizer) % 2; // Immorpher randomizer number
@@ -1284,10 +1296,13 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 	}
 
 	// randomizer cacodemon
-	if (i == MT_CACODEMON) {
-		randomizernum = P_Random(pr_randomizer) % 4; // Immorpher randomizer number
-		if (randomizernum == 3) {
+	if (i == MT_CACODEMON || i == MT_CACODEMON_CLASSIC) {
+		randomizernum = P_Random(pr_randomizer) % 5; // Immorpher randomizer number
+		if (randomizernum == 4) {
 			i = MT_CACODEMON;
+		}
+		else if (randomizernum == 3) {
+			i = MT_CACODEMON_CLASSIC;
 		}
 		else if (randomizernum == 2) {
 			i = MT_NIGHTMARE_CACODEMON;
@@ -1364,18 +1379,21 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	// randomizer cyberdemon
 	if (i == MT_CYBORG) {
-		randomizernum = P_Random(pr_randomizer) % 4; // Immorpher randomizer number
-		if (randomizernum == 3) {
+		randomizernum = P_Random(pr_randomizer) % 5; // Immorpher randomizer number
+		if (randomizernum == 4) {
 			i = MT_CYBORG;
 		}
-		else if (randomizernum == 2) {
+		else if (randomizernum == 3) {
 			i = MT_ANNIHILATOR;
 		}
-		else if (randomizernum == 1) {
+		else if (randomizernum == 2) {
 			i = MT_BFGCYBERDEMON;
 		}
-		else if (randomizernum == 0) {
+		else if (randomizernum == 1) {
 			i = MT_CYBERDEMONSHOTGUN;
+		}
+		else if (randomizernum == 0) {
+			i = MT_THAMUZ;
 		}
 	}
 

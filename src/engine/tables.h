@@ -42,6 +42,7 @@
 #define ANG45            0x20000000
 #define ANG90            0x40000000
 #define ANG180            0x80000000
+#define ANG225            0xA0000000
 #define ANG270            0xc0000000
 #define ANG1            (ANG45/45)
 #define ANG5            (ANG90/18)
