@@ -1177,6 +1177,18 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	  }
 
+	  // randomizer green armor
+	  if (i == MT_ITEM_ARMOR1) {
+		  randomizernum = P_Random(pr_randomizer); // Immorpher randomizer number
+		  if (randomizernum < 251) {
+			  i = MT_ITEM_ARMOR1;
+		  }
+		  else if (randomizernum < 256) {
+			  i = MT_ITEM_ARMOR3;
+		  }
+
+	  }
+
 	  // randomizer blue armor
 	  if (i == MT_ITEM_ARMOR2) {
 		  randomizernum = P_Random(pr_randomizer) % 2; // Immorpher randomizer number
@@ -1192,22 +1204,28 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 	// randomizer zombie man and zombie shotgun
 	if (i == MT_POSSESSED1 || i == MT_POSSESSED2) {
 		randomizernum = P_Random(pr_randomizer); // Immorpher randomizer number
-		if (randomizernum < 40) {
+		if (randomizernum < 31) {
 			i = MT_MELEEZOMBIE;
 		}
-		else if (randomizernum < 81) {
+		else if (randomizernum < 62) {
 			i = MT_POSSESSED1;
 		}
-		else if (randomizernum < 122) {
+		else if (randomizernum < 93) {
 			i = MT_POSSESSED2;
 		}
-		else if (randomizernum < 163) {
+		else if (randomizernum < 124) {
 			i = MT_CHAINGUY;
 		}
-		else if (randomizernum < 204) {
+		else if (randomizernum < 155) {
+			i = MT_RIFLEGUY;
+		}
+		else if (randomizernum < 186) {
+			i = MT_BEHEADEDROCKETEER;
+		}
+		else if (randomizernum < 217) {
 			i = MT_PlASMAZOMBIE;
 		}
-		else if (randomizernum < 245) {
+		else if (randomizernum < 248) {
 			i = MT_SSGZOMBIE;
 		}
 		else if (randomizernum < 256) {
@@ -1217,12 +1235,15 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	// randomizer pinky and specter
 	if (i == MT_DEMON1 || i == MT_DEMON2) {
-		randomizernum = P_Random(pr_randomizer) % 5; // Immorpher randomizer number
-		if (randomizernum == 4) {
+		randomizernum = P_Random(pr_randomizer) % 6; // Immorpher randomizer number
+		if (randomizernum == 5) {
 			i = MT_DEMON1;
 		}
-		else if (randomizernum == 3) {
+		else if (randomizernum == 4) {
 			i = MT_DEMON2;
+		}
+		else if (randomizernum == 3) {
+			i = MT_GREENDEMON;
 		}
 		else if (randomizernum == 2) {
 			i = MT_BLOODDEMON;
@@ -1317,9 +1338,12 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	// randomizer pain elemental
 	if (i == MT_PAIN) {
-		randomizernum = P_Random(pr_randomizer) % 3; // Immorpher randomizer number
-		if (randomizernum == 2) {
+		randomizernum = P_Random(pr_randomizer) % 4; // Immorpher randomizer number
+		if (randomizernum == 3) {
 			i = MT_PAIN;
+		}
+		else if (randomizernum == 2) {
+			i = MT_ABOMINATION;
 		}
 		else if (randomizernum == 1) {
 			i = MT_PAIN_ELEMENTAL_STALKER;
@@ -1345,12 +1369,15 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	// randomizer mancubus
 	if (i == MT_MANCUBUS) {
-		randomizernum = P_Random(pr_randomizer) % 4; // Immorpher randomizer number
-		if (randomizernum == 3) {
+		randomizernum = P_Random(pr_randomizer) % 5; // Immorpher randomizer number
+		if (randomizernum == 4) {
 			i = MT_MANCUBUS;
 		}
-		else if (randomizernum == 2) {
+		else if (randomizernum == 3) {
 			i = MT_DUKEOFHELL;
+		}
+		else if (randomizernum == 2) {
+			i = MT_MANCUBUSROCKET;
 		}
 		else if (randomizernum == 1) {
 			i = MT_HECTEBUS;

@@ -464,6 +464,24 @@ static mobj_t* P_MissileAttack(mobj_t* actor, int direction) {
 		type = MT_PROJ_HEAD_CLASSIC;
 		aim = true;
 		break;
+	case MT_BEHEADEDROCKETEER:
+		offs = 16;
+		deltaz = 32;
+		type = MT_PROJ_ROCKET;
+		aim = true;
+		break;
+	case MT_GREENDEMON:
+		offs = 0;
+		deltaz = 48;
+		type = MT_PROJ_BRUISER1;
+		aim = true;
+		break;
+	case MT_MANCUBUSROCKET:
+		offs = 50;
+		deltaz = 69;
+		type = MT_PROJ_ROCKET;
+		aim = true;
+		break;
 	}
 
 	deltax = FixedMul(offs * FRACUNIT, finecosine[angle]);
@@ -4300,4 +4318,76 @@ void A_ThamuzRaise2(mobj_t* actor) {
 
 	A_FaceTarget(actor);
 	S_StartSound(actor, sfx_tapocast);
+}
+
+//
+// A_BeheadedRocketeerAttack
+//
+
+void A_BeheadedRocketeerAttack(mobj_t* actor) {
+	if (!actor->target) {
+		return;
+	}
+
+	A_FaceTarget(actor);
+	P_MissileAttack(actor, DP_RIGHT);
+}
+
+//
+// A_GreenDemonAttack
+//
+
+void A_GreenDemonAttack(mobj_t* actor) {
+	if (!actor->target)
+	{
+		return;
+	}
+
+	// launch a missile
+	P_MissileAttack(actor, DP_STRAIGHT);
+}
+
+//
+// A_FerrySee
+//
+
+void A_FerrySee(mobj_t* mo) {
+	S_StartSound(mo, sfx_ferrysee);
+	A_Chase(mo);
+}
+
+//
+// A_FerryMelee
+//
+
+void A_FerryMelee(mobj_t* actor) {
+	int    damage;
+	int hitdice;
+
+	if (!actor->target) {
+		return;
+	}
+
+	if (P_CheckMeleeRange(actor)) {
+		S_StartSound(actor, sfx_ferrylaugh);
+		hitdice = (P_Random(pr_troopattack) & 200);
+		damage = ((hitdice << 200) - hitdice) + 200;
+		P_DamageMobj(actor->target, actor, actor, damage);
+	}
+}
+
+//
+// A_AbominationAttack
+// Spawn a lost soul and launch it at the target
+//
+
+void A_AbominationAttack(mobj_t* actor) {
+	if (!actor->target) {
+		return;
+	}
+
+	A_FaceTarget(actor);
+	A_PainShootSkull(actor, actor->angle + ANG45);
+	A_PainShootSkull(actor, actor->angle - ANG45);
+	A_PainShootSkull(actor, actor->angle);
 }

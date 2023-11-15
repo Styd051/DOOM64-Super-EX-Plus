@@ -1074,6 +1074,24 @@ static void P_Obituary(mobj_t* source, mobj_t* target) {
 		case MT_CACODEMON_CLASSIC:
 			sprintf(omsg, "you were smitten\nby a Cacodemon.");
 			break;
+		case MT_GRUNT:
+			sprintf(omsg, "you were killed\nby a Grunt.");
+			break;
+		case MT_RIFLEGUY:
+			sprintf(omsg, "you were jacked\nby a Rifle Guy.");
+			break;
+		case MT_BEHEADEDROCKETEER:
+			sprintf(omsg, "you were killed\nby a Beheaded Rocketeer.");
+			break;
+		case MT_GREENDEMON:
+			sprintf(omsg, "you were killed\nby a Green Demon.");
+			break;
+		case MT_MANCUBUSROCKET:
+			sprintf(omsg, "you were squashed\nby a Mancubus Rocket.");
+			break;
+		case MT_FERRYMAN:
+			sprintf(omsg, "your soul belongs to me.");
+			break;
 		default:
 			sprintf(omsg, "you died.");
 			break;
@@ -1173,6 +1191,8 @@ void P_KillMobj(mobj_t* source, mobj_t* target) {
 	// during the death frame of a thing.
 	switch (target->type) {
 	case MT_WOLFSS:
+	case MT_GRUNT:
+	case MT_RIFLEGUY:
 	case MT_POSSESSED1:
 		item = MT_AMMO_CLIP;
 		break;
@@ -1195,6 +1215,10 @@ void P_KillMobj(mobj_t* source, mobj_t* target) {
 
 	case MT_BFGCOMMANDO:
 		item = MT_WEAP_BFG;
+		break;
+
+	case MT_BEHEADEDROCKETEER:
+		item = MT_WEAP_LAUNCHER;
 		break;
 
 

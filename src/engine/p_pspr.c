@@ -1290,14 +1290,14 @@ void A_FireQuadShotgun(player_t* player, pspdef_t* psp) {
 	}
 
 	for (i = 0; i < 40; i++) {
-		damage = 5 * (P_Random(pr_shotgun) % 3 + 1);
+		damage = 5 * (P_Random(pr_quadshotgun) % 3 + 1);
 		if (player->powers[pw_quaddamage]) {
 			damage *= 3;
 		}
 		angle = player->mo->angle;
-		angle += P_RandomShift(pr_shotgun, 19);
+		angle += P_RandomShift(pr_quadshotgun, 19);
 		P_LineAttack(player->mo, angle, MISSILERANGE, bulletslope +
-			P_RandomShift(pr_shotgun, 5), damage);
+			P_RandomShift(pr_quadshotgun, 5), damage);
 	}
 }
 

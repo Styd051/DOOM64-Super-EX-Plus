@@ -1561,11 +1561,11 @@ boolean PIT_RadiusAttack(mobj_t* thing) {
     }
 
     // Boss cyborg take no damage from concussion.
-    if (thing->type == MT_CYBORG || thing->type == MT_SPIDER || thing->type == MT_ANNIHILATOR || thing->type == MT_BFGCYBERDEMON || thing->type == MT_NIGHTCRAWLER || thing->type == MT_BRUISERDEMON || thing->type == MT_CYBERBARON || thing->type == MT_THAMUZ) {
+    if (thing->type == MT_CYBORG || thing->type == MT_SPIDER || thing->type == MT_ANNIHILATOR || thing->type == MT_BFGCYBERDEMON || thing->type == MT_NIGHTCRAWLER || thing->type == MT_BRUISERDEMON || thing->type == MT_CYBERBARON || thing->type == MT_THAMUZ || thing->type == MT_BEHEADEDROCKETEER || thing->type == MT_MANCUBUSROCKET) {
         return true;
     }
 
-    if (thing->type == MT_SKULL || thing->type == MT_PAIN || thing->type == MT_STALKER || thing->type == MT_PAIN_ELEMENTAL_STALKER || thing->type == MT_PAIN_ELEMENTAL_NIGHTMARE || thing->type == MT_NIGHTMARE_LOSTSOUL) {
+    if (thing->type == MT_SKULL || thing->type == MT_PAIN || thing->type == MT_STALKER || thing->type == MT_PAIN_ELEMENTAL_STALKER || thing->type == MT_PAIN_ELEMENTAL_NIGHTMARE || thing->type == MT_NIGHTMARE_LOSTSOUL || thing->type == MT_ABOMINATION) {
         if (bombsource && bombsource->type == MT_SKULL) {
             return true;
         }
