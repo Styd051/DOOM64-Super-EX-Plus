@@ -650,6 +650,8 @@ enum {
 	toorough,
 	hurtme,
 	violence,
+	ultranightmare,
+	doomslayer,
 	nightmare,
 	newg_end
 } newgame_e;
@@ -659,7 +661,9 @@ menuitem_t NewGameMenu[] = {
 	{1,"Bring It On!",M_ChooseSkill, 'r'},
 	{1,"I Own Doom!",M_ChooseSkill, 'i'},
 	{1,"Watch Me Die!",M_ChooseSkill, 'w'},
-	{1,"Hardcore!",M_ChooseSkill, 'h'},
+	{1,"Ultra Nightmare!",M_ChooseSkill, 'h'},
+	{1,"Doomslayer!",M_ChooseSkill, 'h'},
+	{1,"Hardcore!",M_ChooseSkill, 'd'},
 };
 
 menu_t NewDef = {

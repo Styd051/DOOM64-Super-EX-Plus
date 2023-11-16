@@ -624,6 +624,10 @@ mobj_t* P_SpawnMobj(fixed_t x, fixed_t y, fixed_t z, mobjtype_t type) {
 		mobj->reactiontime = info->reactiontime;
 	}
 
+	if (gameskill != sk_doomslayer) {
+		mobj->reactiontime = info->reactiontime;
+	}
+
 	// [kex] 12/26/11 - don't increment stats when loading a savegame
 	if (gameaction != ga_loadgame) {
 		if (mobj->flags & MF_COUNTKILL) {
@@ -1019,6 +1023,12 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 	else if (gameskill == sk_nightmare) {
 		bit = 4;
 	}
+	else if (gameskill == sk_doomslayer) {
+		bit = 4;
+	}
+	else if (gameskill == sk_ultranightmare) {
+		bit = 4;
+	}
 	else {
 		bit = 1 << (gameskill - 1);
 	}
@@ -1044,6 +1054,70 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 	{
 		if (i == MT_CACODEMON) {
 			i = MT_CACODEMON_CLASSIC;
+		}
+	}
+
+	// new difficulty added Doomslayer ! an unforgiving difficulty
+	if (gameskill == sk_doomslayer) {
+
+		// replace the zombie man by zombie shotgun
+		if (i == MT_POSSESSED1) {
+			i = MT_POSSESSED2;
+		}
+
+		// replace the imp by imp nightmare
+		if (i == MT_IMP1) {
+			i = MT_IMP2;
+		}
+
+		// replace the hell knight by baron of hell
+		if (i == MT_BRUISER2) {
+			i = MT_BRUISER1;
+		}
+
+		// replace the spectre by hell knight
+		if (i == MT_DEMON2) {
+			i = MT_BRUISER2;
+		}
+
+		// replace the demon by spectre
+		if (i == MT_DEMON1) {
+			i = MT_DEMON2;
+		}
+
+		// replace the shell box by shell
+		if (i == MT_AMMO_SHELLBOX) {
+			i = MT_AMMO_SHELL;
+		}
+
+		// replace the clip box by clip
+		if (i == MT_AMMO_CLIPBOX) {
+			i = MT_AMMO_CLIP;
+		}
+
+		// replace the rocket box by rocket
+		if (i == MT_AMMO_ROCKETBOX) {
+			i = MT_AMMO_ROCKET;
+		}
+
+		// replace the cell pack by cell
+		if (i == MT_AMMO_CELLPACK) {
+			i = MT_AMMO_CELL;
+		}
+
+		// replace the medikit by stimpack
+		if (i == MT_ITEM_MEDKIT) {
+			i = MT_ITEM_STIMPACK;
+		}
+
+		// replace the invisible sphere by medikit
+		if (i == MT_ITEM_INVISSPHERE) {
+			i = MT_ITEM_MEDKIT;
+		}
+
+		// replace the invulnerability sphere by soulsphere
+		if (i == MT_ITEM_INVULSPHERE) {
+			i = MT_ITEM_SOULSPHERE;
 		}
 	}
 
@@ -1527,6 +1601,104 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 	// At least set BF_MIDPOINTONLY if no flags exist..
 	if (mobj->flags == 0) {
 		mobj->blockflag |= BF_MIDPOINTONLY;
+	}
+
+	if (mthing->options & MTF_NOINFIGHTING || gameskill == sk_doomslayer) //  No infighting on Doomslayer difficulty!
+	{
+		mobj->flags |= MF_NOINFIGHTING;
+	}
+
+	if (mthing->options & MTF_NIGHTMARE || gameskill == sk_ultranightmare) //  nightmare enable on Ultra Nightmare difficulty!
+	{
+		// zombie man
+		if (i == MT_POSSESSED1) {
+			mobj->health *= 2;
+			mobj->flags |= MF_NIGHTMARE;
+		}
+
+		// zombie shotgun
+		if (i == MT_POSSESSED2) {
+			mobj->health *= 2;
+			mobj->flags |= MF_NIGHTMARE;
+		}
+
+		// demon
+		if (i == MT_DEMON1) {
+			mobj->health *= 2;
+			mobj->flags |= MF_NIGHTMARE;
+		}
+
+		// specter
+		if (i == MT_DEMON2) {
+			mobj->health *= 2;
+			mobj->flags |= MF_NIGHTMARE;
+		}
+
+		// imp
+		if (i == MT_IMP1) {
+			mobj->health *= 2;
+			mobj->flags |= MF_NIGHTMARE;
+		}
+
+		// imp nightmare
+		if (i == MT_IMP2) {
+			mobj->health *= 2;
+			mobj->flags |= MF_NIGHTMARE;
+		}
+
+		// baron of hell
+		if (i == MT_BRUISER1) {
+			mobj->health *= 2;
+			mobj->flags |= MF_NIGHTMARE;
+		}
+
+		// hell knight
+		if (i == MT_BRUISER2) {
+			mobj->health *= 2;
+			mobj->flags |= MF_NIGHTMARE;
+		}
+
+		// cacodemon and cacodemon classic
+		if (i == MT_CACODEMON || i == MT_CACODEMON_CLASSIC) {
+			mobj->health *= 2;
+			mobj->flags |= MF_NIGHTMARE;
+		}
+
+		// pain elemental
+		if (i == MT_PAIN) {
+			mobj->health *= 2;
+			mobj->flags |= MF_NIGHTMARE;
+		}
+
+		// lost soul
+		if (i == MT_SKULL) {
+			mobj->health *= 2;
+			mobj->flags |= MF_NIGHTMARE;
+		}
+
+		// mancubus
+		if (i == MT_MANCUBUS) {
+			mobj->health *= 2;
+			mobj->flags |= MF_NIGHTMARE;
+		}
+
+		// arachnotron
+		if (i == MT_BABY) {
+			mobj->health *= 2;
+			mobj->flags |= MF_NIGHTMARE;
+		}
+
+		// cyberdemon
+		if (i == MT_CYBORG) {
+			mobj->health *= 2;
+			mobj->flags |= MF_NIGHTMARE;
+		}
+
+		// mother demon
+		if (i == MT_RESURRECTOR) {
+			mobj->health *= 2;
+			mobj->flags |= MF_NIGHTMARE;
+		}
 	}
 	
 	return mobj;

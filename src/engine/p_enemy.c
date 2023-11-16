@@ -979,7 +979,7 @@ void A_Chase(mobj_t* actor) {
 	// do not attack twice in a row
 	if (actor->flags & MF_JUSTATTACKED) {
 		actor->flags &= ~MF_JUSTATTACKED;
-		if (gameskill != sk_nightmare && !fastparm) {
+		if (gameskill != sk_nightmare && gameskill != sk_doomslayer && !fastparm) {
 			P_NewChaseDir(actor);
 		}
 		return;
@@ -997,7 +997,7 @@ void A_Chase(mobj_t* actor) {
 
 	// check for missile attack
 	if (actor->info->missilestate) {
-		if (gameskill < sk_nightmare && !fastparm && actor->movecount) {
+		if (gameskill < sk_nightmare && gameskill < sk_doomslayer && !fastparm && actor->movecount) {
 			goto nomissile;
 		}
 

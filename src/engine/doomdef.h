@@ -164,6 +164,8 @@ typedef enum {
 	sk_easy,
 	sk_medium,
 	sk_hard,
+	sk_ultranightmare,
+	sk_doomslayer,
 	sk_nightmare
 } skill_t;
 

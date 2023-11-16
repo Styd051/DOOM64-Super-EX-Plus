@@ -974,7 +974,7 @@ void G_DoLoadLevel(void) {
 	// Supposedly hacks to make the latest edition work.
 	// It might not work properly.
 
-	G_SetFastParms(fastparm || gameskill == sk_nightmare);  // killough 4/10/98
+	G_SetFastParms(fastparm || gameskill == sk_nightmare || gameskill == sk_doomslayer);  // killough 4/10/98
 
 	if (gameskill == sk_nightmare || respawnparm) {
 		respawnmonsters = true;
