@@ -108,10 +108,16 @@ boolean P_GiveAmmo(player_t* player, ammotype_t ammo, int num) {
 	}
 
 	if (gameskill == sk_baby
-		|| gameskill == sk_nightmare || gameskill == sk_doomslayer || gameskill == sk_ultranightmare) {
+		|| gameskill == sk_nightmare || gameskill == sk_ultranightmare) {
 		// give double ammo in trainer mode,
 		// you'll need in nightmare
 		num <<= 1;
+	}
+
+	if (gameskill == sk_doomslayer) {
+		// divide ammo in x4,
+		// you'll need in doomslayer
+		num <<= 2;
 	}
 
 	oldammo = player->ammo[ammo];
