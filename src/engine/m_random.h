@@ -107,7 +107,8 @@ enum {
     pr_spawngreenblood,         // #74
     pr_spawnblueblood,          // #75
     pr_quadshotgun,             // #76
-    pr_randomizer,              // #77
+    pr_defect,                  // #77
+    pr_randomizer,              // #78
 
     // End of new entries
     NUMPRCLASS               // MUST be last item in list

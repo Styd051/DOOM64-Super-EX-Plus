@@ -1598,6 +1598,12 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 		totalsecret++;
 	}
 
+	if (!(mobj->flags & MF_FRIEND) &&
+		mthing->options & MTF_FRIEND)
+	{
+		mobj->flags |= MF_FRIEND;            // killough 10/98:    
+	}
+
 	// At least set BF_MIDPOINTONLY if no flags exist..
 	if (mobj->flags == 0) {
 		mobj->blockflag |= BF_MIDPOINTONLY;

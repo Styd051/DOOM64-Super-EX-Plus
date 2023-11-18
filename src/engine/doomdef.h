@@ -158,7 +158,7 @@ typedef enum {
 #define MTF_NODEATHMATCH    1024   // Don't spawn in deathmatch games
 #define MTF_NONETGAME       2048   // Don't spawn in standard netgame mode
 #define MTF_NIGHTMARE       4096   // [kex] Nightmare thing
-
+#define MTF_FRIEND          8192   // killough 11/98 friendly monsters
 typedef enum {
 	sk_baby,
 	sk_easy,
