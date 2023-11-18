@@ -1125,8 +1125,8 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_SSG7*/              { SPR_SHT2, 5, 6, {A_LoadShotgun2}, S_SSG8 },
 	/*S_SSG8*/              { SPR_SHT2, 6, 5, {NULL}, S_SSG9 },
 	/*S_SSG9*/              { SPR_SHT2, 7, 5, {A_CloseShotgun2}, S_SSG10 },
-	/*S_SSG10*/             { SPR_SHT2, 0, 0, {A_ReFire}, S_SSG },
-	/*S_SSGFLASH*/          { SPR_SHT2, 32776, 5, {NULL}, S_NULL },
+	/*S_SSG10*/             { SPR_SHT2, 0, 4, {A_ReFire}, S_SSG },
+	/*S_SSGFLASH*/          { SPR_SHT2, 32776, 4, {NULL}, S_NULL },
 
 	/*S_CHAING*/            { SPR_CHGG, 0, 1, {A_WeaponReady}, S_CHAING },
 	/*S_CHAINGDOWN*/        { SPR_CHGG, 0, 1, {A_Lower}, S_CHAINGDOWN },
