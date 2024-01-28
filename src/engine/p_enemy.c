@@ -948,6 +948,11 @@ void A_Look(mobj_t* actor) {
 			sound = sfx_impsit1 + (P_Random(pr_see) & 1);
 			break;
 
+		case sfx_chnsit:
+		case sfx_chnatk:
+			sound = sfx_chnsit + (P_Random(pr_see) & 1);
+			break;
+
 		case sfx_tsit1:
 		case sfx_tsit2:
 			sound = sfx_tsit1 + (P_Random(pr_see) & 1);
@@ -2003,11 +2008,24 @@ void A_XScream(mobj_t* actor) {
 
 void A_Pain(mobj_t* actor) {
 	if (actor->info->painsound) {
+		int sound;
+
+		switch (actor->info->painsound) {
+		case sfx_spipain1:
+		case sfx_spipain2:
+			sound = sfx_spipain1 + (P_Random(pr_see) & 1);
+			break;
+
+		default:
+			sound = actor->info->painsound;
+			break;
+		}
+
 		if (actor->type == MT_RESURRECTOR) {
-			S_StartSound(NULL, actor->info->painsound);
+			S_StartSound(NULL, sound);
 		}
 		else {
-			S_StartSound(actor, actor->info->painsound);
+			S_StartSound(actor, sound);
 		}
 	}
 }

@@ -807,6 +807,15 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 		sound = sfx_sgcock;
 		break;
 
+	case SPR_HXSP:
+		if (!P_GiveWeapon(player, special, wp_hexashotgun, special->flags & MF_DROPPED)) {
+			return;
+		}
+		player->message = GOTHEXASHOTGUN;
+		player->messagepic = 46;
+		sound = sfx_sgcock;
+		break;
+
 	case SPR_LSRG:
 		if (!P_GiveWeapon(player, special, wp_laser, false)) {
 			return;

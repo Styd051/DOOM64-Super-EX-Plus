@@ -69,7 +69,8 @@ weaponinfo_t    weaponinfo[NUMWEAPONS] = {
 	{ am_cell,      S_BFGUP, S_BFGDOWN, S_BFG, S_BFG1, S_BFGLIGHT1 },    // bfg
 	{ am_cell,      S_LASERGUP, S_LASERGDOWN, S_LASERG, S_LASERG1, S_LASERGLIGHT },    // laser rifle
 	{ am_nails,      S_NAILGUP, S_NAILGDOWN, S_NAILG, S_NAILG1, S_NULL },    // nailgun
-	{ am_shell,     S_QSGUP, S_QSGDOWN, S_QSG, S_QSG1, S_NULL }    // quad shotgun
+	{ am_shell,     S_QSGUP, S_QSGDOWN, S_QSG, S_QSG1, S_NULL },    // quad shotgun
+	{ am_shell,     S_HXSGUP, S_HXSGDOWN, S_HXSG, S_HXSG1, S_NULL }    // hexa shotgun
 };
 
 static int laserCells = 1;
@@ -201,6 +202,9 @@ boolean P_CheckAmmo(player_t* player) {
 	else if (player->readyweapon == wp_quadshotgun) {
 		count = 4;    // Four barrel.
 	}
+	else if (player->readyweapon == wp_hexashotgun) {
+		count = 6;    // six barrel.
+	}
 	else if (player->readyweapon == wp_laser) {
 		count = laserCells;
 	}
@@ -228,6 +232,10 @@ boolean P_CheckAmmo(player_t* player) {
 		else if (player->weaponowned[wp_quadshotgun]
 			&& player->ammo[am_shell] > 4) {
 			player->pendingweapon = wp_quadshotgun;
+		}
+		else if (player->weaponowned[wp_hexashotgun]
+			&& player->ammo[am_shell] > 6) {
+			player->pendingweapon = wp_hexashotgun;
 		}
 		else if (player->weaponowned[wp_chaingun]
 			&& player->ammo[am_clip]) {
@@ -1286,7 +1294,7 @@ void A_FireQuadShotgun(player_t* player, pspdef_t* psp) {
 	player->recoilpitch = RECOILPITCH;
 
 	if (player->onground) {
-		P_Thrust(player, player->mo->angle + ANG180, FRACUNIT);
+		P_Thrust(player, player->mo->angle + ANG180, FRACUNIT2);
 	}
 
 	for (i = 0; i < 40; i++) {
@@ -1323,4 +1331,41 @@ void A_LoadQuadShotgun(player_t* player, pspdef_t* psp) {
 
 void A_CloseQuadShotgun(player_t* player, pspdef_t* psp) {
 	S_StartSound(player->mo, sfx_quadshotgunclose);
+}
+
+//
+// A_FireHexaShotgun
+//
+
+void A_FireHexaShotgun(player_t* player, pspdef_t* psp) {
+	int         i;
+	angle_t     angle;
+	int         damage;
+
+	S_StartSound(player->mo, sfx_hexashotgunfire);
+	if (player->powers[pw_quaddamage]) {
+		S_StartSound(player->mo, sfx_quaddamageatt);
+	}
+	P_SetMobjState(player->mo, S_PLAY_ATK2);
+	player->ammo[weaponinfo[player->readyweapon].ammo] -= 6;
+
+	P_SetPsprite(player, ps_flash, weaponinfo[player->readyweapon].flashstate);
+	P_BulletSlope(player->mo);
+
+	player->recoilpitch = RECOILPITCH;
+
+	if (player->onground) {
+		P_Thrust(player, player->mo->angle + ANG180, FRACUNIT3);
+	}
+
+	for (i = 0; i < 60; i++) {
+		damage = 5 * (P_Random(pr_hexashotgun) % 3 + 1);
+		if (player->powers[pw_quaddamage]) {
+			damage *= 3;
+		}
+		angle = player->mo->angle;
+		angle += P_RandomShift(pr_hexashotgun, 19);
+		P_LineAttack(player->mo, angle, MISSILERANGE, bulletslope +
+			P_RandomShift(pr_hexashotgun, 5), damage);
+	}
 }

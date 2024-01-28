@@ -76,7 +76,7 @@ char* sprnames[NUMSPRITES + 1] = {  //0x5FA30
 	"BON4", "BACY", "CYBG", "SPO2", "ARNO", "BOZ3", "BA10", "AV64",
 	"TCYB", "FIR3", "TLSS", "HEAC", "BALC", "QSGP", "QSGI", "QSGF", 
 	"QSGO", "QSGR", "QS2R", "QSGC", "GRUN", "RPOS", "BERO", "ACID",
-	"FERY", "PAI3",
+	"FERY", "PAI3", "HXSG", "HXSF", "HX1G", "HX2G", "HX3G", "HXSP",
 	NULL
 };
 
@@ -242,6 +242,7 @@ void A_GreenDemonAttack();
 void A_FerrySee();
 void A_FerryMelee();
 void A_AbominationAttack();
+void A_FireHexaShotgun();
 
 
 
@@ -1260,6 +1261,115 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_QSG60*/{ SPR_QSGC, 13, 2, {NULL}, S_QSG61 },
 	/*S_QSG61*/{ SPR_QSGC, 14, 2, {A_ReFire}, S_QSG },
 
+	/*S_HXSG*/{ SPR_HXSG, 0, 1, {A_WeaponReady}, S_HXSG },
+	/*S_HXSGDOWN*/{ SPR_HXSG, 0, 1, {A_Lower}, S_HXSGDOWN },
+	/*S_HXSGUP*/{ SPR_HXSG, 0, 1, {A_Raise}, S_HXSGUP },
+	/*S_HXSG1*/{ SPR_HXSF, 32768, 2, {NULL}, S_HXSG2 },
+	/*S_HXSG2*/{ SPR_HXSF, 32769, 2, {A_FireHexaShotgun}, S_HXSG3 },
+	/*S_HXSG3*/{ SPR_HXSF, 2, 3, {NULL}, S_HXSG4 },
+	/*S_HXSG4*/{ SPR_HXSF, 3, 1, {A_CheckReload}, S_HXSG5 },
+	/*S_HXSG5*/{ SPR_HXSF, 4, 1, {NULL}, S_HXSG6 },
+	/*S_HXSG6*/{ SPR_HXSF, 5, 1, {NULL}, S_HXSG7 },
+	/*S_HXSG7*/{ SPR_HXSF, 6, 1, {NULL}, S_HXSG8 },
+	/*S_HXSG8*/{ SPR_HXSF, 7, 1, {NULL}, S_HXSG9 },
+	/*S_HXSG9*/{ SPR_HXSF, 8, 1, {NULL}, S_HXSG10 },
+	/*S_HXSG10*/{ SPR_HXSF, 9, 1, {NULL}, S_HXSG11 },
+	/*S_HXSG11*/{ SPR_HXSG, 0, 1, {NULL}, S_HXSG12 },
+	/*S_HXSG12*/{ SPR_HXSG, 1, 1, {NULL}, S_HXSG13 },
+	/*S_HXSG13*/{ SPR_HXSG, 2, 1, {NULL}, S_HXSG14 },
+	/*S_HXSG14*/{ SPR_HXSG, 3, 1, {NULL}, S_HXSG15 },
+	/*S_HXSG15*/{ SPR_HXSG, 4, 1, {NULL}, S_HXSG16 },
+	/*S_HXSG16*/{ SPR_HXSG, 5, 1, {NULL}, S_HXSG17 },
+	/*S_HXSG17*/{ SPR_HXSG, 6, 1, {NULL}, S_HXSG18 },
+	/*S_HXSG18*/{ SPR_HXSG, 7, 1, {NULL}, S_HXSG19 },
+	/*S_HXSG19*/{ SPR_HXSG, 8, 1, {NULL}, S_HXSG20 },
+	/*S_HXSG20*/{ SPR_HXSG, 9, 1, {NULL}, S_HXSG21 },
+	/*S_HXSG21*/{ SPR_HXSG, 10, 1, {NULL}, S_HXSG22 },
+	/*S_HXSG22*/{ SPR_HXSG, 11, 1, {NULL}, S_HXSG23 },
+	/*S_HXSG23*/{ SPR_HXSG, 12, 5, {NULL}, S_HXSG24 },
+	/*S_HXSG24*/{ SPR_HXSG, 13, 1, {NULL}, S_HXSG25 },
+	/*S_HXSG25*/{ SPR_HXSG, 14, 1, {NULL}, S_HXSG26 },
+	/*S_HXSG26*/{ SPR_HXSG, 15, 1, {NULL}, S_HXSG27 },
+	/*S_HXSG27*/{ SPR_HXSG, 16, 1, {NULL}, S_HXSG28 },
+	/*S_HXSG28*/{ SPR_HXSG, 17, 1, {NULL}, S_HXSG29 },
+	/*S_HXSG29*/{ SPR_HXSG, 18, 1, {NULL}, S_HXSG30 },
+	/*S_HXSG30*/{ SPR_HXSG, 19, 1, {NULL}, S_HXSG31 },
+	/*S_HXSG31*/{ SPR_HXSG, 20, 1, {NULL}, S_HXSG32 },
+	/*S_HXSG32*/{ SPR_HXSG, 21, 1, {NULL}, S_HXSG33 },
+	/*S_HXSG33*/{ SPR_HXSG, 22, 1, {NULL}, S_HXSG34 },
+	/*S_HXSG34*/{ SPR_HXSG, 23, 1, {NULL}, S_HXSG35 },
+	/*S_HXSG35*/{ SPR_HXSG, 24, 1, {NULL}, S_HXSG36 },
+	/*S_HXSG36*/{ SPR_HX1G, 1, 1, {A_OpenQuadShotgun}, S_HXSG37 },
+	/*S_HXSG37*/{ SPR_HX1G, 2, 1, {NULL}, S_HXSG38 },
+	/*S_HXSG38*/{ SPR_HX1G, 3, 1, {NULL}, S_HXSG39 },
+	/*S_HXSG39*/{ SPR_HX1G, 4, 3, {NULL}, S_HXSG40 },
+	/*S_HXSG40*/{ SPR_HX1G, 5, 1, {NULL}, S_HXSG41 },
+	/*S_HXSG41*/{ SPR_HX1G, 6, 1, {NULL}, S_HXSG42 },
+	/*S_HXSG42*/{ SPR_HX1G, 7, 1, {NULL}, S_HXSG43 },
+	/*S_HXSG43*/{ SPR_HX1G, 8, 1, {NULL}, S_HXSG44 },
+	/*S_HXSG44*/{ SPR_HX1G, 9, 1, {NULL}, S_HXSG45 },
+	/*S_HXSG45*/{ SPR_HX1G, 10, 1, {NULL}, S_HXSG46 },
+	/*S_HXSG46*/{ SPR_HX1G, 11, 1, {NULL}, S_HXSG47 },
+	/*S_HXSG47*/{ SPR_HX1G, 12, 1, {A_LoadQuadShotgun}, S_HXSG48 },
+	/*S_HXSG48*/{ SPR_HX1G, 13, 1, {NULL}, S_HXSG49 },
+	/*S_HXSG49*/{ SPR_HX1G, 14, 1, {NULL}, S_HXSG50 },
+	/*S_HXSG50*/{ SPR_HX1G, 15, 1, {NULL}, S_HXSG51 },
+	/*S_HXSG51*/{ SPR_HX1G, 16, 1, {NULL}, S_HXSG52 },
+	/*S_HXSG52*/{ SPR_HX1G, 17, 1, {NULL}, S_HXSG53 },
+	/*S_HXSG53*/{ SPR_HX1G, 18, 1, {NULL}, S_HXSG54 },
+	/*S_HXSG54*/{ SPR_HX1G, 19, 3, {NULL}, S_HXSG55 },
+	/*S_HXSG55*/{ SPR_HX1G, 20, 1, {NULL}, S_HXSG56 },
+	/*S_HXSG56*/{ SPR_HX1G, 21, 1, {NULL}, S_HXSG57 },
+	/*S_HXSG57*/{ SPR_HX1G, 22, 1, {NULL}, S_HXSG58 },
+	/*S_HXSG58*/{ SPR_HX1G, 23, 1, {NULL}, S_HXSG59 },
+	/*S_HXSG59*/{ SPR_HX1G, 24, 1, {NULL}, S_HXSG60 },
+	/*S_HXSG60*/{ SPR_HX1G, 25, 1, {NULL}, S_HXSG61 },
+	/*S_HXSG61*/{ SPR_HX2G, 0, 1, {A_LoadQuadShotgun}, S_HXSG62 },
+	/*S_HXSG62*/{ SPR_HX2G, 1, 1, {NULL}, S_HXSG63 },
+	/*S_HXSG63*/{ SPR_HX2G, 2, 1, {NULL}, S_HXSG64 },
+	/*S_HXSG64*/{ SPR_HX2G, 3, 1, {NULL}, S_HXSG65 },
+	/*S_HXSG65*/{ SPR_HX2G, 4, 1, {NULL}, S_HXSG66 },
+	/*S_HXSG66*/{ SPR_HX2G, 5, 1, {NULL}, S_HXSG67 },
+	/*S_HXSG67*/{ SPR_HX2G, 6, 1, {NULL}, S_HXSG68 },
+	/*S_HXSG68*/{ SPR_HX2G, 7, 1, {NULL}, S_HXSG69 },
+	/*S_HXSG69*/{ SPR_HX2G, 8, 1, {NULL}, S_HXSG70 },
+	/*S_HXSG70*/{ SPR_HX2G, 9, 3, {NULL}, S_HXSG71 },
+	/*S_HXSG71*/{ SPR_HX2G, 10, 1, {NULL}, S_HXSG72 },
+	/*S_HXSG72*/{ SPR_HX2G, 11, 1, {NULL}, S_HXSG73 },
+	/*S_HXSG73*/{ SPR_HX2G, 12, 1, {NULL}, S_HXSG74 },
+	/*S_HXSG74*/{ SPR_HX2G, 13, 1, {NULL}, S_HXSG75 },
+	/*S_HXSG75*/{ SPR_HX2G, 14, 1, {NULL}, S_HXSG76 },
+	/*S_HXSG76*/{ SPR_HX2G, 15, 1, {NULL}, S_HXSG77 },
+	/*S_HXSG77*/{ SPR_HX2G, 16, 1, {NULL}, S_HXSG78 },
+	/*S_HXSG78*/{ SPR_HX2G, 17, 1, {NULL}, S_HXSG79 },
+	/*S_HXSG79*/{ SPR_HX2G, 18, 1, {NULL}, S_HXSG80 },
+	/*S_HXSG80*/{ SPR_HX2G, 19, 1, {NULL}, S_HXSG81 },
+	/*S_HXSG81*/{ SPR_HX2G, 20, 1, {NULL}, S_HXSG82 },
+	/*S_HXSG82*/{ SPR_HX2G, 21, 1, {A_LoadQuadShotgun}, S_HXSG83 },
+	/*S_HXSG83*/{ SPR_HX2G, 22, 1, {NULL}, S_HXSG84 },
+	/*S_HXSG84*/{ SPR_HX2G, 23, 1, {NULL}, S_HXSG85 },
+	/*S_HXSG85*/{ SPR_HX2G, 24, 1, {NULL}, S_HXSG86 },
+	/*S_HXSG86*/{ SPR_HX2G, 25, 1, {NULL}, S_HXSG87 },
+	/*S_HXSG87*/{ SPR_HX3G, 0, 1, {NULL}, S_HXSG88 },
+	/*S_HXSG88*/{ SPR_HX3G, 1, 1, {NULL}, S_HXSG89 },
+	/*S_HXSG89*/{ SPR_HX3G, 2, 1, {NULL}, S_HXSG90 },
+	/*S_HXSG90*/{ SPR_HX3G, 3, 1, {NULL}, S_HXSG91 },
+	/*S_HXSG91*/{ SPR_HX3G, 4, 1, {NULL}, S_HXSG92 },
+	/*S_HXSG92*/{ SPR_HX3G, 5, 1, {NULL}, S_HXSG93 },
+	/*S_HXSG93*/{ SPR_HX3G, 6, 1, {NULL}, S_HXSG94 },
+	/*S_HXSG94*/{ SPR_HX3G, 7, 1, {NULL}, S_HXSG95 },
+	/*S_HXSG95*/{ SPR_HX3G, 8, 1, {NULL}, S_HXSG96 },
+	/*S_HXSG96*/{ SPR_HX3G, 9, 1, {A_CloseQuadShotgun}, S_HXSG97 },
+	/*S_HXSG97*/{ SPR_HX3G, 10, 1, {NULL}, S_HXSG98 },
+	/*S_HXSG98*/{ SPR_HX3G, 11, 1, {NULL}, S_HXSG99 },
+	/*S_HXSG99*/{ SPR_HX3G, 12, 1, {NULL}, S_HXSG100 },
+	/*S_HXSG100*/{ SPR_HX3G, 13, 1, {NULL}, S_HXSG101 },
+	/*S_HXSG101*/{ SPR_HX3G, 14, 1, {NULL}, S_HXSG102 },
+	/*S_HXSG102*/{ SPR_HX3G, 15, 1, {NULL}, S_HXSG103 },
+	/*S_HXSG103*/{ SPR_HX3G, 16, 1, {NULL}, S_HXSG104 },
+	/*S_HXSG104*/{ SPR_HX3G, 17, 1, {NULL}, S_HXSG105 },
+	/*S_HXSG105*/{ SPR_HX3G, 18, 1, {A_ReFire}, S_HXSG },
+
 	/*S_NAILSAMMO*/{ SPR_NLBX, 0, -1, {NULL}, S_NULL },
 
 	/*S_NAILSAMMO2*/{ SPR_NLB2, 0, -1, {NULL}, S_NULL },
@@ -1267,6 +1377,8 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_NLGP*/{ SPR_NLGP, 0, -1, {NULL}, S_NULL },
 
 	/*S_QSGP*/{ SPR_QSGP, 0, -1, {NULL}, S_NULL },
+
+	/*S_HXSP*/{ SPR_HXSP, 0, -1, {NULL}, S_NULL },
 
 	{ SPR_S015,0,-1,NULL,S_NULL },// S_LAMP3
 	{ SPR_S016,0,-1,NULL,S_NULL },// S_LAMP4
@@ -3424,7 +3536,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		sfx_sargatk,        //attacksound
 		S_SARG_PAIN1,        //painstate
 		180,        //painchance
-		sfx_dbpain2,        //painsound
+		sfx_spcpain,        //painsound
 		S_SARG_ATK1,        //meleestate
 		S_NULL,        //missilestate
 		S_SARG_DIE1,        //deathstate
@@ -3435,7 +3547,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		100 * FRACUNIT,        //height
 		400,        //mass
 		0,        //damage
-		sfx_dbact,        //activesound
+		sfx_spcact,        //activesound
 		MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
 		0,        //palette
 		255,        //alpha
@@ -3453,7 +3565,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		sfx_sargatk,        //attacksound
 		S_SARG_PAIN0,        //painstate
 		180,        //painchance
-		sfx_dbpain2,        //painsound
+		sfx_spcpain,        //painsound
 		S_SARG_ATK0,        //meleestate
 		S_NULL,        //missilestate
 		S_SARG_DIE0,        //deathstate
@@ -3464,7 +3576,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		100 * FRACUNIT,        //height
 		400,        //mass
 		0,        //damage
-		sfx_dbact,        //activesound
+		sfx_spcact,        //activesound
 		MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
 		1,        //palette
 		255,        //alpha
@@ -3493,7 +3605,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		108 * FRACUNIT,        //height
 		1000,        //mass
 		0,        //damage
-		sfx_posact,        //activesound
+		sfx_manact,        //activesound
 		MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
 		0,        //palette
 		255,        //alpha
@@ -3569,7 +3681,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		sfx_None/*sfx_000*/,        //attacksound
 		S_TROO_PAIN,        //painstate
 		200,        //painchance
-		sfx_dbpain1,        //painsound
+		sfx_imppain,        //painsound
 		S_TROO_MELEE1,        //meleestate
 		S_TROO_ATK1,        //missilestate
 		S_TROO_DIE1,        //deathstate
@@ -3598,7 +3710,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		sfx_None/*sfx_000*/,        //attacksound
 		S_TROO_PAIN,        //painstate
 		128,        //painchance
-		sfx_dbpain1,        //painsound
+		sfx_imppain,        //painsound
 		S_TROO_MELEE1,        //meleestate
 		S_TROO_ATK1,        //missilestate
 		S_TROO_DIE1,        //deathstate
@@ -3627,7 +3739,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		sfx_None/*sfx_000*/,        //attacksound
 		S_HEAD_PAIN,        //painstate
 		128,        //painchance
-		sfx_dbpain2,        //painsound
+		sfx_headpain,        //painsound
 		S_NULL,        //meleestate
 		S_HEAD_ATK1,        //missilestate
 		S_HEAD_DIE1,        //deathstate
@@ -3638,7 +3750,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		90 * FRACUNIT,        //height
 		400,        //mass
 		0,        //damage
-		sfx_dbact,        //activesound
+		sfx_headact,        //activesound
 		MF_SOLID | MF_SHOOTABLE | MF_FLOAT | MF_COUNTKILL,        //flags
 		0,        //palette
 		255,        //alpha
@@ -3656,7 +3768,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		sfx_None/*sfx_000*/,        //attacksound
 		S_BOSS1_PAIN,        //painstate
 		50,        //painchance
-		sfx_dbpain2,        //painsound
+		sfx_brpain,        //painsound
 		S_BOSS1_ATK1,        //meleestate
 		S_BOSS1_ATK1,        //missilestate
 		S_BOSS1_DIE1,        //deathstate
@@ -3667,7 +3779,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		100 * FRACUNIT,        //height
 		1000,        //mass
 		0,        //damage
-		sfx_dbact,        //activesound
+		sfx_bract,        //activesound
 		MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
 		0,        //palette
 		255,        //alpha
@@ -3685,7 +3797,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		sfx_None/*sfx_000*/,        //attacksound
 		S_BOSS2_PAIN,        //painstate
 		50,        //painchance
-		sfx_dbpain2,        //painsound
+		sfx_kntpain,        //painsound
 		S_BOSS2_ATK1,        //meleestate
 		S_BOSS2_ATK1,        //missilestate
 		S_BOSS2_DIE1,        //deathstate
@@ -3696,7 +3808,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		100 * FRACUNIT,        //height
 		1000,        //mass
 		0,        //damage
-		sfx_dbact,        //activesound
+		sfx_kntact,        //activesound
 		MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
 		0,        //palette
 		255,        //alpha
@@ -3743,7 +3855,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		sfx_None/*sfx_000*/,        //attacksound
 		S_BSPI_PAIN,        //painstate
 		128,        //painchance
-		sfx_dbpain2,        //painsound
+		sfx_bsppain,        //painsound
 		S_NULL,        //meleestate
 		S_BSPI_ATK1,        //missilestate
 		S_BSPI_DIE1,        //deathstate
@@ -3772,7 +3884,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		sfx_None/*sfx_000*/,        //attacksound
 		S_CYBR_PAIN,        //painstate
 		20,        //painchance
-		sfx_dbpain2,        //painsound
+		sfx_cybpain,        //painsound
 		S_NULL,        //meleestate
 		S_CYBR_ATK1,        //missilestate
 		S_CYBR_DIE1,        //deathstate
@@ -3783,7 +3895,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		170 * FRACUNIT,        //height
 		1000,        //mass
 		0,        //damage
-		sfx_dbact,        //activesound
+		sfx_cybact,        //activesound
 		MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
 		0,        //palette
 		255,        //alpha
@@ -3841,7 +3953,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		112 * FRACUNIT,        //height
 		400,        //mass
 		0,        //damage
-		sfx_dbact,        //activesound
+		sfx_peact,        //activesound
 		MF_SOLID | MF_SHOOTABLE | MF_FLOAT | MF_COUNTKILL,        //flags
 		0,        //palette
 		255,        //alpha
@@ -9663,23 +9775,23 @@ S_NULL	   //raisestate
 		S_CPOS_STND,        //spawnstate
 		70,        //spawnhealth
 		S_CPOS_RUN1,        //seestate
-		sfx_possit2,        //seesound
+		sfx_chnsit,        //seesound
 		8,        //reactiontime
 		sfx_None,        //attacksound
 		S_CPOS_PAIN,        //painstate
 		170,        //painchance
-		sfx_dbpain1,        //painsound
+		sfx_chnpain,        //painsound
 		S_NULL,        //meleestate
 		S_CPOS_ATK1,        //missilestate
 		S_CPOS_DIE1,        //deathstate
 		S_CPOS_XDIE1,        //xdeathstate
-		sfx_posdie2,        //deathsound
+		sfx_chndie,        //deathsound
 		8,        //speed
 		32 * FRACUNIT,        //radius
 		87 * FRACUNIT,        //height
 		100,        //mass
 		0,        //damage
-		sfx_posact,        //activesound
+		sfx_chnact,        //activesound
 		MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
 		0,        // palette
 		255,        // alpha
@@ -9697,7 +9809,7 @@ S_NULL	   //raisestate
 		sfx_None,        // attacksound
 		S_SKEL_PAIN,        // painstate
 		100,        // painchance
-		sfx_dbpain1,        // painsound
+		sfx_skepain,        // painsound
 		S_SKEL_FIST1,        // meleestate
 		S_SKEL_MISS1,        // missilestate
 		S_SKEL_DIE1,        // deathstate
@@ -9755,7 +9867,7 @@ S_NULL	   //raisestate
 		sfx_pistol,        //attacksound
 		S_SPID_PAIN,        //painstate
 		40,        //painchance
-		sfx_dbpain2,        //painsound
+		sfx_spipain1,        //painsound
 		S_NULL,        //meleestate
 		S_SPID_ATK1,        //missilestate
 		S_SPID_DIE1,        //deathstate
@@ -9812,7 +9924,7 @@ S_NULL	   //raisestate
 	sfx_None/*sfx_000*/,        //attacksound
 	S_A64A_PAIN,        //painstate
 	20,        //painchance
-	sfx_dbpain2,        //painsound
+	sfx_cybpain,        //painsound
 	S_NULL,        //meleestate
 	S_A64A_ATK1,        //missilestate
 	S_A64A_DIE1,        //deathstate
@@ -9823,7 +9935,7 @@ S_NULL	   //raisestate
 	170 * FRACUNIT,        //height
 	1000,        //mass
 	0,        //damage
-	sfx_dbact,        //activesound
+	sfx_cybact,        //activesound
 	MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
 	0,        //palette
 	255,        //alpha
@@ -9928,7 +10040,7 @@ S_NULL	   //raisestate
 	sfx_None/*sfx_000*/,        //attacksound
 	S_BR64_PAIN,        //painstate
 	15,        //painchance
-	sfx_dbpain2,        //painsound
+	sfx_brpain,        //painsound
 	S_BR64_MELEE1,        //meleestate
 	S_BR64_ATK,        //missilestate
 	S_BR64_DIE1,        //deathstate
@@ -9939,7 +10051,7 @@ S_NULL	   //raisestate
 	100 * FRACUNIT,        //height
 	2000,        //mass
 	0,        //damage
-	sfx_dbact,        //activesound
+	sfx_bract,        //activesound
 	MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
 	0,        //palette
 	255,        //alpha
@@ -10624,7 +10736,7 @@ S_NULL	   //raisestate
 	sfx_None/*sfx_000*/,        //attacksound
 	S_BOSS3_PAIN,        //painstate
 	25,        //painchance
-	sfx_dbpain2,        //painsound
+	sfx_brpain,        //painsound
 	S_BOSS3_ATK1,        //meleestate
 	S_BOSS3_ATK1,        //missilestate
 	S_BOSS3_DIE1,        //deathstate
@@ -10635,7 +10747,7 @@ S_NULL	   //raisestate
 	100 * FRACUNIT,        //height
 	1000,        //mass
 	0,        //damage
-	sfx_dbact,        //activesound
+	sfx_bract,        //activesound
 	MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
 	0,        //palette
 	255,        //alpha
@@ -10664,7 +10776,7 @@ S_NULL	   //raisestate
 	108 * FRACUNIT,        //height
 	1000,        //mass
 	0,        //damage
-	sfx_posact,        //activesound
+	sfx_manact,        //activesound
 	MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
 	0,        //palette
 	255,        //alpha
@@ -10711,7 +10823,7 @@ S_NULL	   //raisestate
 	sfx_sargatk,        //attacksound
 	S_SRG2_PAIN1,        //painstate
 	140,        //painchance
-	sfx_dbpain2,        //painsound
+	sfx_spcpain,        //painsound
 	S_SRG2_ATK1,        //meleestate
 	S_NULL,        //missilestate
 	S_SRG2_DIE1,        //deathstate
@@ -10722,7 +10834,7 @@ S_NULL	   //raisestate
 	100 * FRACUNIT,        //height
 	400,        //mass
 	0,        //damage
-	sfx_dbact,        //activesound
+	sfx_spcact,        //activesound
 	MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
 	0,        //palette
 	255,        //alpha
@@ -10740,7 +10852,7 @@ S_NULL	   //raisestate
 	sfx_None/*sfx_000*/,        //attacksound
 	S_DIMP_PAIN,        //painstate
 	200,        //painchance
-	sfx_dbpain1,        //painsound
+	sfx_imppain,        //painsound
 	S_DIMP_MELEE1,        //meleestate
 	S_DIMP_ATK1,        //missilestate
 	S_DIMP_DIE1,        //deathstate
@@ -10798,7 +10910,7 @@ S_NULL	   //raisestate
 	sfx_None/*sfx_000*/,        //attacksound
 	S_HED2_PAIN,        //painstate
 	128,        //painchance
-	sfx_dbpain2,        //painsound
+	sfx_headpain,        //painsound
 	S_NULL,        //meleestate
 	S_HED2_ATK1,        //missilestate
 	S_HED2_DIE1,        //deathstate
@@ -10809,7 +10921,7 @@ S_NULL	   //raisestate
 	90 * FRACUNIT,        //height
 	600,        //mass
 	0,        //damage
-	sfx_dbact,        //activesound
+	sfx_headact,        //activesound
 	MF_SOLID | MF_SHOOTABLE | MF_FLOAT | MF_COUNTKILL,        //flags
 	0,        //palette
 	255,        //alpha
@@ -10856,7 +10968,7 @@ S_NULL	   //raisestate
 	sfx_None/*sfx_000*/,        //attacksound
 	S_HED3_PAIN,        //painstate
 	40,        //painchance
-	sfx_dbpain2,        //painsound
+	sfx_headpain,        //painsound
 	S_NULL,        //meleestate
 	S_HED3_ATK1,        //missilestate
 	S_HED3_DIE1,        //deathstate
@@ -10867,7 +10979,7 @@ S_NULL	   //raisestate
 	90 * FRACUNIT,        //height
 	600,        //mass
 	0,        //damage
-	sfx_dbact,        //activesound
+	sfx_headact,        //activesound
 	MF_SOLID | MF_SHOOTABLE | MF_FLOAT | MF_COUNTKILL,        //flags
 	0,        //palette
 	255,        //alpha
@@ -10914,7 +11026,7 @@ S_NULL	   //raisestate
 	sfx_sargatk,        //attacksound
 	S_SAR3_PAIN1,        //painstate
 	180,        //painchance
-	sfx_dbpain2,        //painsound
+	sfx_spcpain,        //painsound
 	S_SAR3_ATK1,        //meleestate
 	S_NULL,        //missilestate
 	S_SAR3_DIE1,        //deathstate
@@ -10925,7 +11037,7 @@ S_NULL	   //raisestate
 	100 * FRACUNIT,        //height
 	400,        //mass
 	0,        //damage
-	sfx_dbact,        //activesound
+	sfx_spcact,        //activesound
 	MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL | MF_SHADOW,        //flags
 	0,        //palette
 	128,        //alpha
@@ -10943,7 +11055,7 @@ S_NULL	   //raisestate
 	sfx_None/*sfx_000*/,        //attacksound
 	S_HEA2_PAIN,        //painstate
 	96,        //painchance
-	sfx_dbpain2,        //painsound
+	sfx_headpain,        //painsound
 	S_NULL,        //meleestate
 	S_HEA2_ATK1,        //missilestate
 	S_HEA2_DIE1,        //deathstate
@@ -10954,7 +11066,7 @@ S_NULL	   //raisestate
 	90 * FRACUNIT,        //height
 	400,        //mass
 	0,        //damage
-	sfx_dbact,        //activesound
+	sfx_headact,        //activesound
 	MF_SOLID | MF_SHOOTABLE | MF_FLOAT | MF_COUNTKILL | MF_SHADOW,        //flags
 	0,        //palette
 	128,        //alpha
@@ -11012,7 +11124,7 @@ S_NULL	   //raisestate
 	112 * FRACUNIT,        //height
 	600,        //mass
 	0,        //damage
-	sfx_dbact,        //activesound
+	sfx_peact,        //activesound
 	MF_SOLID | MF_SHOOTABLE | MF_FLOAT | MF_COUNTKILL | MF_SHADOW,        //flags
 	0,        //palette
 	128,        //alpha
@@ -11070,7 +11182,7 @@ S_NULL	   //raisestate
 	108 * FRACUNIT,        //height
 	1000,        //mass
 	0,        //damage
-	sfx_posact,        //activesound
+	sfx_manact,        //activesound
 	MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL | MF_SHADOW,        //flags
 	0,        //palette
 	128,        //alpha
@@ -11146,7 +11258,7 @@ S_NULL	   //raisestate
 	sfx_None/*sfx_000*/,        //attacksound
 	S_BSGI_PAIN,        //painstate
 	128,        //painchance
-	sfx_dbpain2,        //painsound
+	sfx_bsppain,        //painsound
 	S_NULL,        //meleestate
 	S_BSGI_ATK1,        //missilestate
 	S_BSGI_DIE1,        //deathstate
@@ -11204,7 +11316,7 @@ S_NULL	   //raisestate
 	sfx_None/*sfx_000*/,        //attacksound
 	S_TRO2_PAIN,        //painstate
 	128,        //painchance
-	sfx_dbpain1,        //painsound
+	sfx_imppain,        //painsound
 	S_TRO2_MELEE1,        //meleestate
 	S_TRO2_ATK1,        //missilestate
 	S_TRO2_DIE1,        //deathstate
@@ -11320,7 +11432,7 @@ S_NULL	   //raisestate
 	sfx_None/*sfx_000*/,        //attacksound
 	S_DCYB_PAIN,        //painstate
 	20,        //painchance
-	sfx_dbpain2,        //painsound
+	sfx_cybpain,        //painsound
 	S_NULL,        //meleestate
 	S_DCYB_ATK1,        //missilestate
 	S_DCYB_DIE1,        //deathstate
@@ -11331,7 +11443,7 @@ S_NULL	   //raisestate
 	170 * FRACUNIT,        //height
 	1000,        //mass
 	0,        //damage
-	sfx_dbact,        //activesound
+	sfx_cybact,        //activesound
 	MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
 	0,        //palette
 	255,        //alpha
@@ -11447,7 +11559,7 @@ S_NULL	   //raisestate
 	112 * FRACUNIT,        //height
 	400,        //mass
 	0,        //damage
-	sfx_dbact,        //activesound
+	sfx_peact,        //activesound
 	MF_SOLID | MF_SHOOTABLE | MF_FLOAT | MF_COUNTKILL,        //flags
 	0,        //palette
 	255,        //alpha
@@ -11465,7 +11577,7 @@ S_NULL	   //raisestate
 	sfx_None,        // attacksound
 	S_SKE2_PAIN,        // painstate
 	100,        // painchance
-	sfx_dbpain1,        // painsound
+	sfx_skepain,        // painsound
 	S_SKE2_FIST1,        // meleestate
 	S_SKE2_MISS1,        // missilestate
 	S_SKE2_DIE1,        // deathstate
@@ -11552,7 +11664,7 @@ S_NULL	   //raisestate
 	sfx_None/*sfx_000*/,        //attacksound
 	S_BSP2_PAIN,        //painstate
 	128,        //painchance
-	sfx_dbpain2,        //painsound
+	sfx_bsppain,        //painsound
 	S_NULL,        //meleestate
 	S_BSP2_ATK1,        //missilestate
 	S_BSP2_DIE1,        //deathstate
@@ -11697,7 +11809,7 @@ S_NULL	   //raisestate
 	sfx_None/*sfx_000*/,        //attacksound
 	S_BACY_PAIN,        //painstate
 	40,        //painchance
-	sfx_dbpain2,        //painsound
+	sfx_brpain,        //painsound
 	S_BACY_ATK2_1,        //meleestate
 	S_BACY_DECIDE,        //missilestate
 	S_BACY_DIE1,        //deathstate
@@ -11708,7 +11820,7 @@ S_NULL	   //raisestate
 	100 * FRACUNIT,        //height
 	1000,        //mass
 	0,        //damage
-	sfx_dbact,        //activesound
+	sfx_bract,        //activesound
 	MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
 	0,        //palette
 	255,        //alpha
@@ -11726,7 +11838,7 @@ S_NULL	   //raisestate
 	sfx_None/*sfx_000*/,        //attacksound
 	S_CYBG_PAIN,        //painstate
 	20,        //painchance
-	sfx_dbpain2,        //painsound
+	sfx_cybpain,        //painsound
 	S_NULL,        //meleestate
 	S_CYBG_ATK1,        //missilestate
 	S_CYBG_DIE1,        //deathstate
@@ -11737,7 +11849,7 @@ S_NULL	   //raisestate
 	170 * FRACUNIT,        //height
 	1000,        //mass
 	0,        //damage
-	sfx_dbact,        //activesound
+	sfx_cybact,        //activesound
 	MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
 	0,        //palette
 	255,        //alpha
@@ -11755,7 +11867,7 @@ S_NULL	   //raisestate
 	sfx_None/*sfx_000*/,        //attacksound
 	S_ARNO_PAIN,        //painstate
 	50,        //painchance
-	sfx_dbpain2,        //painsound
+	sfx_brpain,        //painsound
 	S_NULL,        //meleestate
 	S_ARNO_ATK1,        //missilestate
 	S_ARNO_DIE1,        //deathstate
@@ -11766,7 +11878,7 @@ S_NULL	   //raisestate
 	80 * FRACUNIT,        //height
 	600,        //mass
 	0,        //damage
-	sfx_dbact,        //activesound
+	sfx_bract,        //activesound
 	MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
 	0,        //palette
 	255,        //alpha
@@ -11784,7 +11896,7 @@ S_NULL	   //raisestate
 	sfx_None/*sfx_000*/,        //attacksound
 	S_BOZ3_PAIN,        //painstate
 	75,        //painchance
-	sfx_dbpain2,        //painsound
+	sfx_kntpain,        //painsound
 	S_BOZ3_ATK1,        //meleestate
 	S_BOZ3_ATK1,        //missilestate
 	S_BOZ3_DIE1,        //deathstate
@@ -11795,7 +11907,7 @@ S_NULL	   //raisestate
 	100 * FRACUNIT,        //height
 	1000,        //mass
 	0,        //damage
-	sfx_dbact,        //activesound
+	sfx_kntact,        //activesound
 	MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
 	0,        //palette
 	255,        //alpha
@@ -11882,7 +11994,7 @@ S_NULL	   //raisestate
 	170 * FRACUNIT,        //height
 	1000,        //mass
 	0,        //damage
-	sfx_dbact,        //activesound
+	sfx_cybact,        //activesound
 	MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
 	0,        //palette
 	255,        //alpha
@@ -11987,7 +12099,7 @@ S_NULL	   //raisestate
 	sfx_None/*sfx_000*/,        //attacksound
 	S_HEAC_PAIN,        //painstate
 	128,        //painchance
-	sfx_dbpain2,        //painsound
+	sfx_headpain,        //painsound
 	S_NULL,        //meleestate
 	S_HEAC_ATK1,        //missilestate
 	S_HEAC_DIE1,        //deathstate
@@ -11998,7 +12110,7 @@ S_NULL	   //raisestate
 	90 * FRACUNIT,        //height
 	400,        //mass
 	0,        //damage
-	sfx_dbact,        //activesound
+	sfx_headact,        //activesound
 	MF_SOLID | MF_SHOOTABLE | MF_FLOAT | MF_COUNTKILL,        //flags
 	0,        //palette
 	255,        //alpha
@@ -12161,7 +12273,7 @@ S_NULL	   //raisestate
 	sfx_sargatk,        //attacksound
 	S_ACID_PAIN1,        //painstate
 	180,        //painchance
-	sfx_dbpain2,        //painsound
+	sfx_spcpain,        //painsound
 	S_ACID_MELEE1,        //meleestate
 	S_ACID_ATK1,        //missilestate
 	S_ACID_DIE1,        //deathstate
@@ -12172,7 +12284,7 @@ S_NULL	   //raisestate
 	100 * FRACUNIT,        //height
 	400,        //mass
 	0,        //damage
-	sfx_dbact,        //activesound
+	sfx_spcact,        //activesound
 	MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
 	0,        //palette
 	255,        //alpha
@@ -12201,7 +12313,7 @@ S_NULL	   //raisestate
 	108 * FRACUNIT,        //height
 	1000,        //mass
 	0,        //damage
-	sfx_posact,        //activesound
+	sfx_manact,        //activesound
 	MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
 	1,        //palette
 	255,        //alpha
@@ -12259,8 +12371,37 @@ S_NULL	   //raisestate
 	112 * FRACUNIT,        //height
 	400,        //mass
 	0,        //damage
-	sfx_dbact,        //activesound
+	sfx_peact,        //activesound
 	MF_SOLID | MF_SHOOTABLE | MF_FLOAT | MF_COUNTKILL,        //flags
+	0,        //palette
+	255,        //alpha
+	S_NULL	   //raisestate
+},
+
+{
+	/*MT_WEAP_HEXASHOTGUN*/
+	9049,        //doomednum
+	S_HXSP,        //spawnstate
+	1000,        //spawnhealth
+	S_NULL,        //seestate
+	sfx_None/*sfx_000*/,        //seesound
+	8,        //reactiontime
+	sfx_None/*sfx_000*/,        //attacksound
+	S_NULL,        //painstate
+	0,        //painchance
+	sfx_None/*sfx_000*/,        //painsound
+	S_NULL,        //meleestate
+	S_NULL,        //missilestate
+	S_NULL,        //deathstate
+	S_NULL,        //xdeathstate
+	sfx_None/*sfx_000*/,        //deathsound
+	0,        //speed
+	20 * FRACUNIT,        //radius
+	16 * FRACUNIT,        //height
+	100,        //mass
+	0,        //damage
+	sfx_None/*sfx_000*/,        //activesound
+	MF_SPECIAL,        //flags
 	0,        //palette
 	255,        //alpha
 	S_NULL	   //raisestate

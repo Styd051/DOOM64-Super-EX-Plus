@@ -1217,12 +1217,15 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	  // randomizer weapon Super Shotgun
 	  if (i == MT_WEAP_SSHOTGUN) {
-		  randomizernum = P_Random(pr_randomizer) % 2; // Immorpher randomizer number
-		  if (randomizernum == 1) {
+		  randomizernum = P_Random(pr_randomizer) % 3; // Immorpher randomizer number
+		  if (randomizernum == 2) {
 			  i = MT_WEAP_SSHOTGUN;
 		  }
-		  else if (randomizernum == 0) {
+		  else if (randomizernum == 1) {
 			  i = MT_WEAP_QUADSHOTGUN;
+		  }
+		  else if (randomizernum == 0) {
+			  i = MT_WEAP_HEXASHOTGUN;
 		  }
 
 	  }

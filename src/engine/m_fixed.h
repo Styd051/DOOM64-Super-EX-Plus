@@ -35,6 +35,8 @@
 //
 #define FRACBITS        16
 #define FRACUNIT        (1<<FRACBITS)
+#define FRACUNIT2        (2<<FRACBITS)
+#define FRACUNIT3        (3<<FRACBITS)
 
 #define INT2F(x)        ((x)<<FRACBITS)
 #define F2INT(x)        ((x)>>FRACBITS)
