@@ -1913,6 +1913,64 @@ void A_PainShootSkull(mobj_t* actor, angle_t angle) {
 }
 
 //
+// A_PainShootSkullNightmare
+// Spawn a lost soul nightmare and launch it at the target
+//
+
+void A_PainShootSkullNightmare(mobj_t* actor, angle_t angle) {
+	fixed_t     x;
+	fixed_t     y;
+	fixed_t     z;
+	mobj_t* newmobj;
+	angle_t     an;
+	int         prestep;
+	int         count;
+
+	// count total number of skull currently on the level
+	count = 0;
+
+	for (newmobj = mobjhead.next; newmobj != &mobjhead; newmobj = newmobj->next) {
+		if (newmobj->type == MT_SKULLNIGHTMARE) {
+			count++;
+		}
+	}
+
+	//
+	// if there are all ready 17 skulls on the level,
+	// don't spit another one
+	// 20120212 villsa - new compatibility flag to disable limit
+	//
+	if (compatflags & COMPATF_LIMITPAIN && count > 0x11) {
+		return;
+	}
+
+	an = angle >> ANGLETOFINESHIFT;
+
+	prestep = 4 * FRACUNIT + 3 * (actor->info->radius + mobjinfo[MT_SKULLNIGHTMARE].radius) / 2;
+
+	x = actor->x + FixedMul(prestep, finecosine[an]);
+	y = actor->y + FixedMul(prestep, finesine[an]);
+	z = actor->z + 16 * FRACUNIT;
+
+	newmobj = P_SpawnMobj(x, y, z, MT_SKULLNIGHTMARE);
+
+	// Check for movements
+
+	if ((!P_TryMove(newmobj, newmobj->x, newmobj->y)) ||
+		(!P_PathTraverse(actor->x, actor->y, newmobj->x, newmobj->y, PT_ADDLINES, PIT_PainCheckLine))) {
+		// kill it immediately
+
+		P_DamageMobj(newmobj, actor, actor, 10000);
+		P_RadiusAttack(newmobj, newmobj, 128);
+		return;
+	}
+
+	P_SetTarget(&newmobj->target, actor->target);
+	P_SetMobjState(newmobj, newmobj->info->missilestate);
+	A_SkullAttack(newmobj);
+}
+
+//
 // A_PainAttack
 // Spawn a lost soul and launch it at the target
 //
@@ -1923,8 +1981,17 @@ void A_PainAttack(mobj_t* actor) {
 	}
 
 	A_FaceTarget(actor);
-	A_PainShootSkull(actor, actor->angle + 0x15550000);
-	A_PainShootSkull(actor, actor->angle - 0x15550000);
+	if (actor->flags & MF_NIGHTMARE)
+	{
+		A_PainShootSkullNightmare(actor, actor->angle + 0x15550000);
+		A_PainShootSkullNightmare(actor, actor->angle - 0x15550000);
+	}
+	else 
+	{
+		A_PainShootSkull(actor, actor->angle + 0x15550000);
+		A_PainShootSkull(actor, actor->angle - 0x15550000);
+	}
+
 }
 
 //
@@ -1933,9 +2000,18 @@ void A_PainAttack(mobj_t* actor) {
 
 void A_PainDie(mobj_t* actor) {
 	A_Fall(actor);
-	A_PainShootSkull(actor, actor->angle + ANG90);
-	A_PainShootSkull(actor, actor->angle + ANG180);
-	A_PainShootSkull(actor, actor->angle + ANG270);
+	if (actor->flags & MF_NIGHTMARE)
+	{
+		A_PainShootSkullNightmare(actor, actor->angle + ANG90);
+		A_PainShootSkullNightmare(actor, actor->angle + ANG180);
+		A_PainShootSkullNightmare(actor, actor->angle + ANG270);
+	}
+	else
+	{
+		A_PainShootSkull(actor, actor->angle + ANG90);
+		A_PainShootSkull(actor, actor->angle + ANG180);
+		A_PainShootSkull(actor, actor->angle + ANG270);
+	}
 
 	A_OnDeathTrigger(actor);
 }

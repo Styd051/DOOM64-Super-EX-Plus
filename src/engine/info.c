@@ -12406,4 +12406,33 @@ S_NULL	   //raisestate
 	255,        //alpha
 	S_NULL	   //raisestate
 },
+
+{
+	/*MT_SKULLNIGHTMARE*/
+	9050,        //doomednum
+	S_SKUL_STND,        //spawnstate
+	120,        //spawnhealth
+	S_SKUL_RUN1,        //seestate
+	sfx_None/*sfx_000*/,        //seesound
+	8,        //reactiontime
+	sfx_skullatk,        //attacksound
+	S_SKUL_PAIN,        //painstate
+	256,        //painchance
+	sfx_dbpain2,        //painsound
+	S_NULL,        //meleestate
+	S_SKUL_ATK1,        //missilestate
+	S_SKUL_DIE1,        //deathstate
+	S_NULL,        //xdeathstate
+	sfx_implod,        //deathsound
+	8,        //speed
+	28 * FRACUNIT,        //radius
+	64 * FRACUNIT,        //height
+	50,        //mass
+	3,        //damage
+	sfx_dbact,        //activesound
+	MF_SOLID | MF_SHOOTABLE | MF_FLOAT | MF_COUNTKILL | MF_NOBLOOD | MF_NIGHTMARE,        //flags
+	0,        //palette
+	192,        //alpha
+	S_NULL	   //raisestate
+},
 };

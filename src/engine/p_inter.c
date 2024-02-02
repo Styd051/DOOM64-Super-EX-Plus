@@ -1108,6 +1108,9 @@ static void P_Obituary(mobj_t* source, mobj_t* target) {
 		case MT_FERRYMAN:
 			sprintf(omsg, "your soul belongs to me.");
 			break;
+		case MT_SKULLNIGHTMARE:
+			sprintf(omsg, "A Lost Soul slammed\ninto you.");
+			break;
 		default:
 			sprintf(omsg, "you died.");
 			break;
