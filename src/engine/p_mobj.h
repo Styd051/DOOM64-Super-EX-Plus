@@ -139,7 +139,8 @@ typedef enum {
 	MF_TRIGDEATH = 0x20000000,   // [d64] Trigger line special on death
 	MF_SHADOW = 0x40000000,   // temporary player invisibility powerup.
 	MF_NOINFIGHTING = 0x80000000,    // [d64] Do not switch targets
-    MF_FRIEND = 0x180000000        // killough 7/18/98: friendly monsters
+    MF_FRIEND = 0x180000000,        // killough 7/18/98: friendly monsters
+    MF_INVULNERABLE = 0x08000000	// mobj is invulnerable
 } mobjflag_t;
 
 typedef enum {

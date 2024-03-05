@@ -1020,6 +1020,7 @@ CVAR_EXTERNAL(hud_disablesecretmessages);
 CVAR_EXTERNAL(m_nospawnsound);
 CVAR_EXTERNAL(m_obituaries);
 CVAR_EXTERNAL(m_brutal);
+CVAR_EXTERNAL(m_nobuzzsound);
 
 
 
@@ -1040,6 +1041,7 @@ enum {
 	misc_header3,
 	misc_wipe,
 	misc_skybox,
+	misc_nobuzzsound,
 	misc_header4,
 	misc_showkey,
 	misc_showlocks,
@@ -1074,6 +1076,7 @@ menuitem_t MiscMenu[] = {
 	{-1,"Misc",0 },
 	{2,"Screen Melt:",M_MiscChoice, 's' },
 	{2,"Skybox:",M_MiscChoice,'k'},
+	{2,"Buzz Sound:",M_MiscChoice },
 	{-1,"Automap",0 },
 	{2,"Key Pickups:",M_MiscChoice },
 	{2,"Locked Doors:",M_MiscChoice },
@@ -1107,6 +1110,7 @@ char* MiscHints[misc_end] = {
 	NULL,
 	"enable the melt effect when completing a level",
 	"toggle skies to render either normally or as skyboxes",
+	"disable the sound buzz of plasma gun",
 	NULL,
 	"display key pickups in automap",
 	"colorize locked doors accordingly to the key in automap",
@@ -1135,6 +1139,7 @@ menudefault_t MiscDefault[] = {
 	{ &m_cacodemonalternative, 0 },
 	{ &r_wipe, 1 },
 	{ &r_skybox, 0 },
+	{ &m_nobuzzsound, 0 },
 	{ &hud_disablesecretmessages, 0 },
 	{ &am_showkeymarkers, 0 },
 	{ &am_showkeycolors, 0 },
@@ -1252,6 +1257,10 @@ void M_MiscChoice(int choice) {
 		M_SetOptionValue(choice, 0, 1, 1, &r_skybox);
 		break;
 
+	case misc_nobuzzsound:
+		M_SetOptionValue(choice, 0, 1, 1, &m_nobuzzsound);
+		break;
+
 	case misc_disablesecretmessages:
 		M_SetOptionValue(choice, 0, 1, 1, &hud_disablesecretmessages);
 		break;
@@ -1331,6 +1340,7 @@ void M_DrawMisc(void) {
 	DRAWMISCITEM(misc_wipe, r_wipe.value, msgNames);
 	DRAWMISCITEM(misc_autorun, p_autorun.value, autoruntype);
 	DRAWMISCITEM(misc_skybox, r_skybox.value, msgNames);
+	DRAWMISCITEM(misc_nobuzzsound, m_nobuzzsound.value, disablesecretmessages);
 	DRAWMISCITEM(misc_showkey, am_showkeymarkers.value, mapdisplaytype);
 	DRAWMISCITEM(misc_showlocks, am_showkeycolors.value, mapdisplaytype);
 	DRAWMISCITEM(misc_amobjects, am_drawobjects.value, objectdrawtype);

@@ -162,7 +162,7 @@ void P_MissileHit(mobj_t* mo) {
 		damage = ((P_Random(pr_damage) & 7) + 1) * mo->info->damage;
 		P_DamageMobj(missilething, mo, mo->target, damage);
 
-		if (mo->type == MT_PROJ_RECTFIRE || mo->type == MT_PROJ_BRUISERDEMON2 || mo->type == MT_PROJ_THAMUZFIRE) {
+		if (mo->type == MT_PROJ_RECTFIRE || mo->type == MT_PROJ_BRUISERDEMON2 || mo->type == MT_PROJ_THAMUZFIRE || mo->type == MT_PROJ_RESURRECTORINFERNOFIRE) {
 			if (missilething->player && missilething->info->mass) {
 				missilething->momz += ((1500 / missilething->info->mass) * FRACUNIT);
 			}
@@ -339,7 +339,7 @@ void P_ZMovement(mobj_t* mo) {
 
 		if ((mo->flags & MF_MISSILE)
 			&& !(mo->flags & MF_NOCLIP)
-			&& !(mo->type == MT_PROJ_RECTFIRE || mo->type == MT_PROJ_BRUISERDEMON2 || mo->type == MT_PROJ_THAMUZFIRE)) {
+			&& !(mo->type == MT_PROJ_RECTFIRE || mo->type == MT_PROJ_BRUISERDEMON2 || mo->type == MT_PROJ_THAMUZFIRE || mo->type == MT_PROJ_RESURRECTORINFERNOFIRE)) {
 			mo->mobjfunc = P_ExplodeMissile;
 			return;
 		}
@@ -1230,6 +1230,18 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	  }
 
+	  // randomizer weapon BFG
+	  if (i == MT_WEAP_BFG) {
+		  randomizernum = P_Random(pr_randomizer) % 2; // Immorpher randomizer number
+		  if (randomizernum == 1) {
+			  i = MT_WEAP_BFG;
+		  }
+		  else if (randomizernum == 0) {
+			  i = MT_WEAP_BFG10K;
+		  }
+
+	  }
+
 	  // randomizer health bonus
 	  if (i == MT_ITEM_BONUSHEALTH) {
 		  randomizernum = P_Random(pr_randomizer) % 2; // Immorpher randomizer number
@@ -1302,7 +1314,7 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 		else if (randomizernum < 217) {
 			i = MT_PlASMAZOMBIE;
 		}
-		else if (randomizernum < 248) {
+		else if (randomizernum < 250) {
 			i = MT_SSGZOMBIE;
 		}
 		else if (randomizernum < 256) {
@@ -1312,38 +1324,44 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	// randomizer pinky and specter
 	if (i == MT_DEMON1 || i == MT_DEMON2) {
-		randomizernum = P_Random(pr_randomizer) % 6; // Immorpher randomizer number
-		if (randomizernum == 5) {
+		randomizernum = P_Random(pr_randomizer) % 7; // Immorpher randomizer number
+		if (randomizernum == 6) {
 			i = MT_DEMON1;
 		}
-		else if (randomizernum == 4) {
+		else if (randomizernum == 5) {
 			i = MT_DEMON2;
 		}
-		else if (randomizernum == 3) {
+		else if (randomizernum == 4) {
 			i = MT_GREENDEMON;
 		}
-		else if (randomizernum == 2) {
+		else if (randomizernum == 3) {
 			i = MT_BLOODDEMON;
 		}
-		else if (randomizernum == 1) {
+		else if (randomizernum == 2) {
 			i = MT_NIGHTMARE_SPECTRE;
 		}
-		else if (randomizernum == 0) {
+		else if (randomizernum == 1) {
 			i = MT_HELLHOUND;
+		}
+		else if (randomizernum == 0) {
+			i = MT_CENTAUR;
 		}
 	}
 
 	// randomizer imp and imp nightmare
 	if (i == MT_IMP1 || i == MT_IMP2) {
-		randomizernum = P_Random(pr_randomizer) % 4; // Immorpher randomizer number
-		if (randomizernum == 3) {
+		randomizernum = P_Random(pr_randomizer) % 5; // Immorpher randomizer number
+		if (randomizernum == 4) {
 			i = MT_IMP1;
 		}
-		else if (randomizernum == 2) {
+		else if (randomizernum == 3) {
 			i = MT_IMP2;
 		}
-		else if (randomizernum == 1) {
+		else if (randomizernum == 2) {
 			i = MT_DARKIMP;
+		}
+		else if (randomizernum == 1) {
+			i = MT_NAMIDARKIMP;
 		}
 		else if (randomizernum == 0) {
 			i = MT_HARDCORE_IMP;
@@ -1378,18 +1396,21 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	// randomizer hell knight
 	if (i == MT_BRUISER2) {
-		randomizernum = P_Random(pr_randomizer) % 4; // Immorpher randomizer number
-		if (randomizernum == 3) {
+		randomizernum = P_Random(pr_randomizer) % 5; // Immorpher randomizer number
+		if (randomizernum == 4) {
 			i = MT_BRUISER2;
 		}
-		else if (randomizernum == 2) {
+		else if (randomizernum == 3) {
 			i = MT_UNDEAD;
 		}
-		else if (randomizernum == 1) {
+		else if (randomizernum == 2) {
 			i = MT_NIGHTMARE_REVENANT;
 		}
-		else if (randomizernum == 0) {
+		else if (randomizernum == 1) {
 			i = MT_KNIGHTMARE;
+		}
+		else if (randomizernum == 0) {
+			i = MT_CENTAURLEADER;
 		}
 	}
 
@@ -1415,12 +1436,15 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	// randomizer pain elemental
 	if (i == MT_PAIN) {
-		randomizernum = P_Random(pr_randomizer) % 4; // Immorpher randomizer number
-		if (randomizernum == 3) {
+		randomizernum = P_Random(pr_randomizer) % 5; // Immorpher randomizer number
+		if (randomizernum == 4) {
 			i = MT_PAIN;
 		}
-		else if (randomizernum == 2) {
+		else if (randomizernum == 3) {
 			i = MT_ABOMINATION;
+		}
+		else if (randomizernum == 2) {
+			i = MT_SOULKEEPER;
 		}
 		else if (randomizernum == 1) {
 			i = MT_PAIN_ELEMENTAL_STALKER;
@@ -1432,9 +1456,12 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	// randomizer lost soul
 	if (i == MT_SKULL) {
-		randomizernum = P_Random(pr_randomizer) % 3; // Immorpher randomizer number
-		if (randomizernum == 2) {
+		randomizernum = P_Random(pr_randomizer) % 4; // Immorpher randomizer number
+		if (randomizernum == 3) {
 			i = MT_SKULL;
+		}
+		else if (randomizernum == 2) {
+			i = MT_TERRORSOUL;
 		}
 		else if (randomizernum == 1) {
 			i = MT_STALKER;
@@ -1483,32 +1510,41 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	// randomizer cyberdemon
 	if (i == MT_CYBORG) {
-		randomizernum = P_Random(pr_randomizer) % 5; // Immorpher randomizer number
-		if (randomizernum == 4) {
+		randomizernum = P_Random(pr_randomizer) % 6; // Immorpher randomizer number
+		if (randomizernum == 5) {
 			i = MT_CYBORG;
 		}
-		else if (randomizernum == 3) {
+		else if (randomizernum == 4) {
 			i = MT_ANNIHILATOR;
 		}
-		else if (randomizernum == 2) {
+		else if (randomizernum == 3) {
 			i = MT_BFGCYBERDEMON;
 		}
-		else if (randomizernum == 1) {
+		else if (randomizernum == 2) {
 			i = MT_CYBERDEMONSHOTGUN;
 		}
-		else if (randomizernum == 0) {
+		else if (randomizernum == 1) {
 			i = MT_THAMUZ;
+		}
+		else if (randomizernum == 0) {
+			i = MT_HARBINGER;
 		}
 	}
 
 	// randomizer mother demon
 	if (i == MT_RESURRECTOR) {
-		randomizernum = P_Random(pr_randomizer) % 2; // Immorpher randomizer number
-		if (randomizernum == 1) {
+		randomizernum = P_Random(pr_randomizer) % 4; // Immorpher randomizer number
+		if (randomizernum == 3) {
 			i = MT_RESURRECTOR;
 		}
-		else if (randomizernum == 0) {
+		else if (randomizernum == 2) {
 			i = MT_RESURRECTOR2;
+		}
+		else if (randomizernum == 1) {
+			i = MT_RESURRECTORINFERNO;
+		}
+		else if (randomizernum == 0) {
+			i = MT_RESURRECTORBFG;
 		}
 	}
 
@@ -1882,6 +1918,14 @@ void P_SpawnPlayerMissile(mobj_t* source, mobjtype_t type) {
 	else if (type == MT_PROJ_NAILQUADDAMAGE) {
 		missileheight = (32 * FRACUNIT);
 		offset = 40;
+	}
+	else if (type == MT_PROJ_BFG10K) {
+		missileheight = (32 * FRACUNIT);
+		offset = 30;
+	}
+	else if (type == MT_PROJ_BFG10KQUADDAMAGE) {
+		missileheight = (32 * FRACUNIT);
+		offset = 30;
 	}
 	else {
 		missileheight = (32 * FRACUNIT);

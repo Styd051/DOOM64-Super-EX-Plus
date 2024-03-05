@@ -109,7 +109,13 @@ enum {
     pr_quadshotgun,             // #76
     pr_defect,                  // #77
     pr_hexashotgun,             // #78
-    pr_randomizer,              // #79
+    pr_rectinfernodecide,       // #79
+    pr_terrorsouldecide,        // #80
+    pr_soulkeeperdecide,        // #81
+    pr_centaurdefend,           // #82
+    pr_centaurattack,           // #83
+    pr_harbingerdecide,         // #84
+    pr_randomizer,              // #85
 
     // End of new entries
     NUMPRCLASS               // MUST be last item in list

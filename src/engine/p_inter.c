@@ -731,7 +731,7 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 			return;
 		}
 		player->message = GOTNAILSAMMOBOX;
-		player->messagepic = 50;
+		player->messagepic = 46;
 		break;
 
 		// weapons
@@ -741,6 +741,15 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 		}
 		player->message = GOTBFG9000;
 		player->messagepic = 16;
+		sound = sfx_sgcock;
+		break;
+
+	case SPR_BFG2:
+		if (!P_GiveWeapon(player, special, wp_bfg10k, false)) {
+			return;
+		}
+		player->message = GOTBFG10000;
+		player->messagepic = 49;
 		sound = sfx_sgcock;
 		break;
 
@@ -803,7 +812,7 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 			return;
 		}
 		player->message = GOTQUADSHOTGUN;
-		player->messagepic = 45;
+		player->messagepic = 47;
 		sound = sfx_sgcock;
 		break;
 
@@ -812,7 +821,7 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 			return;
 		}
 		player->message = GOTHEXASHOTGUN;
-		player->messagepic = 46;
+		player->messagepic = 48;
 		sound = sfx_sgcock;
 		break;
 
@@ -1111,6 +1120,27 @@ static void P_Obituary(mobj_t* source, mobj_t* target) {
 		case MT_SKULLNIGHTMARE:
 			sprintf(omsg, "A Lost Soul slammed\ninto you.");
 			break;
+		case MT_HARBINGER:
+			sprintf(omsg, "you were killed\nby a Harbinger.");
+			break;
+		case MT_RESURRECTORINFERNO:
+			sprintf(omsg, "you were destroyed\nby the Resurrector Inferno.");
+			break;
+		case MT_TERRORSOUL:
+			sprintf(omsg, "A Terror Soul slammed\ninto you.");
+			break;
+		case MT_RESURRECTORBFG:
+			sprintf(omsg, "you were destroyed\nby the Resurrector BFG.");
+			break;
+		case MT_CENTAUR:
+			sprintf(omsg, "you were killed\nby a Centaur.");
+			break;
+		case MT_CENTAURLEADER:
+			sprintf(omsg, "you were killed\nby a Centaur Leader.");
+			break;
+		case MT_NAMIDARKIMP:
+			sprintf(omsg, "you were cursed\nby a Nami Dark IMP.");
+			break;
 		default:
 			sprintf(omsg, "you died.");
 			break;
@@ -1272,6 +1302,11 @@ void P_DamageMobj(mobj_t* target, mobj_t* inflictor, mobj_t* source, int damage)
 	}
 
 	if (target->health <= 0) {
+		return;
+	}
+
+	if ((target->flags & MF_INVULNERABLE) && damage < 10000)
+	{ // mobj is invulnerable
 		return;
 	}
 

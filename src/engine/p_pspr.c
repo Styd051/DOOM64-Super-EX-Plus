@@ -54,6 +54,9 @@
 
 // plasma cells for a bfg attack
 #define BFGCELLS                40
+#define BFG10KCELLS                5
+
+CVAR(m_nobuzzsound, 0);
 
 CVAR_EXTERNAL(v_accessibility);
 
@@ -70,7 +73,8 @@ weaponinfo_t    weaponinfo[NUMWEAPONS] = {
 	{ am_cell,      S_LASERGUP, S_LASERGDOWN, S_LASERG, S_LASERG1, S_LASERGLIGHT },    // laser rifle
 	{ am_nails,      S_NAILGUP, S_NAILGDOWN, S_NAILG, S_NAILG1, S_NULL },    // nailgun
 	{ am_shell,     S_QSGUP, S_QSGDOWN, S_QSG, S_QSG1, S_NULL },    // quad shotgun
-	{ am_shell,     S_HXSGUP, S_HXSGDOWN, S_HXSG, S_HXSG1, S_NULL }    // hexa shotgun
+	{ am_shell,     S_HXSGUP, S_HXSGDOWN, S_HXSG, S_HXSG1, S_NULL },    // hexa shotgun
+	{ am_cell,      S_BFG10KUP1, S_BFG10KDOWN, S_BFG10KREADY1, S_BFG10K1, S_NULL }    // bfg10k
 };
 
 static int laserCells = 1;
@@ -155,7 +159,16 @@ void P_BringUpWeapon(player_t* player) {
 		S_StartSound(player->mo, sfx_sawup);
 	}
 	else if (player->pendingweapon == wp_plasma) {
-		S_StartSound(player->mo, sfx_electric);
+		if (m_nobuzzsound.value != 1)
+		{
+			S_StartSound(player->mo, sfx_electric);
+		}
+	}
+	else if (player->pendingweapon == wp_bfg10k) {
+		if (m_nobuzzsound.value != 1)
+		{
+			S_StartSound(player->mo, sfx_bfg10kelectric);
+		}
 	}
 
 	newstate = weaponinfo[player->pendingweapon].upstate;
@@ -195,6 +208,9 @@ boolean P_CheckAmmo(player_t* player) {
 	// Minimal amount for one shot varies.
 	if (player->readyweapon == wp_bfg) {
 		count = deh_bfg_cells_per_shot;
+	}
+	else if (player->readyweapon == wp_bfg10k) {
+		count = 5;    
 	}
 	else if (player->readyweapon == wp_supershotgun) {
 		count = 2;    // Double barrel.
@@ -259,6 +275,10 @@ boolean P_CheckAmmo(player_t* player) {
 			&& player->ammo[am_cell] > 40) {
 			player->pendingweapon = wp_bfg;
 		}
+		else if (player->weaponowned[wp_bfg10k]
+			&& player->ammo[am_cell] > 5) {
+			player->pendingweapon = wp_bfg10k;
+		}
 		else if (player->weaponowned[wp_laser]
 			&& player->ammo[am_cell] > laserCells) {
 			player->pendingweapon = wp_laser;
@@ -295,6 +315,9 @@ void P_FireWeapon(player_t* player) {
 	newstate = weaponinfo[player->readyweapon].atkstate;
 	if (player->refire && player->readyweapon == wp_pistol) {
 		newstate++;
+	}
+	if (player->refire && player->readyweapon == wp_bfg10k) {
+		newstate = S_BFG10K4;
 	}
 	P_SetPsprite(player, ps_weapon, newstate);
 	P_NoiseAlert(player->mo, player->mo);
@@ -390,6 +413,13 @@ void A_Lower(player_t* player, pspdef_t* psp) {
 	//
 	if (player->readyweapon == wp_plasma) {
 		S_StopSound(NULL, sfx_electric);
+	}
+
+	//
+	// [d64] stop BFG10K buzz
+	//
+	if (player->readyweapon == wp_bfg10k) {
+		S_StopSound(NULL, sfx_bfg10kelectric);
 	}
 
 	/* */
@@ -1368,4 +1398,56 @@ void A_FireHexaShotgun(player_t* player, pspdef_t* psp) {
 		P_LineAttack(player->mo, angle, MISSILERANGE, bulletslope +
 			P_RandomShift(pr_hexashotgun, 5), damage);
 	}
+}
+
+//
+// A_BFG10KAnimate
+//
+
+static int bfg10k_animpic = 0;
+
+void A_BFG10KAnimate(player_t* player, pspdef_t* psp) {
+	P_SetPsprite(player, ps_flash, S_BFG10KANIM1 + bfg10k_animpic);
+
+	if (++bfg10k_animpic >= 3) {
+		bfg10k_animpic = 0;
+	}
+}
+
+//
+// A_BFG10ksound
+//
+
+void A_BFG10ksound(player_t* player, pspdef_t* psp) {
+	S_StartSound(player->mo, sfx_bfg10kf);
+}
+
+//
+// A_BFG10ksound2
+//
+
+void A_BFG10ksound2(player_t* player, pspdef_t* psp) {
+	S_StartSound(player->mo, sfx_bfg10kcool);
+}
+
+//
+// A_FireBFG10K
+//
+void A_FireBFG10K(player_t* player, pspdef_t* psp) {
+	player->ammo[weaponinfo[player->readyweapon].ammo] -= BFG10KCELLS;
+
+
+	if (player->powers[pw_quaddamage]) {
+
+		P_SpawnPlayerMissile(player->mo, MT_PROJ_BFG10KQUADDAMAGE);
+		S_StartSound(player->mo, sfx_quaddamageatt);
+
+	}
+	else
+	{
+
+		P_SpawnPlayerMissile(player->mo, MT_PROJ_BFG10K);
+
+	}
+
 }

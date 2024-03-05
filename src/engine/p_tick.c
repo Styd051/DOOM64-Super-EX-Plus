@@ -319,6 +319,11 @@ void P_Stop(void) {
 	//
 	S_StopSound(NULL, sfx_electric);
 
+	//
+	// [d64] stop BFG10K buzz
+	//
+	S_StopSound(NULL, sfx_bfg10kelectric);
+
 	for (i = 0; i < MAXPLAYERS; i++) {
 		// take away cards and stuff
 		if (playeringame[i]) {

@@ -170,6 +170,7 @@ CVAR_EXTERNAL(st_hud_color);
 CVAR_EXTERNAL(m_complexdoom64);
 CVAR_EXTERNAL(m_cacodemonalternative);
 CVAR_EXTERNAL(monster_infighting);
+CVAR_EXTERNAL(m_nobuzzsound);
 
 CVAR(m_keepartifacts, 0);
 
@@ -199,6 +200,7 @@ void G_RegisterCvars(void) {
 	CON_CvarRegister(&m_keepartifacts);
 	CON_CvarRegister(&m_cacodemonalternative);
 	CON_CvarRegister(&monster_infighting);
+	CON_CvarRegister(&m_nobuzzsound);
 }
 
 //
