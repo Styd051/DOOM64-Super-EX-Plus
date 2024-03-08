@@ -1643,6 +1643,11 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 		mobj->flags |= MF_FRIEND;            // killough 10/98:    
 	}
 
+	// styd: add a flag to things that allow them to fall off a cliff
+	if (mthing->options & MTF_DROPOFF) {
+		mobj->flags |= MF_DROPOFF;
+	}
+
 	// At least set BF_MIDPOINTONLY if no flags exist..
 	if (mobj->flags == 0) {
 		mobj->blockflag |= BF_MIDPOINTONLY;
