@@ -226,7 +226,7 @@ boolean PIT_CheckLine(line_t* ld) {
     }
 
     // [d64] don't cross mid-pegged lines
-    // styd: fixies block projectile to not block things and only blocks projectiles
+    // styd: fixes block projectile to not block things and only blocks projectiles
     if (!(tmthing->flags & MF_SOLID) && ld->flags & ML_BLOCKPROJECTILES) {
         tmhitline = ld;
         return false;

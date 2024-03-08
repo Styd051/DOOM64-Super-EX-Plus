@@ -2569,6 +2569,7 @@ void M_DrawFeaturesMenu(void);
 CVAR_EXTERNAL(sv_lockmonsters);
 
 enum {
+	features_levels = 0,
 	features_invulnerable,
 	features_healthboost,
 	features_securitykeys,
@@ -2580,7 +2581,12 @@ enum {
 	features_end
 } features_e;
 
+#define FEATURESWARPLEVEL    "Warp To Level"
+#define FEATURESWARPFUN        "Warp To Fun"
+#define FEATURESWARPTHELOSTLEVELS  "Warp To Lost"
+
 menuitem_t FeaturesMenu[] = {
+	{2,FEATURESWARPLEVEL,M_DoFeature,'l'},
 	{2,"Invulnerable",M_DoFeature,'i'},
 	{2,"Health Boost",M_DoFeature,'h'},
 	{2,"Security Keys",M_DoFeature,'k'},
@@ -2618,6 +2624,9 @@ void M_Features(int choice) {
 void M_DrawFeaturesMenu(void) {
 	mapdef_t* map = P_GetMapInfo(levelwarp + 1);
 
+	/*Warp To Level*/
+	M_DrawSmbString(map->mapname, &featuresDef, features_levels);
+
 	/*Lock Monsters Mode*/
 	M_DrawSmbString(msgNames[(int)sv_lockmonsters.value], &featuresDef, features_lockmonsters);
 
@@ -2641,6 +2650,18 @@ void M_DrawFeaturesMenu(void) {
 	/*Full Keys*/
 	M_DrawSmbString(showfullitemvalue[2] ? "100%%" : "-", &featuresDef, features_securitykeys);
 
+	switch (map->type) {
+	case 0:
+		sprintf(featuresDef.menuitems[features_levels].name, FEATURESWARPLEVEL);
+		break;
+	case 1:
+		sprintf(featuresDef.menuitems[features_levels].name, FEATURESWARPFUN);
+		break;
+	case 2:
+		sprintf(featuresDef.menuitems[features_levels].name, FEATURESWARPTHELOSTLEVELS);
+		break;
+	}
+
 	/*Full Artifacts*/
 	M_DrawSmbString(showfullitemvalue[3] ? "100%%" : "-", &featuresDef, features_artifacts);
 }
@@ -2649,6 +2670,25 @@ void M_DoFeature(int choice) {
 	int i = 0;
 
 	switch (itemOn) {
+	case features_levels:
+		if (choice) {
+			levelwarp++;
+			if (levelwarp >= 39) {
+				if (choice == 2) {
+					levelwarp = 0;
+				}
+				else {
+					levelwarp = 39;
+				}
+			}
+		}
+		else {
+			levelwarp--;
+			if (levelwarp <= 0) {
+				levelwarp = 0;
+			}
+		}
+		break;
 
 	case features_invulnerable:
 		if (choice) {
@@ -4422,7 +4462,17 @@ boolean M_Responder(event_t* ev) {
 				}
 
 				currentMenu->lastOn = itemOn;
-				if (currentMenu->menuitems[itemOn].status >= 2 ||
+				if (currentMenu == &featuresDef) {
+					if (currentMenu->menuitems[itemOn].routine == M_DoFeature &&
+						itemOn == features_levels) {
+						gameaction = ga_warplevel;
+						gamemap = nextmap = levelwarp + 1;
+						M_ClearMenus();
+						dmemset(passwordData, 0xff, 16);
+						return true;
+					}
+				}
+				else if (currentMenu->menuitems[itemOn].status >= 2 ||
 					currentMenu->menuitems[itemOn].status == -2) {
 					currentMenu->menuitems[itemOn].routine(2);
 				}
