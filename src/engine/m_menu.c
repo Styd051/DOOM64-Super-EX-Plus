@@ -2664,6 +2664,7 @@ void M_DrawFeaturesMenu(void) {
 
 	/*Full Artifacts*/
 	M_DrawSmbString(showfullitemvalue[3] ? "100%%" : "-", &featuresDef, features_artifacts);
+
 }
 
 void M_DoFeature(int choice) {
