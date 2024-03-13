@@ -352,4 +352,7 @@ extern boolean CacodemonAlternative;
 //code assumes MOUSE_BUTTONS<10
 #define MOUSE_BUTTONS        6
 
+// Most damage defined using HITDICE (HERETIC)
+#define HITDICE(a) ((1+(P_Random(pr_hereticdamage)&7))*a)
+
 #endif          // __DOOMDEF__

@@ -1141,6 +1141,15 @@ static void P_Obituary(mobj_t* source, mobj_t* target) {
 		case MT_NAMIDARKIMP:
 			sprintf(omsg, "you were cursed\nby a Nami Dark IMP.");
 			break;
+		case MT_WIZARD:
+			sprintf(omsg, "you were killed\nby a Wizard.");
+			break;
+		case MT_IMPWARRIOR:
+			sprintf(omsg, "you were burned\nby an Imp Warrior.");
+			break;
+		case MT_DARKNOTRON:
+			sprintf(omsg, "the Darknotron claims another victim!");
+			break;
 		default:
 			sprintf(omsg, "you died.");
 			break;

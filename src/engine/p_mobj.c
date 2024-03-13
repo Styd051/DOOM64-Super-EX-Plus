@@ -1493,18 +1493,21 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	// randomizer arachnotron
 	if (i == MT_BABY) {
-		randomizernum = P_Random(pr_randomizer) % 4; // Immorpher randomizer number
-		if (randomizernum == 3) {
+		randomizernum = P_Random(pr_randomizer) % 5; // Immorpher randomizer number
+		if (randomizernum == 4) {
 			i = MT_BABY;
 		}
-		else if (randomizernum == 2) {
+		else if (randomizernum == 3) {
 			i = MT_NIGHTCRAWLER;
 		}
-		else if (randomizernum == 1) {
+		else if (randomizernum == 2) {
 			i = MT_ARTHRONAILER;
 		}
-		else if (randomizernum == 0) {
+		else if (randomizernum == 1) {
 			i = MT_ARACHNOBARON;
+		}
+		else if (randomizernum == 0) {
+			i = MT_DARKNOTRON;
 		}
 	}
 
@@ -1628,6 +1631,7 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 	// [kex] check for nightmare flag
 	if (mthing->options & MTF_NIGHTMARE) {
 		mobj->health *= 2;
+		mobj->alpha = 128; // styd: fixes the transparency issue that makes monsters almost invisible in Nightmare Mode
 		mobj->flags |= MF_NIGHTMARE;
 	}
 
@@ -1663,90 +1667,105 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 		// zombie man
 		if (i == MT_POSSESSED1) {
 			mobj->health *= 2;
+			mobj->alpha = 128;
 			mobj->flags |= MF_NIGHTMARE;
 		}
 
 		// zombie shotgun
 		if (i == MT_POSSESSED2) {
 			mobj->health *= 2;
+			mobj->alpha = 128;
 			mobj->flags |= MF_NIGHTMARE;
 		}
 
 		// demon
 		if (i == MT_DEMON1) {
 			mobj->health *= 2;
+			mobj->alpha = 128;
 			mobj->flags |= MF_NIGHTMARE;
 		}
 
 		// specter
 		if (i == MT_DEMON2) {
 			mobj->health *= 2;
+			mobj->alpha = 128;
 			mobj->flags |= MF_NIGHTMARE;
 		}
 
 		// imp
 		if (i == MT_IMP1) {
 			mobj->health *= 2;
+			mobj->alpha = 128;
 			mobj->flags |= MF_NIGHTMARE;
 		}
 
 		// imp nightmare
 		if (i == MT_IMP2) {
 			mobj->health *= 2;
+			mobj->alpha = 128;
 			mobj->flags |= MF_NIGHTMARE;
 		}
 
 		// baron of hell
 		if (i == MT_BRUISER1) {
 			mobj->health *= 2;
+			mobj->alpha = 128;
 			mobj->flags |= MF_NIGHTMARE;
 		}
 
 		// hell knight
 		if (i == MT_BRUISER2) {
 			mobj->health *= 2;
+			mobj->alpha = 128;
 			mobj->flags |= MF_NIGHTMARE;
 		}
 
 		// cacodemon and cacodemon classic
 		if (i == MT_CACODEMON || i == MT_CACODEMON_CLASSIC) {
 			mobj->health *= 2;
+			mobj->alpha = 128;
 			mobj->flags |= MF_NIGHTMARE;
 		}
 
 		// pain elemental
 		if (i == MT_PAIN) {
 			mobj->health *= 2;
+			mobj->alpha = 128;
 			mobj->flags |= MF_NIGHTMARE;
 		}
 
 		// lost soul
 		if (i == MT_SKULL) {
 			mobj->health *= 2;
+			mobj->alpha = 128;
 			mobj->flags |= MF_NIGHTMARE;
 		}
 
 		// mancubus
 		if (i == MT_MANCUBUS) {
 			mobj->health *= 2;
+			mobj->alpha = 128;
 			mobj->flags |= MF_NIGHTMARE;
 		}
 
 		// arachnotron
 		if (i == MT_BABY) {
 			mobj->health *= 2;
+			mobj->alpha = 128;
 			mobj->flags |= MF_NIGHTMARE;
 		}
 
 		// cyberdemon
 		if (i == MT_CYBORG) {
 			mobj->health *= 2;
+			mobj->alpha = 128;
 			mobj->flags |= MF_NIGHTMARE;
 		}
 
 		// mother demon
 		if (i == MT_RESURRECTOR) {
 			mobj->health *= 2;
+			mobj->alpha = 128;
 			mobj->flags |= MF_NIGHTMARE;
 		}
 	}

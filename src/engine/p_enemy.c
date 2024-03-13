@@ -557,6 +557,24 @@ static mobj_t* P_MissileAttack(mobj_t* actor, int direction) {
 		type = MT_PROJ_CENTAUR;
 		aim = true;
 		break;
+	case MT_WIZARD:
+		offs = 0;
+		deltaz = 48;
+		type = MT_PROJ_WIZARD;
+		aim = false;
+		break;
+	case MT_IMPWARRIOR:
+		offs = 0;
+		deltaz = 64;
+		type = MT_PROJ_IMP1;
+		aim = true;
+		break;
+	case MT_DARKNOTRON:
+		offs = 20;
+		deltaz = 28;
+		type = MT_PROJ_DARKNOTRON;
+		aim = false;
+		break;
 	}
 
 	deltax = FixedMul(offs * FRACUNIT, finecosine[angle]);
@@ -5354,7 +5372,8 @@ void A_SetReflective(mobj_t* actor)
 	actor->flags |= MF_NOBLOOD;
 
 	if ((actor->type == MT_CENTAUR) ||
-		(actor->type == MT_CENTAURLEADER))
+		(actor->type == MT_CENTAURLEADER) ||
+		(actor->type == MT_IMPWARRIOR))
 	{
 		A_SetInvulnerable(actor);
 	}
@@ -5371,7 +5390,8 @@ void A_UnSetReflective(mobj_t* actor)
 	actor->flags &= ~MF_NOBLOOD;
 
 	if ((actor->type == MT_CENTAUR) ||
-		(actor->type == MT_CENTAURLEADER))
+		(actor->type == MT_CENTAURLEADER) ||
+		(actor->type == MT_IMPWARRIOR))
 	{
 		A_UnSetInvulnerable(actor);
 	}
@@ -5481,4 +5501,192 @@ void A_NamiDarkImpAttack(mobj_t* actor) {
 
 void A_BFG10KExplode(mobj_t* thingy) {
 	P_RadiusAttack(thingy, thingy->target, 160);
+}
+
+//
+// A_GhostOff
+//
+
+void A_GhostOff(mobj_t* actor)
+{
+	actor->flags &= ~MF_SHADOW;
+}
+
+//
+// A_WizAtk1
+//
+
+void A_WizAtk1(mobj_t* actor)
+{
+	A_FaceTarget(actor);
+	actor->flags &= ~MF_SHADOW;
+}
+
+//
+// A_WizAtk2
+//
+
+void A_WizAtk2(mobj_t* actor)
+{
+	A_FaceTarget(actor);
+	actor->flags |= MF_SHADOW;
+}
+
+//
+// A_WizAtk3
+//
+
+void A_WizAtk3(mobj_t* actor)
+{
+	mobj_t* mo;
+	angle_t an;
+	fixed_t momz;
+
+	actor->flags &= ~MF_SHADOW;
+	if (!actor->target)
+	{
+		return;
+	}
+	S_StartSound(actor, actor->info->attacksound);
+	if (P_CheckMeleeRange(actor))
+	{
+		 P_DamageMobj(actor->target, actor, actor, HITDICE(4));
+		return;
+	}
+	mo = P_MissileAttack(actor, DP_STRAIGHT);
+	if (mo)
+	{
+		mo = P_MissileAttack(actor, DP_RIGHT);
+		mo->angle -= ANG45/8;
+		an = mo->angle >> ANGLETOFINESHIFT;
+
+		mo->momx = FixedMul(mo->info->speed, finecosine[an]);
+		mo->momy = FixedMul(mo->info->speed, finesine[an]);
+
+		mo = P_MissileAttack(actor, DP_LEFT);
+		mo->angle += ANG45/8;
+		an = mo->angle >> ANGLETOFINESHIFT;
+
+		mo->momx = FixedMul(mo->info->speed, finecosine[an]);
+		mo->momy = FixedMul(mo->info->speed, finesine[an]);
+	}
+}
+
+//
+// A_DarknotronAttack1
+//
+
+void A_DarknotronAttack1(mobj_t* actor) {
+	mobj_t* mo;
+	angle_t an;
+
+	if (!actor->target) {
+		return;
+	}
+
+	A_FaceTarget(actor);
+	P_MissileAttack(actor, DP_RIGHT);
+	mo = P_MissileAttack(actor, DP_LEFT);
+
+	mo->angle += FATSPREAD;
+	an = mo->angle >> ANGLETOFINESHIFT;
+
+	mo->momx = FixedMul(mo->info->speed, finecosine[an]);
+	mo->momy = FixedMul(mo->info->speed, finesine[an]);
+}
+
+//
+// A_DarknotronAttack2
+//
+
+void A_DarknotronAttack2(mobj_t* actor) {
+	mobj_t* mo;
+	angle_t an;
+
+	if (!actor->target) {
+		return;
+	}
+
+	A_FaceTarget(actor);
+	P_MissileAttack(actor, DP_LEFT);
+	mo = P_MissileAttack(actor, DP_RIGHT);
+
+	mo->angle -= FATSPREAD;
+	an = mo->angle >> ANGLETOFINESHIFT;
+
+	mo->momx = FixedMul(mo->info->speed, finecosine[an]);
+	mo->momy = FixedMul(mo->info->speed, finesine[an]);
+}
+
+//
+// A_DarknotronAttack3
+//
+
+void A_DarknotronAttack3(mobj_t* actor) {
+	mobj_t* mo;
+	angle_t an;
+
+	if (!actor->target) {
+		return;
+	}
+
+	A_FaceTarget(actor);
+	mo = P_MissileAttack(actor, DP_RIGHT);
+	mo->angle -= 0x4000000;
+	an = mo->angle >> ANGLETOFINESHIFT;
+
+	mo->momx = FixedMul(mo->info->speed, finecosine[an]);
+	mo->momy = FixedMul(mo->info->speed, finesine[an]);
+
+	mo = P_MissileAttack(actor, DP_LEFT);
+	mo->angle += 0x4000000;
+	an = mo->angle >> ANGLETOFINESHIFT;
+
+	mo->momx = FixedMul(mo->info->speed, finecosine[an]);
+	mo->momy = FixedMul(mo->info->speed, finesine[an]);
+}
+
+//
+// A_DarknotronFaceTarget
+//
+
+void A_DarknotronFaceTarget(mobj_t* actor) {
+	if (!actor->target) {
+		return;
+	}
+
+	A_FaceTarget(actor);
+	actor->reactiontime = 1;
+}
+
+//
+// A_DarknotronRefire
+//
+
+void A_DarknotronRefire(mobj_t* actor) {
+	A_FaceTarget(actor);
+
+	if (P_Random(pr_darknotronrefire) < 10) {
+		return;
+	}
+
+	if ((!actor->target || actor->target->health <= 0) || !(actor->flags & MF_SEETARGET)) {
+		P_SetMobjState(actor, actor->info->seestate);
+		actor->reactiontime = 1;
+		return;
+	}
+
+	if (!actor->reactiontime--) {
+		P_SetMobjState(actor, actor->info->missilestate);
+		actor->reactiontime = 1;
+	}
+}
+
+//
+// A_DarknotronMetal
+//
+
+void A_DarknotronMetal(mobj_t* mo) {
+	S_StartSound(mo, sfx_darknotronstomp);
+	A_Chase(mo);
 }

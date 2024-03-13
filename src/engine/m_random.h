@@ -115,7 +115,9 @@ enum {
     pr_centaurdefend,           // #82
     pr_centaurattack,           // #83
     pr_harbingerdecide,         // #84
-    pr_randomizer,              // #85
+    pr_hereticdamage,           // #85
+    pr_darknotronrefire,        // #86
+    pr_randomizer,              // #87
 
     // End of new entries
     NUMPRCLASS               // MUST be last item in list

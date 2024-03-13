@@ -167,7 +167,7 @@ void DL_ProcessDrawList(int tag, boolean(*procfunc)(vtxlist_t*, int*)) {
 				// villsa 12152013 - change blend states for nightmare things
 				if ((checkNightmare ^ (flags & MF_NIGHTMARE))) {
 					if (!checkNightmare && (flags & MF_NIGHTMARE)) {
-						dglBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_COLOR);
+						// dglBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_COLOR); // styd: disable this function because the transparency makes monsters almost invisible in Nightmare Mode 
 						checkNightmare ^= 1;
 					}
 					else if (checkNightmare && !(flags & MF_NIGHTMARE)) {
