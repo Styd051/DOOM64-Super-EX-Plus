@@ -1629,6 +1629,11 @@ void A_RectMissile(mobj_t* actor) {
 	mo->momx = FixedMul(mo->info->speed, finecosine[an]);
 	mo->momy = FixedMul(mo->info->speed, finesine[an]);
 
+	// styd: fixes the mother demon when she has the nightmare flag and when she launches her tracer projectiles the projectile will also have the nightmare flag
+	if (actor->flags & MF_NIGHTMARE) {
+		mo->flags |= MF_NIGHTMARE;
+	}
+
 	// Arm2
 
 	an = (actor->angle - ANG90) >> ANGLETOFINESHIFT;
@@ -1643,6 +1648,11 @@ void A_RectMissile(mobj_t* actor) {
 	an >>= ANGLETOFINESHIFT;
 	mo->momx = FixedMul(mo->info->speed, finecosine[an]);
 	mo->momy = FixedMul(mo->info->speed, finesine[an]);
+
+	// styd: fixes the mother demon when she has the nightmare flag and when she launches her tracer projectiles the projectile will also have the nightmare flag
+	if (actor->flags & MF_NIGHTMARE) {
+		mo->flags |= MF_NIGHTMARE;
+	}
 
 	// Arm3
 
@@ -1659,6 +1669,11 @@ void A_RectMissile(mobj_t* actor) {
 	mo->momx = FixedMul(mo->info->speed, finecosine[an]);
 	mo->momy = FixedMul(mo->info->speed, finesine[an]);
 
+	// styd: fixes the mother demon when she has the nightmare flag and when she launches her tracer projectiles the projectile will also have the nightmare flag
+	if (actor->flags & MF_NIGHTMARE) {
+		mo->flags |= MF_NIGHTMARE;
+	}
+
 	// Arm4
 
 	an = (actor->angle + ANG90) >> ANGLETOFINESHIFT;
@@ -1673,6 +1688,11 @@ void A_RectMissile(mobj_t* actor) {
 	an >>= ANGLETOFINESHIFT;
 	mo->momx = FixedMul(mo->info->speed, finecosine[an]);
 	mo->momy = FixedMul(mo->info->speed, finesine[an]);
+
+	// styd: fixes the mother demon when she has the nightmare flag and when she launches her tracer projectiles the projectile will also have the nightmare flag
+	if (actor->flags & MF_NIGHTMARE) {
+		mo->flags |= MF_NIGHTMARE;
+	}
 }
 
 //
@@ -1712,6 +1732,11 @@ void A_RectGroundFire(mobj_t* actor) {
 	mo->momy = FixedMul(mo->info->speed, finesine[mo->angle]);
 	mo->angle = an;
 
+	// styd: fixes the mother demon when she has the nightmare flag and when she throws her fire projectiles the projectile will have the nightmare flag
+	if (actor->flags & MF_NIGHTMARE) {
+		mo->flags |= MF_NIGHTMARE;
+	}
+
 	mo = P_SpawnMobj(actor->x, actor->y, actor->z, MT_PROJ_RECTFIRE);
 	P_SetTarget(&mo->target, actor);
 	mo->angle = an - ANG45;
@@ -1719,6 +1744,11 @@ void A_RectGroundFire(mobj_t* actor) {
 	mo->momx = FixedMul(mo->info->speed, finecosine[mo->angle]);
 	mo->momy = FixedMul(mo->info->speed, finesine[mo->angle]);
 	mo->angle = an - ANG45;
+
+	// styd: fixes the mother demon when she has the nightmare flag and when she throws her fire projectiles the projectile will have the nightmare flag
+	if (actor->flags & MF_NIGHTMARE) {
+		mo->flags |= MF_NIGHTMARE;
+	}
 
 	mo = P_SpawnMobj(actor->x, actor->y, actor->z, MT_PROJ_RECTFIRE);
 	P_SetTarget(&mo->target, actor);
@@ -1728,6 +1758,10 @@ void A_RectGroundFire(mobj_t* actor) {
 	mo->momy = FixedMul(mo->info->speed, finesine[mo->angle]);
 	mo->angle = an + ANG45;
 
+	// styd: fixes the mother demon when she has the nightmare flag and when she throws her fire projectiles the projectile will have the nightmare flag
+	if (actor->flags & MF_NIGHTMARE) {
+		mo->flags |= MF_NIGHTMARE;
+	}
 	S_StartSound(mo, mo->info->seesound);
 }
 
@@ -1744,6 +1778,11 @@ void A_MoveGroundFire(mobj_t* fire) {
 
 	mo = P_SpawnMobj(fire->x, fire->y, fire->floorz, MT_PROP_FIRE);
 	P_FadeMobj(mo, -8, 0, 0);
+
+	// styd: fixes the fire projectile when there is the nightmare flag, the fire effect will have the nightmare flag
+	if (fire->flags & MF_NIGHTMARE) {
+		mo->flags |= MF_NIGHTMARE;
+	}
 }
 
 //
@@ -1970,64 +2009,13 @@ void A_PainShootSkull(mobj_t* actor, angle_t angle) {
 	P_SetTarget(&newmobj->target, actor->target);
 	P_SetMobjState(newmobj, newmobj->info->missilestate);
 	A_SkullAttack(newmobj);
-}
 
-//
-// A_PainShootSkullNightmare
-// Spawn a lost soul nightmare and launch it at the target
-//
-
-void A_PainShootSkullNightmare(mobj_t* actor, angle_t angle) {
-	fixed_t     x;
-	fixed_t     y;
-	fixed_t     z;
-	mobj_t* newmobj;
-	angle_t     an;
-	int         prestep;
-	int         count;
-
-	// count total number of skull currently on the level
-	count = 0;
-
-	for (newmobj = mobjhead.next; newmobj != &mobjhead; newmobj = newmobj->next) {
-		if (newmobj->type == MT_SKULLNIGHTMARE) {
-			count++;
-		}
+// styd: fixes the pain elemental when it has the nightmare flag and when it spits out lost souls, they too will have the nightmare flag
+	if (actor->flags & MF_NIGHTMARE) {
+		newmobj->health *= 2;
+		newmobj->alpha = 128; 
+		newmobj->flags |= MF_NIGHTMARE;
 	}
-
-	//
-	// if there are all ready 17 skulls on the level,
-	// don't spit another one
-	// 20120212 villsa - new compatibility flag to disable limit
-	//
-	if (compatflags & COMPATF_LIMITPAIN && count > 0x11) {
-		return;
-	}
-
-	an = angle >> ANGLETOFINESHIFT;
-
-	prestep = 4 * FRACUNIT + 3 * (actor->info->radius + mobjinfo[MT_SKULLNIGHTMARE].radius) / 2;
-
-	x = actor->x + FixedMul(prestep, finecosine[an]);
-	y = actor->y + FixedMul(prestep, finesine[an]);
-	z = actor->z + 16 * FRACUNIT;
-
-	newmobj = P_SpawnMobj(x, y, z, MT_SKULLNIGHTMARE);
-
-	// Check for movements
-
-	if ((!P_TryMove(newmobj, newmobj->x, newmobj->y)) ||
-		(!P_PathTraverse(actor->x, actor->y, newmobj->x, newmobj->y, PT_ADDLINES, PIT_PainCheckLine))) {
-		// kill it immediately
-
-		P_DamageMobj(newmobj, actor, actor, 10000);
-		P_RadiusAttack(newmobj, newmobj, 128);
-		return;
-	}
-
-	P_SetTarget(&newmobj->target, actor->target);
-	P_SetMobjState(newmobj, newmobj->info->missilestate);
-	A_SkullAttack(newmobj);
 }
 
 //
@@ -2041,17 +2029,8 @@ void A_PainAttack(mobj_t* actor) {
 	}
 
 	A_FaceTarget(actor);
-	if (actor->flags & MF_NIGHTMARE)
-	{
-		A_PainShootSkullNightmare(actor, actor->angle + 0x15550000);
-		A_PainShootSkullNightmare(actor, actor->angle - 0x15550000);
-	}
-	else 
-	{
-		A_PainShootSkull(actor, actor->angle + 0x15550000);
-		A_PainShootSkull(actor, actor->angle - 0x15550000);
-	}
-
+	A_PainShootSkull(actor, actor->angle + 0x15550000);
+	A_PainShootSkull(actor, actor->angle - 0x15550000);
 }
 
 //
@@ -2060,20 +2039,11 @@ void A_PainAttack(mobj_t* actor) {
 
 void A_PainDie(mobj_t* actor) {
 	A_Fall(actor);
-	if (actor->flags & MF_NIGHTMARE)
-	{
-		A_PainShootSkullNightmare(actor, actor->angle + ANG90);
-		A_PainShootSkullNightmare(actor, actor->angle + ANG180);
-		A_PainShootSkullNightmare(actor, actor->angle + ANG270);
-	}
-	else
-	{
-		A_PainShootSkull(actor, actor->angle + ANG90);
-		A_PainShootSkull(actor, actor->angle + ANG180);
-		A_PainShootSkull(actor, actor->angle + ANG270);
-	}
-
-	A_OnDeathTrigger(actor);
+	A_PainShootSkull(actor, actor->angle + ANG90);
+	A_PainShootSkull(actor, actor->angle + ANG180);
+	A_PainShootSkull(actor, actor->angle + ANG270);
+	
+    A_OnDeathTrigger(actor);
 }
 
 //
