@@ -1092,7 +1092,20 @@ void A_Chase(mobj_t* actor) {
 	// check for melee attack
 	if (actor->info->meleestate && P_CheckMeleeRange(actor)) {
 		if (actor->info->attacksound) {
-			S_StartSound(actor, actor->info->attacksound);
+			int sound;
+
+			switch (actor->info->attacksound) {
+			case sfx_deeponeatk1:
+			case sfx_deeponeatk2:
+				sound = sfx_deeponeatk1 + (P_Random(pr_see) & 1);
+				break;
+
+			default:
+				sound = actor->info->attacksound;
+				break;
+			}
+
+			S_StartSound(actor, sound);
 		}
 
 		P_SetMobjState(actor, actor->info->meleestate);
@@ -1129,7 +1142,20 @@ nomissile:
 
 	// make active sound
 	if (actor->info->activesound && P_Random(pr_see) < 3) {
-		S_StartSound(actor, actor->info->activesound);
+		int sound;
+
+		switch (actor->info->activesound) {
+		case sfx_deeponeact1:
+		case sfx_deeponeact2:
+			sound = sfx_deeponeact1 + (P_Random(pr_see) & 1);
+			break;
+
+		default:
+			sound = actor->info->activesound;
+			break;
+		}
+
+		S_StartSound(actor, sound);
 	}
 }
 
@@ -2120,6 +2146,13 @@ void A_Pain(mobj_t* actor) {
 		case sfx_spipain1:
 		case sfx_spipain2:
 			sound = sfx_spipain1 + (P_Random(pr_see) & 1);
+			break;
+
+		case sfx_deeponepain1:
+		case sfx_deeponepain2:
+		case sfx_deeponepain3:
+		case sfx_deeponepain4:
+			sound = sfx_deeponepain1 + (P_Random(pr_see) % 4);
 			break;
 
 		default:
@@ -5659,4 +5692,79 @@ void A_DarknotronRefire(mobj_t* actor) {
 void A_DarknotronMetal(mobj_t* mo) {
 	S_StartSound(mo, sfx_darknotronstomp);
 	A_Chase(mo);
+}
+
+//
+// A_DeepOneMissile
+//
+
+void A_DeepOneMissile(mobj_t* actor, int direction)
+{
+	mobj_t* mo;
+	angle_t angle;
+
+	if (direction == DP_LEFT) {
+		angle = actor->angle + ANG45;
+	}
+	else if (direction == DP_RIGHT) {
+		angle = actor->angle - ANG45;
+	}
+	else {
+		angle = actor->angle;
+	}
+	angle >>= ANGLETOFINESHIFT;
+
+	mo = P_SpawnMissile(actor,
+		actor->target,
+		MT_PROJ_DEEPONE,
+		FixedMul(20 * FRACUNIT, finecosine[angle]),
+		FixedMul(20 * FRACUNIT, finesine[angle]),
+		48,
+		true);
+	mo->x += mo->momx;
+	mo->y += mo->momy;
+	mo->tracer = actor->target;
+}
+
+//
+// A_DeepOneAttack
+//
+
+void A_DeepOneAttack(mobj_t* actor) {
+	int    damage;
+	int    hitdice;
+
+	if (!actor->target)
+	{
+		return;
+	}
+
+	A_FaceTarget(actor);
+
+	// launch a missile
+	A_DeepOneMissile(actor, DP_RIGHT);
+	S_StartSound(actor, sfx_deeponefire);
+}
+
+//
+// A_DeepOneMelee
+//
+
+void A_DeepOneMelee(mobj_t* actor) {
+	int    damage;
+	int    hitdice;
+
+	if (!actor->target)
+	{
+		return;
+	}
+
+	if (P_CheckMeleeRange(actor))
+	{
+		S_StartSound(actor, sfx_scratch);
+		hitdice = (P_Random(pr_bruisattack) & 7);
+		damage = ((hitdice * 20) + 20);
+		P_DamageMobj(actor->target, actor, actor, damage);
+		return;
+	}
 }

@@ -78,7 +78,7 @@ char* sprnames[NUMSPRITES + 1] = {  //0x5FA30
 	"QSGO", "QSGR", "QS2R", "QSGC", "GRUN", "RPOS", "BERO", "ACID",
 	"FERY", "PAI3", "HXSG", "HXSF", "HX1G", "HX2G", "HX3G", "HXSP",
 	"HARB", "RECI", "SKUT", "REC2", "CENT", "CTFX", "DRKI", "BG2G",
-	"BFG2", "WZRD", "FX11", "ENSL", "BSP3", "APL2",
+	"BFG2", "WZRD", "FX11", "ENSL", "BSP3", "APL2", "CUTH", "OLDP",
 	NULL
 };
 
@@ -284,6 +284,8 @@ void A_DarknotronAttack3();
 void A_DarknotronFaceTarget();
 void A_DarknotronRefire();
 void A_DarknotronMetal();
+void A_DeepOneAttack();
+void A_DeepOneMelee();
 
 
 
@@ -3860,6 +3862,44 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_APL2_DIE4*/{ SPR_APL2, 32773, 3, {NULL}, S_APL2_DIE5 },
 	/*S_APL2_DIE5*/{ SPR_APL2, 32774, 3, {NULL}, S_APL2_DIE6 },
 	/*S_APL2_DIE6*/{ SPR_APL2, 32775, 3, {NULL}, S_NULL },
+
+	/*S_CUTH_STND*/{ SPR_CUTH, 0, 10, {A_Look}, S_CUTH_STND2 },
+	/*S_CUTH_STND2*/{ SPR_CUTH, 1, 10, {A_Look}, S_CUTH_STND },
+	/*S_CUTH_RUN1*/{ SPR_CUTH, 0, 3, {A_Chase}, S_CUTH_RUN2 },
+	/*S_CUTH_RUN2*/{ SPR_CUTH, 0, 3, {A_Chase}, S_CUTH_RUN3 },
+	/*S_CUTH_RUN3*/{ SPR_CUTH, 1, 3, {A_Chase}, S_CUTH_RUN4 },
+	/*S_CUTH_RUN4*/{ SPR_CUTH, 1, 3, {A_Chase}, S_CUTH_RUN5 },
+	/*S_CUTH_RUN5*/{ SPR_CUTH, 2, 3, {A_Chase}, S_CUTH_RUN6 },
+	/*S_CUTH_RUN6*/{ SPR_CUTH, 2, 3, {A_Chase}, S_CUTH_RUN7 },
+	/*S_CUTH_RUN7*/{ SPR_CUTH, 3, 3, {A_Chase}, S_CUTH_RUN8 },
+	/*S_CUTH_RUN8*/{ SPR_CUTH, 3, 3, {A_Chase}, S_CUTH_RUN1 },
+	/*S_CUTH_MELEE1*/{ SPR_CUTH, 4, 6, {A_FaceTarget}, S_CUTH_MELEE2 },
+	/*S_CUTH_MELEE2*/{ SPR_CUTH, 5, 6, {A_FaceTarget}, S_CUTH_MELEE3 },
+	/*S_CUTH_MELEE3*/{ SPR_CUTH, 6, 6, {A_DeepOneMelee}, S_CUTH_RUN1 },
+	/*S_CUTH_ATK1*/{ SPR_CUTH, 7, 8, {A_FaceTarget}, S_CUTH_ATK2 },
+	/*S_CUTH_ATK2*/{ SPR_CUTH, 8, 8, {A_DeepOneAttack}, S_CUTH_ATK3 },
+	/*S_CUTH_ATK3*/{ SPR_CUTH, 7, 8, {A_CPosRefire}, S_CUTH_ATK2 },
+	/*S_CUTH_PAIN*/{ SPR_CUTH, 9, 2, {NULL}, S_CUTH_PAIN2 },
+	/*S_CUTH_PAIN2*/{ SPR_CUTH, 9, 2, {A_Pain}, S_CUTH_RUN1 },
+	/*S_CUTH_DIE1*/{ SPR_CUTH, 10, 8, {NULL}, S_CUTH_DIE2 },
+	/*S_CUTH_DIE2*/{ SPR_CUTH, 11, 8, {A_Scream}, S_CUTH_DIE3 },
+	/*S_CUTH_DIE3*/{ SPR_CUTH, 12, 8, {NULL}, S_CUTH_DIE4 },
+	/*S_CUTH_DIE4*/{ SPR_CUTH, 13, 8, {A_Fall}, S_CUTH_DIE5 },
+	/*S_CUTH_DIE5*/{ SPR_CUTH, 14, 8, {A_OnDeathTrigger}, S_CUTH_DIE6 },
+	/*S_CUTH_DIE6*/{ SPR_CUTH, 15, -1, {NULL}, S_NULL },
+	/*S_CUTH_RAISE1*/{ SPR_CUTH, 15, 8, {NULL}, S_CUTH_RAISE2 },
+	/*S_CUTH_RAISE2*/{ SPR_CUTH, 14, 8, {NULL}, S_CUTH_RAISE3 },
+	/*S_CUTH_RAISE3*/{ SPR_CUTH, 13, 8, {NULL}, S_CUTH_RAISE4 },
+	/*S_CUTH_RAISE4*/{ SPR_CUTH, 12, 8, {NULL}, S_CUTH_RAISE5 },
+	/*S_CUTH_RAISE5*/{ SPR_CUTH, 11, 8, {NULL}, S_CUTH_RAISE6 },
+	/*S_CUTH_RAISE6*/{ SPR_CUTH, 10, 8, {NULL}, S_CUTH_RUN1 },
+
+	/*S_OLDP1*/{ SPR_OLDP, 32768, 2, {A_Tracer}, S_OLDP2 },
+	/*S_OLDP2*/{ SPR_OLDP, 32769, 2, {A_Tracer}, S_OLDP1 },
+	/*S_OLDP_DIE1*/{ SPR_OLDP, 32770, 4, {NULL}, S_OLDP_DIE2 },
+	/*S_OLDP_DIE2*/{ SPR_OLDP, 32771, 4, {A_FadeAlpha}, S_OLDP_DIE3 },
+	/*S_OLDP_DIE3*/{ SPR_OLDP, 32772, 4, {A_FadeAlpha}, S_OLDP_DIE4 },
+	/*S_OLDP_DIE4*/{ SPR_OLDP, 32773, 4, {NULL}, S_NULL },
 };
 
 #pragma warning(pop)
@@ -12864,31 +12904,60 @@ S_NULL	   //raisestate
 },
 
 {
-	/*MT_SKULLNIGHTMARE*/
+	/*MT_DEEPONE*/
 	9050,        //doomednum
-	S_SKUL_STND,        //spawnstate
-	120,        //spawnhealth
-	S_SKUL_RUN1,        //seestate
+	S_CUTH_STND,        //spawnstate
+	2000,        //spawnhealth
+	S_CUTH_RUN1,        //seestate
+	sfx_deeponesit,        //seesound
+	8,        //reactiontime
+	sfx_deeponeatk1,        //attacksound
+	S_CUTH_PAIN,        //painstate
+	50,        //painchance
+	sfx_deeponepain1,        //painsound
+	S_CUTH_MELEE1,        //meleestate
+	S_CUTH_ATK1,        //missilestate
+	S_CUTH_DIE1,        //deathstate
+	S_NULL,        //xdeathstate
+	sfx_deeponedie,        //deathsound
+	8,        //speed
+	24 * FRACUNIT,        //radius
+	100 * FRACUNIT,        //height
+	1000,        //mass
+	0,        //damage
+	sfx_deeponeact1,        //activesound
+	MF_SOLID | MF_SHOOTABLE | MF_GRAVITY | MF_COUNTKILL,        //flags
+	0,        //palette
+	255,        //alpha
+	S_CUTH_RAISE1	   //raisestate
+},
+
+{
+	/*MT_PROJ_DEEPONE*/
+	-1,        //doomednum
+	S_OLDP1,        //spawnstate
+	1000,        //spawnhealth
+	S_NULL,        //seestate
 	sfx_None/*sfx_000*/,        //seesound
 	8,        //reactiontime
-	sfx_skullatk,        //attacksound
-	S_SKUL_PAIN,        //painstate
-	256,        //painchance
-	sfx_dbpain2,        //painsound
+	sfx_None/*sfx_000*/,        //attacksound
+	S_NULL,        //painstate
+	0,        //painchance
+	sfx_None/*sfx_000*/,        //painsound
 	S_NULL,        //meleestate
-	S_SKUL_ATK1,        //missilestate
-	S_SKUL_DIE1,        //deathstate
+	S_NULL,        //missilestate
+	S_OLDP_DIE1,        //deathstate
 	S_NULL,        //xdeathstate
-	sfx_implod,        //deathsound
-	8,        //speed
-	28 * FRACUNIT,        //radius
-	64 * FRACUNIT,        //height
-	50,        //mass
-	3,        //damage
-	sfx_dbact,        //activesound
-	MF_SOLID | MF_SHOOTABLE | MF_FLOAT | MF_COUNTKILL | MF_NOBLOOD | MF_NIGHTMARE,        //flags
+	sfx_deeponehit,        //deathsound
+	25 * FRACUNIT,        //speed
+	13 * FRACUNIT,        //radius
+	8 * FRACUNIT,        //height
+	100,        //mass
+	5,        //damage
+	sfx_None/*sfx_000*/,        //activesound
+	MF_NOBLOCKMAP | MF_DROPOFF | MF_MISSILE,        //flags
 	0,        //palette
-	192,        //alpha
+	255,        //alpha
 	S_NULL	   //raisestate
 },
 

@@ -1371,20 +1371,23 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 	// randomizer baron of hell
 	if (i == MT_BRUISER1) {
 		randomizernum = P_Random(pr_randomizer); // Immorpher randomizer number
-		if (randomizernum < 46) {
+		if (randomizernum < 38) {
 			i = MT_BRUISER1;
 		}
-		else if (randomizernum < 92) {
+		else if (randomizernum < 76) {
 			i = MT_CYBERBARON;
 		}
-		else if (randomizernum < 138) {
+		else if (randomizernum < 114) {
 			i = MT_BELPHEGOR;
 		}
-		else if (randomizernum < 184) {
+		else if (randomizernum < 152) {
 			i = MT_BRUISERDEMON;
 		}
-		else if (randomizernum < 230) {
+		else if (randomizernum < 190) {
 			i = MT_HELLCENTAUR;
+		}
+		else if (randomizernum < 230) {
+			i = MT_DEEPONE;
 		}
 		else if (randomizernum < 243) {
 			i = MT_RESURRECTOR3;
