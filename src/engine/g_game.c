@@ -255,7 +255,7 @@ static CMD(QuickLoad) {
 
 static CMD(Save) {
 	M_StartControlPanel(true);
-	M_SaveGame(0);
+	M_SaveGame();
 }
 
 //
@@ -264,7 +264,7 @@ static CMD(Save) {
 
 static CMD(Load) {
 	M_StartControlPanel(true);
-	M_LoadGame(0);
+	M_LoadGame();
 }
 
 //
