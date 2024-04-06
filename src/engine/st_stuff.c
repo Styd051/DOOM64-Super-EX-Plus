@@ -330,8 +330,8 @@ static void ST_DrawPendingWeapon(void) {
 			color = WHITEALPHA(st_wpndisplay_alpha);
 		}
 
-		Draw_Number(245 + x, 400, i, 0, color);
-		x += 16;
+		Draw_Number(165 + x, 400, i, 0, color);
+		x += 24;
 	}
 
 	if (plyr->pendingweapon == wp_nochange) {
@@ -340,8 +340,9 @@ static void ST_DrawPendingWeapon(void) {
 	else {
 		wpn = plyr->pendingweapon;
 	}
-
-	Draw_BigText(235 + (wpn * 16), 404, WHITEALPHA(st_wpndisplay_alpha), "/b");
+	GL_SetOrthoScale(0.6f);
+	//Draw_BigText(155 + (wpn * 24), 404, WHITEALPHA(st_wpndisplay_alpha), "/b");
+	Draw_BigText(127 + (wpn * 20), 335, WHITEALPHA(st_wpndisplay_alpha), "/b");
 
 	GL_SetOrthoScale(1.0f);
 }
