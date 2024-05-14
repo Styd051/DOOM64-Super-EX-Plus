@@ -240,10 +240,8 @@ CVAR_CMD(m_menufadetime, 0) {
 }
 
 CVAR_CMD(m_menumouse, 1) {
-	SDL_ShowCursor(cvar->value < 1);
 	if (cvar->value <= 0) {
 		itemSelected = -1;
-		SDL_ShowCursor(cvar->value = 0);
 	}
 }
 
@@ -3751,15 +3749,15 @@ static void M_CheckDragThermoBar(event_t* ev, menu_t* menu) {
 	}
 
 	// mouse buttons must be held and moving
-	if (!(ev->data1 & 1) || !(ev->data2 | ev->data3)) {
+	if (!(ev->data1 & 1) || (ev->data2 != 0.0 || ev->data3 != 0.0)) {
 		return;
 	}
 
 	bar = menu->thermobars;
 	x = menu->x;
 	y = menu->y;
-	mx = (float)mouse_x;
-	my = (float)mouse_y;
+	mx = mouse_x;
+	my = mouse_y;
 	scalex = ((float)video_width /
 		((float)SCREENHEIGHT * video_ratio)) * menu->scale;
 	scaley = ((float)video_height /
@@ -4232,7 +4230,7 @@ boolean M_Responder(event_t* ev) {
 			shiftdown = false;
 		}
 	}
-	else if (ev->type == ev_mouse && (ev->data2 | ev->data3)) {
+	else if (ev->type == ev_mouse && (ev->data2 != 0.0 || ev->data3 != 0.0)) {
 		// handle mouse-over selection
 		if (m_menumouse.value) {
 			M_CheckDragThermoBar(ev, currentMenu);
@@ -4677,7 +4675,7 @@ static void M_DrawMenuSkull(int x, int y) {
 // M_DrawCursor
 //
 
-static void M_DrawCursor(int x, int y) {
+static void M_DrawCursor(float x, float y) {
 	if (m_menumouse.value) {
 		int gfxIdx;
 		float factor;
