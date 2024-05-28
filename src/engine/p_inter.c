@@ -1455,7 +1455,7 @@ void P_DamageMobj(mobj_t* target, mobj_t* inflictor, mobj_t* source, int damage)
 		&& source->type != MT_RESURRECTOR3
 		&& source->type != MT_CACODEMON_CLASSIC
 		&& !(target->flags & MF_NOINFIGHTING
-		|| (source->flags ^ target->flags) & p_disable_monster_infighting.value > 0))
+		|| ((source->flags ^ target->flags) & p_disable_monster_infighting.value) > 0))
 	{
 		// if not intent on another player,
 		// chase after this one
