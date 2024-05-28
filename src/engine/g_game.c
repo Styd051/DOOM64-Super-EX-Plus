@@ -167,9 +167,9 @@ CVAR_EXTERNAL(m_nospawnsound);
 CVAR_EXTERNAL(m_obituaries);
 CVAR_EXTERNAL(m_brutal);
 CVAR_EXTERNAL(st_hud_color);
+CVAR_EXTERNAL(p_disable_monster_infighting);
 CVAR_EXTERNAL(m_complexdoom64);
 CVAR_EXTERNAL(m_cacodemonalternative);
-CVAR_EXTERNAL(monster_infighting);
 CVAR_EXTERNAL(m_nobuzzsound);
 
 CVAR(m_keepartifacts, 0);
@@ -195,11 +195,11 @@ void G_RegisterCvars(void) {
 	CON_CvarRegister(&st_hud_color);
 	CON_CvarRegister(&m_obituaries);
 	CON_CvarRegister(&compat_mobjpass);
+	CON_CvarRegister(&p_disable_monster_infighting);
 	CON_CvarRegister(&compat_limitpain);
 	CON_CvarRegister(&m_complexdoom64);
 	CON_CvarRegister(&m_keepartifacts);
 	CON_CvarRegister(&m_cacodemonalternative);
-	CON_CvarRegister(&monster_infighting);
 	CON_CvarRegister(&m_nobuzzsound);
 }
 

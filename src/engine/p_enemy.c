@@ -46,7 +46,7 @@
 #include "info.h"
 #include "z_zone.h"
 
-CVAR(monster_infighting, 0);
+CVAR(p_disable_monster_infighting, 0);
 
 typedef enum {
 	DI_EAST,
@@ -218,13 +218,13 @@ boolean P_CheckMissileRange(mobj_t* actor) {
 			(actor->target->health > 0 &&
 				(!(actor->target->flags & MF_FRIEND) ||
 					(actor->target->player ?
-						monster_infighting.value > 0 || P_Random(pr_defect) > 128 :
+						p_disable_monster_infighting.value > 0 || P_Random(pr_defect) > 128 :
 		!(actor->target->flags & MF_JUSTHIT) && P_Random(pr_defect) > 128)));
 	}
 
 	// killough 7/18/98: friendly monsters don't attack other friendly
     // monsters or players (except when attacked, and then only once)
-	if (actor->flags & actor->target->flags & MF_FRIEND || monster_infighting.value > 0)
+	if (actor->flags & actor->target->flags & MF_FRIEND || p_disable_monster_infighting.value > 0)
 		return false;
 
 

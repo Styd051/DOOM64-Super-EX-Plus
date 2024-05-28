@@ -61,7 +61,7 @@
 CVAR_EXTERNAL(p_damageindicator);
 CVAR(m_obituaries, 0);
 CVAR_EXTERNAL(m_brutal);
-CVAR_EXTERNAL(monster_infighting);
+CVAR_EXTERNAL(p_disable_monster_infighting);
 
 // a weapon is found with two clip loads,
 // a big item has five clip loads
@@ -1455,7 +1455,7 @@ void P_DamageMobj(mobj_t* target, mobj_t* inflictor, mobj_t* source, int damage)
 		&& source->type != MT_RESURRECTOR3
 		&& source->type != MT_CACODEMON_CLASSIC
 		&& !(target->flags & MF_NOINFIGHTING
-		|| (source->flags ^ target->flags) & monster_infighting.value > 0))
+		|| (source->flags ^ target->flags) & p_disable_monster_infighting.value > 0))
 	{
 		// if not intent on another player,
 		// chase after this one

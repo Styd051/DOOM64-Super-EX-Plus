@@ -1014,6 +1014,7 @@ CVAR_EXTERNAL(hud_disablesecretmessages);
 CVAR_EXTERNAL(m_nospawnsound);
 CVAR_EXTERNAL(m_obituaries);
 CVAR_EXTERNAL(m_brutal);
+CVAR_EXTERNAL(p_disable_monster_infighting);
 CVAR_EXTERNAL(m_nobuzzsound);
 
 
@@ -1048,6 +1049,7 @@ enum {
 	misc_comp_pain,
 	misc_comp_pass,
 	misc_disablesecretmessages,
+	misc_monster_infighting,
 	misc_default,
 	misc_return,
 	misc_end
@@ -1083,6 +1085,7 @@ menuitem_t MiscMenu[] = {
 	{2,"Limit Lost Souls:",M_MiscChoice,'l'},
 	{2,"Tall Actors:",M_MiscChoice,'i'},
 	{2,"Secret Messages:",M_MiscChoice,'x'},
+	{2,"Infighting:",M_MiscChoice,'m'},
 	{-2,"Default",M_DoDefaults,'d'},
 	{1,"/r Return",M_Return, 0x20}
 };
@@ -1117,6 +1120,7 @@ char* MiscHints[misc_end] = {
 	"limit max amount of lost souls spawn by pain elemental to 17",
 	"emulate infinite height bug for all solid actors",
 	"disable the secret message text",
+	"monster infighting",
 	NULL,
 	//NULL
 };
@@ -1144,6 +1148,7 @@ menudefault_t MiscDefault[] = {
 	{ &m_brutal, 0 },
 	{ &compat_limitpain, 1 },
 	{ &compat_mobjpass, 1 },
+	{ &p_disable_monster_infighting, 0 },
 	{ NULL, -1 }
 };
 
@@ -1294,6 +1299,10 @@ void M_MiscChoice(int choice) {
 	case misc_comp_pass:
 		M_SetOptionValue(choice, 0, 1, 1, &compat_mobjpass);
 		break;
+
+	case misc_monster_infighting:
+		M_SetOptionValue(choice, 0, 1, 1, &p_disable_monster_infighting);
+		break;
 	}
 }
 
@@ -1345,6 +1354,7 @@ void M_DrawMisc(void) {
 	DRAWMISCITEM(misc_comp_pain, compat_limitpain.value, msgNames);
 	DRAWMISCITEM(misc_comp_pass, !compat_mobjpass.value, msgNames);
 	DRAWMISCITEM(misc_disablesecretmessages, hud_disablesecretmessages.value, disablesecretmessages);
+	DRAWMISCITEM(misc_monster_infighting, p_disable_monster_infighting.value, disablesecretmessages);
 
 #undef DRAWMISCITEM
 
