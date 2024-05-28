@@ -1994,9 +1994,6 @@ void M_Video(int choice) {
 	else if (dfcmp(checkratio, ratioVal[4])) {
 		m_aspectRatio = 4;
 	}
-	else if (dfcmp(checkratio, ratioVal[5])) {
-		m_aspectRatio = 5;
-	}
 	else {
 		m_aspectRatio = 0;
 	}
@@ -2219,7 +2216,7 @@ void M_ChangeRatio(int choice) {
 		}
 	}
 	else {
-		m_aspectRatio = MAX(m_aspectRatio--, 0);
+		m_aspectRatio = MAX(m_aspectRatio - 1, 0);
 	}
 
 	switch (m_aspectRatio) {
@@ -2277,7 +2274,7 @@ void M_ChangeResolution(int choice) {
 		}
 	}
 	else {
-		m_ScreenSize = MAX(m_ScreenSize--, 0);
+		m_ScreenSize = MAX(m_ScreenSize - 1, 0);
 	}
 
 	M_SetResolution();
@@ -4826,7 +4823,7 @@ void M_Drawer(void) {
 		// if menu item is static but has text, then display it as gray text
 		// used for subcategories
 		//
-		else if (currentMenu->menuitems[i].name != NULL) {
+		else if (currentMenu->menuitems[i].name[0] != 0) {
 			if (!currentMenu->smallfont) {
 				Draw_BigText(
 					-1,
@@ -5078,7 +5075,7 @@ void M_Ticker(void) {
 
 	// auto-adjust itemOn and page offset if the first menu item is being used as a header
 	if (currentMenu->menuitems[0].status == -1 &&
-		currentMenu->menuitems[0].name != NULL) {
+		currentMenu->menuitems[0].name[0] != 0) {
 		// bump page offset up
 		if (itemOn == 1) {
 			currentMenu->menupageoffset = 0;
