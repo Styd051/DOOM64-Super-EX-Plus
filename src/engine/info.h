@@ -335,6 +335,7 @@ typedef enum {
 	SPR_APL2,
 	SPR_CUTH,
 	SPR_OLDP,
+	SPR_BLUP,
 	NUMSPRITES
 } spritenum_t;
 
@@ -896,6 +897,10 @@ typedef enum {
 	S_BLUEBLOOD2,
 	S_BLUEBLOOD3,
 	S_BLUEBLOOD4,
+	S_PURPLEBLOOD1,
+	S_PURPLEBLOOD2,
+	S_PURPLEBLOOD3,
+	S_PURPLEBLOOD4,
 	S_CORPSE,
 	S_TFOG1,
 	S_TFOG2,
@@ -3779,6 +3784,7 @@ typedef enum {
 	MT_BLOOD,                // 43
 	MT_GREENBLOOD,
 	MT_BLUEBLOOD,
+	MT_PURPLEBLOOD,
 	MT_GIB_CRUSHED,            // 44
 	MT_TELEPORTFOG,            // 45
 	MT_BFGSPREAD,            // 46

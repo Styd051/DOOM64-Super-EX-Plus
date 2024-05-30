@@ -1896,6 +1896,35 @@ void P_SpawnBlueBlood(fixed_t x, fixed_t y, fixed_t z, int damage) {
 	}
 }
 
+//
+// P_SpawnPurpleBlood
+//
+void P_SpawnPurpleBlood(fixed_t x, fixed_t y, fixed_t z, int damage) {
+	mobj_t* th;
+	int i = 0;
+
+	for (i = 0; i < 3; i++) {
+		x += ((P_Random(pr_spawnpurpleblood) - P_Random(pr_spawnpurpleblood)) << 12);
+		y += ((P_Random(pr_spawnpurpleblood) - P_Random(pr_spawnpurpleblood)) << 12);
+		z += ((P_Random(pr_spawnpurpleblood) - P_Random(pr_spawnpurpleblood)) << 11);
+
+		th = P_SpawnMobj(x, y, z, MT_PURPLEBLOOD);
+		th->momz = FRACUNIT * 2;
+		th->tics -= (P_Random(pr_spawnpurpleblood) & 1);
+
+		if (th->tics < 1) {
+			th->tics = 1;
+		}
+
+		if (damage <= 12 && (damage >= 9)) {
+			P_SetMobjState(th, S_PURPLEBLOOD2);
+		}
+		else if (damage < 9) {
+			P_SetMobjState(th, S_PURPLEBLOOD3);
+		}
+	}
+}
+
 /*
 ================
 =

@@ -1292,6 +1292,12 @@ boolean PTR_ShootTraverse(intercept_t* in) {
     else if (th->type == MT_CACODEMON_CLASSIC) {
         P_SpawnBlueBlood(x, y, z, la_damage);
     }
+    else if (th->type == MT_IMP2) {
+        P_SpawnPurpleBlood(x, y, z, la_damage);
+    }
+    else if (th->type == MT_SKULL) {
+        P_SpawnPuff(x, y, z);
+    }
     else {
         P_SpawnBlood(x, y, z, la_damage);
     }
@@ -1711,7 +1717,21 @@ boolean PIT_ChangeSector(mobj_t* thing) {
             P_DamageMobj(thing, NULL, NULL, 10);
 
             // spray blood in a random direction
-            mo = P_SpawnMobj(thing->x, thing->y, thing->z + thing->height / 2, MT_BLOOD);
+            if (mo->type == MT_BRUISER1 || mo->type == MT_BRUISER2) {
+                mo = P_SpawnMobj(thing->x, thing->y, thing->z + thing->height / 2, MT_GREENBLOOD);
+            }
+            else if (mo->type == MT_CACODEMON_CLASSIC) {
+                mo = P_SpawnMobj(thing->x, thing->y, thing->z + thing->height / 2, MT_BLUEBLOOD);
+            }
+            else if (mo->type == MT_IMP2) {
+                mo = P_SpawnMobj(thing->x, thing->y, thing->z + thing->height / 2, MT_PURPLEBLOOD);
+            }
+            else if (mo->type == MT_SKULL) {
+                mo = P_SpawnMobj(thing->x, thing->y, thing->z + thing->height / 2, MT_SMOKE_GRAY);
+            }
+            else {
+                mo = P_SpawnMobj(thing->x, thing->y, thing->z + thing->height / 2, MT_BLOOD);
+            }
             mo->momx = P_RandomShift(pr_crush, 12);
             mo->momy = P_RandomShift(pr_crush, 12);
         }

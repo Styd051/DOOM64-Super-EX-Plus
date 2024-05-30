@@ -79,6 +79,7 @@ char* sprnames[NUMSPRITES + 1] = {  //0x5FA30
 	"FERY", "PAI3", "HXSG", "HXSF", "HX1G", "HX2G", "HX3G", "HXSP",
 	"HARB", "RECI", "SKUT", "REC2", "CENT", "CTFX", "DRKI", "BG2G",
 	"BFG2", "WZRD", "FX11", "ENSL", "BSP3", "APL2", "CUTH", "OLDP",
+	"BLUP",
 	NULL
 };
 
@@ -877,15 +878,23 @@ state_t states[NUMSTATES] = {      //0x4DFF4
 	/*S_BLOOD3*/            { SPR_BLUD, 2, 6, {NULL}, S_BLOOD4 },
 	/*S_BLOOD4*/            { SPR_BLUD, 3, 6, {NULL}, S_NULL },
 
+	// GREEN BLOOD
 	/*S_GREENBLOOD1*/{ SPR_GBLD, 0, 6, {NULL}, S_GREENBLOOD2 },
 	/*S_GREENBLOOD2*/{ SPR_GBLD, 1, 6, {NULL}, S_GREENBLOOD3 },
 	/*S_GREENBLOOD3*/{ SPR_GBLD, 2, 6, {NULL}, S_GREENBLOOD4 },
 	/*S_GREENBLOOD4*/{ SPR_GBLD, 3, 6, {NULL}, S_NULL },
 
+	// BLUE BLOOD
 	/*S_BLUEBLOOD1*/{ SPR_BBLD, 0, 6, {NULL}, S_BLUEBLOOD2 },
 	/*S_BLUEBLOOD2*/{ SPR_BBLD, 1, 6, {NULL}, S_BLUEBLOOD3 },
 	/*S_BLUEBLOOD3*/{ SPR_BBLD, 2, 6, {NULL}, S_BLUEBLOOD4 },
 	/*S_BLUEBLOOD4*/{ SPR_BBLD, 3, 6, {NULL}, S_NULL },
+
+	// PURPLE BLOOD
+	/*S_PURPLEBLOOD1*/{ SPR_BLUP, 0, 6, {NULL}, S_PURPLEBLOOD2 },
+	/*S_PURPLEBLOOD2*/{ SPR_BLUP, 1, 6, {NULL}, S_PURPLEBLOOD3 },
+	/*S_PURPLEBLOOD3*/{ SPR_BLUP, 2, 6, {NULL}, S_PURPLEBLOOD4 },
+	/*S_PURPLEBLOOD4*/{ SPR_BLUP, 3, 6, {NULL}, S_NULL },
 
 	/*S_CORPSE*/            { SPR_A027, 0, -1, {NULL}, S_NULL },
 
@@ -4334,7 +4343,7 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		50,        //mass
 		3,        //damage
 		sfx_dbact,        //activesound
-		MF_SOLID | MF_SHOOTABLE | MF_FLOAT | MF_COUNTKILL | MF_NOBLOOD,        //flags
+		MF_SOLID | MF_SHOOTABLE | MF_FLOAT | MF_COUNTKILL,        //flags
 		0,        //palette
 		192,        //alpha
 		S_NULL	   //raisestate
@@ -5236,6 +5245,35 @@ mobjinfo_t mobjinfo[NUMMOBJTYPES] = {      //0x51E38
 		MF_NOBLOCKMAP | MF_GRAVITY,        //flags
 		0,        //palette
 		255,        //alpha
+		S_NULL	   //raisestate
+	},
+
+	{
+		/*MT_PURPLEBLOOD*/
+		-1,        //doomednum
+		S_PURPLEBLOOD1,        //spawnstate
+		1000,        //spawnhealth
+		S_NULL,        //seestate
+		sfx_None/*sfx_000*/,        //seesound
+		8,        //reactiontime
+		sfx_None/*sfx_000*/,        //attacksound
+		S_NULL,        //painstate
+		0,        //painchance
+		sfx_None/*sfx_000*/,        //painsound
+		S_NULL,        //meleestate
+		S_NULL,        //missilestate
+		S_NULL,        //deathstate
+		S_NULL,        //xdeathstate
+		sfx_None/*sfx_000*/,        //deathsound
+		0,        //speed
+		20 * FRACUNIT,        //radius
+		16 * FRACUNIT,        //height
+		100,        //mass
+		0,        //damage
+		sfx_None/*sfx_000*/,        //activesound
+		MF_NOBLOCKMAP | MF_GRAVITY | MF_SHADOW,        //flags
+		0,        //palette
+		180,        //alpha
 		S_NULL	   //raisestate
 	},
 
