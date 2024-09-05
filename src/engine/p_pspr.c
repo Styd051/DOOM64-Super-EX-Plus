@@ -74,7 +74,8 @@ weaponinfo_t    weaponinfo[NUMWEAPONS] = {
 	{ am_nails,      S_NAILGUP, S_NAILGDOWN, S_NAILG, S_NAILG1, S_NULL },    // nailgun
 	{ am_shell,     S_QSGUP, S_QSGDOWN, S_QSG, S_QSG1, S_NULL },    // quad shotgun
 	{ am_shell,     S_HXSGUP, S_HXSGDOWN, S_HXSG, S_HXSG1, S_NULL },    // hexa shotgun
-	{ am_cell,      S_BFG10KUP1, S_BFG10KDOWN, S_BFG10KREADY1, S_BFG10K1, S_NULL }    // bfg10k
+	{ am_cell,      S_BFG10KUP1, S_BFG10KDOWN, S_BFG10KREADY1, S_BFG10K1, S_NULL },    // bfg10k
+	{ am_fuel,      S_FLAMETHROWERUP, S_FLAMETHROWERDOWN, S_FLAMETHROWER, S_FLAMETHROWER1, S_NULL }    // flamethrower
 };
 
 static int laserCells = 1;
@@ -287,6 +288,10 @@ boolean P_CheckAmmo(player_t* player) {
 			&& player->ammo[am_nails]) {
 			player->pendingweapon = wp_nailgun;
 		}
+		else if (player->weaponowned[wp_flamethrower]
+			&& player->ammo[am_fuel]) {
+			player->pendingweapon = wp_flamethrower;
+		}
 		else {
 			// If everything fails.
 			player->pendingweapon = wp_fist;
@@ -318,6 +323,9 @@ void P_FireWeapon(player_t* player) {
 	}
 	if (player->refire && player->readyweapon == wp_bfg10k) {
 		newstate = S_BFG10K4;
+	}
+	if (player->refire && player->readyweapon == wp_flamethrower) {
+		newstate = S_FLAMETHROWER3;
 	}
 	P_SetPsprite(player, ps_weapon, newstate);
 	P_NoiseAlert(player->mo, player->mo);
@@ -1450,4 +1458,34 @@ void A_FireBFG10K(player_t* player, pspdef_t* psp) {
 
 	}
 
+}
+
+//
+// A_FireFlamethrower
+//
+void A_FireFlamethrower(player_t* player, pspdef_t* psp) {
+	int sound;
+
+	player->ammo[weaponinfo[player->readyweapon].ammo]--;
+
+	if (player->powers[pw_quaddamage]) {
+
+		P_SpawnPlayerMissile(player->mo, MT_PROJ_PLASMAQUADDAMAGE);
+		S_StartSound(player->mo, sfx_quaddamageatt);
+
+	}
+	else
+	{
+
+		P_SpawnPlayerMissile(player->mo, MT_PROJ_FLAMETHROWER);
+		
+	}
+
+	if (P_Random(pr_fireFlamethrower) < 128) {
+		S_StartSound(player->mo, sfx_flamefire1);
+	}
+	else
+	{
+		S_StartSound(player->mo, sfx_flamefire2);
+	}
 }

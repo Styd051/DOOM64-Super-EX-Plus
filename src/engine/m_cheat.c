@@ -234,7 +234,7 @@ void M_CheatGiveWeapon(player_t* player, char dat[4]) {
 	char c = dat[0];
 	int w = datoi(&c);
 
-	static char* WeapGotNames[12] = {
+	static char* WeapGotNames[13] = {
 		GOTCHAINSAW,
 		GOTSHOTGUN,
 		GOTSHOTGUN2,
@@ -246,10 +246,11 @@ void M_CheatGiveWeapon(player_t* player, char dat[4]) {
 		GOTNAILGUN,
 		GOTQUADSHOTGUN,
 		GOTHEXASHOTGUN,
-		GOTBFG10000
+		GOTBFG10000,
+		GOTFLAMETHROWER
 	};
 
-	static weapontype_t WeapTypes[12] = {
+	static weapontype_t WeapTypes[13] = {
 		wp_chainsaw,
 		wp_shotgun,
 		wp_supershotgun,
@@ -261,7 +262,8 @@ void M_CheatGiveWeapon(player_t* player, char dat[4]) {
 		wp_nailgun,
 		wp_quadshotgun,
 		wp_hexashotgun,
-		wp_bfg10k
+		wp_bfg10k,
+		wp_flamethrower
 	};
 
 	if (!w || w >= 9) {

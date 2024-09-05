@@ -118,7 +118,8 @@ enum {
     pr_hereticdamage,           // #85
     pr_darknotronrefire,        // #86
     pr_spawnpurpleblood,        // #87
-    pr_randomizer,              // #88
+    pr_fireFlamethrower,        // #88
+    pr_randomizer,              // #89
 
     // End of new entries
     NUMPRCLASS               // MUST be last item in list

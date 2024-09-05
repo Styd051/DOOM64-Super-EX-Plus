@@ -202,6 +202,7 @@ typedef enum {
 	wp_quadshotgun,
 	wp_hexashotgun,
 	wp_bfg10k,
+	wp_flamethrower,
 	NUMWEAPONS,
 
 	// No pending weapon change.
@@ -215,6 +216,7 @@ typedef enum {
 	am_cell,    // Plasma rifle, BFG.
 	am_misl,    // Missile launcher.
 	am_nails,    // Nailgun
+	am_fuel,    // Flamethrower.
 	NUMAMMO,
 	am_noammo    // Unlimited for chainsaw / fist.
 } ammotype_t;

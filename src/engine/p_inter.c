@@ -65,8 +65,8 @@ CVAR_EXTERNAL(p_disable_monster_infighting);
 
 // a weapon is found with two clip loads,
 // a big item has five clip loads
-int     maxammo[NUMAMMO] = { 200, 50, 300, 50, 100 };
-int     clipammo[NUMAMMO] = { 10, 4, 20, 1, 10 };
+int     maxammo[NUMAMMO] = { 200, 50, 300, 50, 100, 150 };
+int     clipammo[NUMAMMO] = { 10, 4, 20, 1, 10, 10 };
 
 int infraredFactor = 0;
 
@@ -181,6 +181,15 @@ boolean P_GiveAmmo(player_t* player, ammotype_t ammo, int num) {
 		if (player->readyweapon == wp_fist) {
 			if (player->weaponowned[wp_nailgun]) {
 				player->pendingweapon = wp_nailgun;
+			}
+		}
+		break;
+
+	case am_fuel:
+		if (player->readyweapon == wp_fist
+			|| player->readyweapon == wp_pistol) {
+			if (player->weaponowned[wp_flamethrower]) {
+				player->pendingweapon = wp_flamethrower;
 			}
 		}
 		break;
@@ -734,6 +743,22 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 		player->messagepic = 46;
 		break;
 
+	case SPR_AGAS:
+		if (!P_GiveAmmo(player, am_fuel, 1)) {
+			return;
+		}
+		player->message = GOTFUELAMMOSMALL;
+		player->messagepic = 52;
+		break;
+
+	case SPR_AGA2:
+		if (!P_GiveAmmo(player, am_fuel, 5)) {
+			return;
+		}
+		player->message = GOTFUELAMMOLARGE;
+		player->messagepic = 53;
+		break;
+
 		// weapons
 	case SPR_BFUG:
 		if (!P_GiveWeapon(player, special, wp_bfg, false)) {
@@ -749,7 +774,7 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 			return;
 		}
 		player->message = GOTBFG10000;
-		player->messagepic = 49;
+		player->messagepic = 50;
 		sound = sfx_sgcock;
 		break;
 
@@ -786,6 +811,15 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 		}
 		player->message = GOTPLASMA;
 		player->messagepic = 20;
+		sound = sfx_sgcock;
+		break;
+
+	case SPR_FTWP:
+		if (!P_GiveWeapon(player, special, wp_flamethrower, false)) {
+			return;
+		}
+		player->message = GOTFLAMETHROWER;
+		player->messagepic = 51;
 		sound = sfx_sgcock;
 		break;
 

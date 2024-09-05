@@ -2118,6 +2118,11 @@ void A_Scream(mobj_t* actor) {
 		sound = sfx_impdth1 + (P_Random(pr_scream) & 1);
 		break;
 
+	case sfx_flamedie1:
+	case sfx_flamedie2:
+		sound = sfx_flamedie1 + (P_Random(pr_scream) & 1);
+		break;
+
 	default:
 		sound = actor->info->deathsound;
 		break;
@@ -5767,4 +5772,26 @@ void A_DeepOneMelee(mobj_t* actor) {
 		P_DamageMobj(actor->target, actor, actor, damage);
 		return;
 	}
+}
+
+//
+// A_DamageBurn
+//
+
+void A_DamageBurn(mobj_t* thingy) {
+	P_RadiusAttack(thingy, thingy->target, 5);
+}
+
+// 
+// A_SoundFlameBurn
+// 
+
+
+void A_SoundFlameBurn(mobj_t* actor) {
+	if (!actor->target) {
+		return;
+	}
+
+	A_FaceTarget(actor);
+	S_StartSound(actor, sfx_flamedie3);
 }

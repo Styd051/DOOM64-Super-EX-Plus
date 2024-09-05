@@ -1181,12 +1181,30 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	  // randomizer ammo cell
 	  if (i == MT_AMMO_CELL) {
-		  randomizernum = P_Random(pr_randomizer) % 2; // Immorpher randomizer number
-		  if (randomizernum == 1) {
+		  randomizernum = P_Random(pr_randomizer) % 4; // Immorpher randomizer number
+		  if (randomizernum == 3) {
 			  i = MT_AMMO_CELL;
 		  }
-		  else if (randomizernum == 0) {
+		  else if (randomizernum == 2) {
 			  i = MT_AMMO_CELLPACK;
+		  }
+		  else if (randomizernum == 1) {
+			  i = MT_AMMO_FUELSMALL;
+		  }
+		  else if (randomizernum == 0) {
+			  i = MT_AMMO_FUELLARGE;
+		  }
+
+	  }
+
+	  // randomizer ammo cell pack
+	  if (i == MT_AMMO_CELLPACK) {
+		  randomizernum = P_Random(pr_randomizer) % 2; // Immorpher randomizer number
+		  if (randomizernum == 1) {
+			  i = MT_AMMO_CELLPACK;
+		  }
+		  else if (randomizernum == 0) {
+			  i = MT_AMMO_FUELLARGE;
 		  }
 
 	  }
@@ -1230,6 +1248,18 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 
 	  }
 
+	  // randomizer weapon Plasma Gun
+	  if (i == MT_WEAP_PLASMA) {
+		  randomizernum = P_Random(pr_randomizer) % 2; // Immorpher randomizer number
+		  if (randomizernum == 1) {
+			  i = MT_WEAP_PLASMA;
+		  }
+		  else if (randomizernum == 0) {
+			  i = MT_WEAP_FLAMETHROWER;
+		  }
+
+	  }
+
 	  // randomizer weapon BFG
 	  if (i == MT_WEAP_BFG) {
 		  randomizernum = P_Random(pr_randomizer) % 2; // Immorpher randomizer number
@@ -1241,6 +1271,7 @@ mobj_t* P_SpawnMapThing(mapthing_t* mthing) {
 		  }
 
 	  }
+
 
 	  // randomizer health bonus
 	  if (i == MT_ITEM_BONUSHEALTH) {
@@ -1985,6 +2016,10 @@ void P_SpawnPlayerMissile(mobj_t* source, mobjtype_t type) {
 	else if (type == MT_PROJ_BFG10KQUADDAMAGE) {
 		missileheight = (32 * FRACUNIT);
 		offset = 30;
+	}
+	else if (type == MT_PROJ_FLAMETHROWER) {
+		missileheight = (32 * FRACUNIT);
+		offset = 40;
 	}
 	else {
 		missileheight = (32 * FRACUNIT);

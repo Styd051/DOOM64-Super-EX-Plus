@@ -152,7 +152,12 @@ void M_EncodePassword(void) {
 	// nail
 
 	M_EncodePassItem(&bit, player->ammo[am_nails], player->maxammo[am_nails]);
-	encode[2] = (bit << 4) & 0xff;
+	encode[6] = (bit << 4) & 0xff;
+
+	// fuel
+
+	M_EncodePassItem(&bit, player->ammo[am_fuel], player->maxammo[am_fuel]);
+	encode[6] |= bit & 0xff;
 
 	// health
 
@@ -389,6 +394,7 @@ boolean M_DecodePassword(boolean checkOnly) {
 		player->maxammo[am_cell] = (maxammo[am_cell] << 1);
 		player->maxammo[am_misl] = (maxammo[am_misl] << 1);
 		player->maxammo[am_nails] = (maxammo[am_nails] << 1);
+		player->maxammo[am_fuel] = (maxammo[am_fuel] << 1);
 	}
 
 	//
@@ -398,7 +404,8 @@ boolean M_DecodePassword(boolean checkOnly) {
 	player->ammo[am_shell] = M_DecodePassItem(decode[2] & 0xf, player->maxammo[am_shell]);
 	player->ammo[am_cell] = M_DecodePassItem(decode[3] >> 4, player->maxammo[am_cell]);
 	player->ammo[am_misl] = M_DecodePassItem(decode[3] & 0xf, player->maxammo[am_misl]);
-	player->ammo[am_nails] = M_DecodePassItem(decode[2] >> 4, player->maxammo[am_nails]);
+	player->ammo[am_nails] = M_DecodePassItem(decode[4] >> 4, player->maxammo[am_nails]);
+	player->ammo[am_fuel] = M_DecodePassItem(decode[4] & 0xf, player->maxammo[am_fuel]);
 
 	//
 	// get health

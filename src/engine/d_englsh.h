@@ -121,6 +121,8 @@
 #define GOTBACKPACK     "You got the backpack!"
 #define GOTNAILSAMMOSMALLBOX     "Picked up a small box of nails."
 #define GOTNAILSAMMOBOX     "Picked up a box of nails."
+#define GOTFUELAMMOSMALL         "Picked up a fuel can."
+#define GOTFUELAMMOLARGE         "Picked up a fuel tank."
 
 #define GOTBFG9000      "You got the BFG9000!  Oh, yes."
 #define GOTCHAINGUN     "You got the chaingun!"
@@ -134,6 +136,7 @@
 #define GOTQUADSHOTGUN  "You got the quad shotgun!"
 #define GOTHEXASHOTGUN  "You got the hexa shotgun!"
 #define GOTBFG10000     "You got the BFG10000!  Hell, yes!"
+#define GOTFLAMETHROWER "You got the flamethrower!"
 
 #define FOUNDSECRET     "You found a secret area!"
 #define FOUNDSECRETITEM "You found a secret item!"
