@@ -924,7 +924,7 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 	if (special->type != MT_FAKEITEM) {
 		if (special->flags & MF_COUNTITEM) {
 			player->itemcount++;
-		}
+		
 	}
 
 	if (special->flags & MF_COUNTSECRET) {
@@ -938,6 +938,7 @@ void P_TouchSpecialThing(mobj_t* special, mobj_t* toucher) {
 
 	if (player == &players[consoleplayer]) {
 		S_StartSound(NULL, sound);
+	    }
 	}
 }
 
