@@ -2047,11 +2047,11 @@ void P_AddSectorSpecial(sector_t* sector) {
 		break;
 
 	case 12:	/* SYNC STROBE SLOW Exclusive Psx Doom */
-		P_SpawnStrobeFlash(sector, SLOWDARK, 1);
+		P_SpawnStrobeFlash(sector, SLOWDARK);
 		break;
 
 	case 13:	/* SYNC STROBE FAST Exclusive Psx Doom */
-		P_SpawnStrobeFlash(sector, FASTDARK, 1);
+		P_SpawnStrobeFlash(sector, FASTDARK);
 		break;
 
 	case 17:
